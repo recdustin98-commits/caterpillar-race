@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Caterpillar Race</title>
+<meta name="description" content="Draw circles to race your caterpillar. Challenge a friend with a link, no download.">
+<meta property="og:title" content="Caterpillar Race">
+<meta property="og:description" content="Draw circles to race. Challenge a friend with one link.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#d6efff,#0d2231);--ink:light-dark(#10301f,#e9f7ee);--card:light-dark(#ffffff,#15354a);--muted:light-dark(#3b5a49,#a9c7b5);--title:light-dark(#1f7a2b,#86e070);--seg:light-dark(#e6f5ff,#0d2231);--on:light-dark(#2f9e3a,#3fae48);--orange:#ff8a2a}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Baloo 2",system-ui,sans-serif;overflow-x:clip;padding-bottom:env(safe-area-inset-bottom)}
+.top{max-width:1240px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) max(4vw,14px) 8px}
+h1{font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0;font-weight:800;color:var(--title)}
+.top p{margin:4px 0 0;max-width:64ch;color:var(--muted)}
+.stage{position:relative;height:clamp(400px,70vh,660px);max-width:1240px;margin:0 auto;overflow:hidden;user-select:none;-webkit-user-select:none}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.ov{position:absolute;inset:30px 0 0;display:grid;place-items:center;padding:12px;pointer-events:none;overflow:auto}
+.panel{pointer-events:auto;background:var(--card);color:var(--ink);border-radius:20px;padding:16px 18px;width:min(440px,100%);box-shadow:0 14px 40px rgba(0,40,20,.28);text-align:center;user-select:text;-webkit-user-select:text}
+.panel h2{margin:0 0 6px;font-size:30px;line-height:1.05;font-weight:800}
+.seg{display:flex;gap:5px;background:var(--seg);padding:4px;border-radius:14px;margin:8px 0}
+.seg button,.sec{flex:1;min-height:44px;border:0;border-radius:10px;background:transparent;color:var(--ink);font:700 15px "Baloo 2",system-ui,sans-serif;cursor:pointer;padding:0 6px}
+.seg button.on{background:var(--on);color:#fff}
+.go{width:100%;min-height:54px;border:0;border-radius:14px;background:var(--orange);color:#2a1200;font:800 22px "Baloo 2",system-ui,sans-serif;margin-top:10px;cursor:pointer;box-shadow:0 4px 0 #c45a0c}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 #c45a0c}
+.go:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;margin-top:8px}
+.sec{background:var(--seg)}
+button:focus-visible,input:focus-visible{outline:3px solid #ffb84d;outline-offset:2px}
+.small{font-size:14px;color:var(--muted);margin:8px 0 0}
+label{display:block;text-align:left;font-weight:700;font-size:14px;margin:10px 0 4px}
+input[type=text]{width:100%;min-height:46px;border:2px solid color-mix(in srgb,var(--ink) 20%,transparent);border-radius:12px;padding:0 12px;font:600 17px "Baloo 2",system-ui,sans-serif;background:var(--seg);color:var(--ink)}
+.code{font:800 40px/1 "Baloo 2",system-ui,sans-serif;letter-spacing:.12em;margin:4px 0}
+.link{font-size:13px;color:var(--muted);overflow-wrap:anywhere;margin:2px 0 0}
+.players{list-style:none;padding:0;margin:10px 0 0;text-align:left}
+.players li{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:var(--seg);margin-top:6px;font-weight:700}
+.players .dot{width:12px;height:12px;border-radius:50%;flex:none}
+.players .st{margin-left:auto;font-size:14px;color:var(--muted)}
+.players .ok{color:var(--on)}
+table{width:100%;border-collapse:collapse;margin:6px 0 2px;font-size:15px;font-variant-numeric:tabular-nums}
+th,td{padding:5px 6px;text-align:right;white-space:nowrap}
+th{font-size:13px;color:var(--muted);font-weight:700}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+.rk th:nth-child(2),.rk td:nth-child(2){text-align:left;white-space:normal}
+tbody tr+tr td{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
+.foot{max-width:1240px;margin:0 auto;padding:12px max(4vw,14px) 28px;font-size:14px;color:var(--muted)}
+.foot p{margin:2px 0;max-width:70ch}
+.lang{float:right;border:0;background:transparent;color:var(--muted);font:700 14px "Baloo 2",sans-serif;min-height:44px;cursor:pointer}
+@media(min-width:900px){.stage{border-radius:22px;width:calc(100% - 8vw)}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="lang" id="lang" type="button"></button>
+  <h1 id="h1">Caterpillar Race</h1>
+  <p id="intro"></p>
+</header>
+<main class="stage">
+  <canvas id="cv" aria-label="Race track"></canvas>
+  <div id="ov" class="ov"></div>
+</main>
+<footer class="foot"><p id="foot"></p></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
