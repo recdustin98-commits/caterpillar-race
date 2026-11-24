@@ -77,7 +77,7 @@ const g=p=>(p-Math.sin(p))/(2*Math.PI);
 const headOff=phi=>(N-1)*SP+STEP*g(phi-(N-1)*DELTA);
 const X0=START+120-headOff(0),S0=START+120;
 const CHARS=['cat','inch','centi','turtle'];
-const SIG={cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86a',dark:'#3f8a24',spot:'#fff6a8'},centi:{body:'#c9b3ff',dark:'#7d5fd1',spot:'#ffadc8'},turtle:{body:'#5fc79a',dark:'#2e7d5b',spot:'#ffe27a'}};
+const SIG={cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86a',dark:'#3f8a24',spot:'#fff6a8'},centi:{body:'#c9b3ff',dark:'#5b3fb0',spot:'#ff4f97'},turtle:{body:'#5fc79a',dark:'#2e7d5b',spot:'#ffe27a'}};
 // Every character moves the same average distance per turn (fair races); only the look differs.
 function headPos(ch,phi){
   if(ch==='inch')return S0+2*STEP*g(phi/2);
@@ -175,11 +175,11 @@ function drawInch(c,now){
   return {x:hx,y:hy,r:12};
 }
 function drawCenti(c,now){
-  const base=178,hx=headX(c),hy=base-13,n=10;
+  const base=178,hx=headX(c),hy=base-19,n=10;
   ctx.fillStyle='rgba(30,60,20,.2)';ctx.beginPath();ctx.ellipse(hx-62,base+2,72,3.5,0,0,7);ctx.fill();
   const segs=[];for(let i=1;i<=n;i++){const psi=c.phi*1.6-i*.75;segs.push({x:hx-13-(i-1)*12,y:hy+1+Math.sin(psi)*1.1,psi})}
   ctx.lineCap='round';
-  segs.forEach(s=>{const sw=Math.sin(s.psi)*5,lift=Math.max(0,Math.cos(s.psi))*4;ctx.strokeStyle=c.spot;ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(s.x,s.y+4);ctx.lineTo(s.x+sw,base-1-lift);ctx.stroke();ctx.fillStyle=c.spot;ctx.beginPath();ctx.arc(s.x+sw,base-1-lift,1.8,0,7);ctx.fill()});
+  segs.forEach(s=>{const sw=Math.sin(s.psi)*7,lift=Math.max(0,Math.cos(s.psi))*5,fx=s.x+sw,fy=base+1-lift;ctx.beginPath();ctx.moveTo(s.x,s.y+2);ctx.lineTo(fx,fy);ctx.strokeStyle=c.dark;ctx.lineWidth=5;ctx.stroke();ctx.strokeStyle=c.spot;ctx.lineWidth=3;ctx.stroke();ctx.fillStyle=c.dark;ctx.beginPath();ctx.arc(fx,fy,2.6,0,7);ctx.fill()});
   const last=segs[n-1];ctx.strokeStyle=c.dark;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(last.x-6,last.y);ctx.quadraticCurveTo(last.x-14,last.y-4,last.x-20,last.y+3);ctx.stroke();
   for(let i=n-1;i>=0;i--){const s=segs[i];ctx.fillStyle=c.body;ctx.strokeStyle=c.dark;ctx.lineWidth=1.8;ctx.beginPath();ctx.ellipse(s.x,s.y,7.5,7,0,0,7);ctx.fill();ctx.stroke();if(i%2){ctx.fillStyle='#fff6a8';ctx.beginPath();ctx.arc(s.x,s.y-3.5,1.8,0,7);ctx.fill()}}
   const a=RM?0:Math.sin(now/120+c.ph)*.18;ctx.strokeStyle=c.dark;ctx.lineWidth=2;
@@ -203,13 +203,14 @@ function drawTurtle(c,now){
   if(sp>8&&!RM)for(let i=0;i<3;i++){const tt=((now/(900-sp*10))+i/3)%1;ctx.strokeStyle=`rgba(255,255,255,${.9*(1-tt)})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(hx+12+tt*5,cy-8-tt*34,2+tt*2.5,0,7);ctx.stroke()}
   return {x:hx,y:cy-3,r:12};
 }
+const EX_FAST=100,EX_RED=200; // RPM where the face starts sweating / huffing (separate from the gauge red zone)
 function exprOf(c){
-  if(mode==='practice')return state==='race'?(c.disp>=REDRPM?'red':c.disp>=200?'fast':'slow'):'slow';
+  if(mode==='practice')return state==='race'?(c.disp>=EX_RED?'red':c.disp>=EX_FAST?'fast':'slow'):'slow';
   if(c.done!=null){const fin=racers.filter(r=>r.done!=null).sort((a,b)=>a.done-b.done);return fin[0]===c?'win':'lose'}
   if(state==='done')return c===winner?'win':'lose';
   if(state==='count')return 'ready';
   if(state!=='race')return 'slow';
-  return c.disp>=REDRPM?'red':c.disp>=200?'fast':'slow';
+  return c.disp>=EX_RED?'red':c.disp>=EX_FAST?'fast':'slow';
 }
 function drop(x,y,s,a){ctx.save();ctx.globalAlpha*=a;ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='#6cc4ff';ctx.strokeStyle='#2a8fd0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,-6);ctx.quadraticCurveTo(4.5,0,0,4);ctx.quadraticCurveTo(-4.5,0,0,-6);ctx.fill();ctx.stroke();ctx.restore()}
 // One face, six moods. Drawn in units of a 17px head, facing right, centred on the head.
@@ -534,7 +535,7 @@ function refreshPanel(force){
 const ICON={
  cat:'<svg viewBox="0 0 60 36" aria-hidden="true"><g fill="#6fd14a" stroke="#2f7d1f" stroke-width="2"><circle cx="8" cy="26" r="5"/><circle cx="16" cy="23" r="6"/><circle cx="25" cy="19" r="6.5"/><circle cx="34" cy="19" r="6.5"/><circle cx="42" cy="23" r="6"/><circle cx="51" cy="20" r="7.5"/></g><circle cx="52" cy="18" r="2.4" fill="#fff" stroke="#14301f"/><circle cx="52.6" cy="18.4" r="1.1" fill="#14301f"/></svg>',
  inch:'<svg viewBox="0 0 60 36" aria-hidden="true"><path d="M8 30 C 9 4, 38 4, 40 30" fill="none" stroke="#3f8a24" stroke-width="7" stroke-linecap="round"/><path d="M8 30 C 9 4, 38 4, 40 30" fill="none" stroke="#a6e86a" stroke-width="4.5" stroke-linecap="round"/><circle cx="47" cy="25" r="6.5" fill="#a6e86a" stroke="#3f8a24" stroke-width="1.8"/><circle cx="48.5" cy="23.5" r="2.2" fill="#fff" stroke="#14301f"/><circle cx="49" cy="24" r="1" fill="#14301f"/></svg>',
- centi:'<svg viewBox="0 0 60 36" aria-hidden="true"><g stroke="#ffadc8" stroke-width="1.8" stroke-linecap="round"><path d="M7 25l-2 7M14 25l2 7M21 25l-2 7M28 25l2 7M35 25l-2 7M42 25l2 7"/></g><g fill="#c9b3ff" stroke="#7d5fd1" stroke-width="1.4"><circle cx="7" cy="22" r="4.5"/><circle cx="14" cy="21.5" r="4.5"/><circle cx="21" cy="22" r="4.5"/><circle cx="28" cy="21.5" r="4.5"/><circle cx="35" cy="22" r="4.5"/><circle cx="42" cy="21.5" r="4.5"/><circle cx="50" cy="20" r="6.5"/></g><path d="M51 14q3-8 8-9M54 15q4-4 6-3" fill="none" stroke="#7d5fd1" stroke-width="1.4"/><circle cx="51.5" cy="18.5" r="2.2" fill="#fff" stroke="#14301f"/><circle cx="52" cy="19" r="1" fill="#14301f"/></svg>',
+ centi:'<svg viewBox="0 0 60 36" aria-hidden="true"><g stroke-linecap="round"><path d="M7 25l-2 7M14 25l2 7M21 25l-2 7M28 25l2 7M35 25l-2 7M42 25l2 7" stroke="#5b3fb0" stroke-width="3.4"/><path d="M7 25l-2 7M14 25l2 7M21 25l-2 7M28 25l2 7M35 25l-2 7M42 25l2 7" stroke="#ff4f97" stroke-width="1.8"/></g><g fill="#c9b3ff" stroke="#5b3fb0" stroke-width="1.4"><circle cx="7" cy="22" r="4.5"/><circle cx="14" cy="21.5" r="4.5"/><circle cx="21" cy="22" r="4.5"/><circle cx="28" cy="21.5" r="4.5"/><circle cx="35" cy="22" r="4.5"/><circle cx="42" cy="21.5" r="4.5"/><circle cx="50" cy="20" r="6.5"/></g><path d="M51 14q3-8 8-9M54 15q4-4 6-3" fill="none" stroke="#5b3fb0" stroke-width="1.4"/><circle cx="51.5" cy="18.5" r="2.2" fill="#fff" stroke="#14301f"/><circle cx="52" cy="19" r="1" fill="#14301f"/></svg>',
  turtle:'<svg viewBox="0 0 60 36" aria-hidden="true"><ellipse cx="34" cy="27" rx="10" ry="3" fill="#bff0d8" stroke="#2e7d5b" stroke-width="1.4" transform="rotate(25 34 27)"/><path d="M8 24 A 18 13 0 0 1 44 24 Z" fill="#5fc79a" stroke="#2e7d5b" stroke-width="1.8"/><circle cx="50" cy="20" r="6.5" fill="#bff0d8" stroke="#2e7d5b" stroke-width="1.8"/><circle cx="51.5" cy="18.5" r="2.2" fill="#fff" stroke="#14301f"/><circle cx="52" cy="19" r="1" fill="#14301f"/></svg>'};
 function charPicker(){return `<label>${t('character')}</label><div class="chars" data-g="char">${CHARS.map(k=>`<button data-v="${k}" class="${k===myChar?'on':''}" aria-pressed="${k===myChar}">${ICON[k]}<span>${t('ch_'+k)}</span></button>`).join('')}</div>`}
 function menu(){
