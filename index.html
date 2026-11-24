@@ -18,8 +18,8 @@ h1{font-size:clamp(30px,6vw,46px);line-height:1.05;margin:0;font-weight:800;colo
 .top p{margin:4px 0 0;max-width:64ch;color:var(--muted)}
 .stage{position:relative;height:clamp(400px,70vh,660px);max-width:1240px;margin:0 auto;overflow:hidden;user-select:none;-webkit-user-select:none}
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
-.ov{position:absolute;inset:30px 0 0;display:grid;place-items:center;padding:12px;pointer-events:none;overflow:auto}
-.panel{pointer-events:auto;background:var(--card);color:var(--ink);border-radius:20px;padding:16px 18px;width:min(440px,100%);box-shadow:0 14px 40px rgba(0,40,20,.28);text-align:center;user-select:text;-webkit-user-select:text}
+.ov{position:absolute;inset:30px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;pointer-events:none}
+.panel{max-height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;pointer-events:auto;background:var(--card);color:var(--ink);border-radius:20px;padding:16px 18px;width:min(440px,100%);box-shadow:0 14px 40px rgba(0,40,20,.28);text-align:center;user-select:text;-webkit-user-select:text}
 .panel h2{margin:0 0 6px;font-size:30px;line-height:1.05;font-weight:800}
 .seg{display:flex;gap:5px;background:var(--seg);padding:4px;border-radius:14px;margin:8px 0}
 .seg button,.sec{flex:1;min-height:44px;border:0;border-radius:10px;background:transparent;color:var(--ink);font:700 15px "Baloo 2",system-ui,sans-serif;cursor:pointer;padding:0 6px}
@@ -49,19 +49,29 @@ tbody tr+tr td{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent
 .foot{max-width:1240px;margin:0 auto;padding:12px max(4vw,14px) 28px;font-size:14px;color:var(--muted)}
 .foot p{margin:2px 0;max-width:70ch}
 .chars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:4px 0 6px}
-.chars button{display:flex;flex-direction:column;align-items:center;gap:0;min-height:56px;padding:4px 2px;border:2px solid transparent;border-radius:12px;background:var(--seg);color:var(--ink);font:700 12px/1.1 "Baloo 2",system-ui,sans-serif;cursor:pointer}
+.chars button{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0;min-height:64px;padding:4px 2px;border:2px solid transparent;border-radius:12px;background:var(--seg);color:var(--ink);font:700 12px/1.1 "Baloo 2",system-ui,sans-serif;cursor:pointer}
 .chars button.on{border-color:var(--on);background:color-mix(in srgb,var(--on) 14%,var(--seg))}
 .chars img{width:100%;max-width:64px;height:38px;object-fit:contain}.chars span{font-size:11px;word-break:keep-all;text-align:center}.seg.tabs{margin-bottom:6px}
 .ic{display:inline-block;width:30px;height:18px;vertical-align:-4px;margin-right:4px}.ic img{width:100%;height:100%;object-fit:contain}
-.seg.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.steps{display:flex;gap:6px;justify-content:center;margin:0 0 6px}.steps i{width:28px;height:6px;border-radius:3px;background:color-mix(in srgb,var(--ink) 14%,transparent)}.steps i.on{background:var(--on)}
+.modes{display:grid;gap:8px;margin:8px 0 0}.modes button{display:flex;align-items:center;gap:12px;text-align:left;min-height:62px;padding:8px 12px;border:2px solid transparent;border-radius:14px;background:var(--seg);color:var(--ink);font:inherit;cursor:pointer}
+.modes button.on{border-color:var(--on);background:color-mix(in srgb,var(--on) 14%,var(--seg))}.modes .em{font-size:26px;width:34px;text-align:center;flex:none}.modes b{display:block;font-size:17px;line-height:1.2}.modes small{display:block;font-size:13px;color:var(--muted);line-height:1.25}
+.row.nav .go{flex:2;margin-top:0}.row.nav .sec{min-height:54px}
+.seg.cap button{padding:0;min-width:0}
+.codein{text-align:center;font-size:30px!important;letter-spacing:.4em;font-weight:800!important}
+.players li.empty{background:transparent;border:2px dashed color-mix(in srgb,var(--ink) 20%,transparent);color:var(--muted);justify-content:center;font-weight:600}
+.go.alt{background:var(--on);color:#fff;box-shadow:0 4px 0 #1f6e28;font-size:19px}
+.go.small{font-size:18px;min-height:46px;margin-top:0}
+.quit{position:absolute;right:10px;bottom:10px;pointer-events:auto;min-height:40px;padding:0 14px;border:0;border-radius:12px;background:rgba(255,255,255,.88);color:#14301f;font:800 15px "Baloo 2",system-ui,sans-serif;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.panel.confirm{width:min(320px,100%)}.panel.confirm .row button{flex:1;width:auto;min-height:46px;margin-top:0}.panel.confirm p{margin:0 0 4px;font-size:18px}
 .done{position:absolute;left:12px;bottom:12px;pointer-events:auto;min-height:44px;padding:0 20px;border:0;border-radius:12px;background:#fff;color:#14301f;font:800 17px "Baloo 2",system-ui,sans-serif;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.2)}
-.lang{float:right;border:0;background:transparent;color:var(--muted);font:700 14px "Baloo 2",sans-serif;min-height:44px;cursor:pointer}
+.snd{float:right;display:flex;gap:4px}.snd button{border:0;background:var(--seg);border-radius:10px;color:var(--ink);font:700 13px "Baloo 2",sans-serif;min-height:40px;padding:0 10px;cursor:pointer}.snd button[aria-pressed=false]{opacity:.6}
 @media(min-width:900px){.stage{border-radius:22px;width:calc(100% - 8vw)}}
 </style>
 </head>
 <body>
 <header class="top">
-  <button class="lang" id="lang" type="button"></button>
+  <div class="snd"><button id="bMusic" type="button" aria-pressed="true"></button><button id="bSfx" type="button" aria-pressed="true"></button></div>
   <h1 id="h1">Caterpillar Race</h1>
   <p id="intro"></p>
 </header>
