@@ -203,7 +203,7 @@ function drawTurtle(c,now){
   if(sp>8&&!RM)for(let i=0;i<3;i++){const tt=((now/(900-sp*10))+i/3)%1;ctx.strokeStyle=`rgba(255,255,255,${.9*(1-tt)})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(hx+12+tt*5,cy-8-tt*34,2+tt*2.5,0,7);ctx.stroke()}
   return {x:hx,y:cy-3,r:12};
 }
-const EX_FAST=100,EX_RED=200; // RPM where the face starts sweating / huffing (separate from the gauge red zone)
+const EX_FAST=100,EX_FLUSH=200,EX_RED=300; // RPM where the face starts sweating / huffing (separate from the gauge red zone)
 function exprOf(c){
   if(mode==='practice')return state==='race'?(c.disp>=EX_RED?'red':c.disp>=EX_FAST?'fast':'slow'):'slow';
   if(c.done!=null){const fin=racers.filter(r=>r.done!=null).sort((a,b)=>a.done-b.done);return fin[0]===c?'win':'lose'}
@@ -217,8 +217,10 @@ function drop(x,y,s,a){ctx.save();ctx.globalAlpha*=a;ctx.translate(x,y);ctx.scal
 function face(cx,cy,r,ex,now,c){
   const ink='#14301f';ctx.save();ctx.translate(cx,cy);ctx.scale(r/17,r/17);
   if(ex==='ready'&&!RM)ctx.translate(Math.sin(now/35)*.9,0);
-  if(ex==='red'){const heat=Math.max(0,Math.min(1,(c.disp-EX_RED)/(REDRPM-EX_RED)));ctx.fillStyle=`rgba(255,${60-30*heat|0},${50-30*heat|0},${.22+.48*heat})`;ctx.beginPath();ctx.arc(0,0,17.5,0,7);ctx.fill();
-    if(heat>=1&&!RM){ctx.strokeStyle=`rgba(255,40,40,${.5+.4*Math.sin(now/90)})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,19,0,7);ctx.stroke()}}
+  // 200-300 RPM: the sweating face slowly blushes; 300+: full red, huffing, glowing outline
+  const flush=ex==='red'?1:ex==='fast'?Math.max(0,Math.min(1,(c.disp-EX_FLUSH)/(EX_RED-EX_FLUSH))):0;
+  if(flush>0){ctx.fillStyle=`rgba(255,${60-30*flush|0},${50-30*flush|0},${ex==='red'?.72:.45*flush})`;ctx.beginPath();ctx.arc(0,0,17.5,0,7);ctx.fill()}
+  if(ex==='red'&&!RM){ctx.strokeStyle=`rgba(255,40,40,${.55+.4*Math.sin(now/90)})`;ctx.lineWidth=2.2;ctx.beginPath();ctx.arc(0,0,19.5,0,7);ctx.stroke()}
   const eye=(x,y,s,px,big)=>{ctx.fillStyle='#fff';ctx.strokeStyle=ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,s,0,7);ctx.fill();ctx.stroke();ctx.fillStyle=ink;ctx.beginPath();ctx.arc(x+px,y+1,s*(big?.55:.42),0,7);ctx.fill();if(big){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x+px+1,y-1,s*.2,0,7);ctx.fill()}};
   const cheeks=(col)=>{ctx.fillStyle=col;ctx.beginPath();ctx.arc(10,6,4,0,7);ctx.fill();ctx.beginPath();ctx.arc(-9,6,3.4,0,7);ctx.fill()};
   ctx.lineCap='round';ctx.lineJoin='round';
