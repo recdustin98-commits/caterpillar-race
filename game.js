@@ -30,7 +30,7 @@ const L={
   board:'Leaderboard',boardTitle:'Fastest caterpillars',p24:'24 hours',p7:'7 days',pAll:'All time',nickOpt:'Nickname (for the leaderboard)',
   boardEmpty:'No times yet. Be the first!',boardErr:'Couldn\'t load the leaderboard. Check your internet.',boardSaving:'Saving to leaderboard…',
   boardRank:'Leaderboard: you\'re #{r} of {n} in the last 24 hours',boardNoNick:'Add a nickname before the race to join the leaderboard.',boardFail:'Couldn\'t save to the leaderboard.',loading:'Loading…',boardNote:'Your best time counts once per period.',
-  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 300 RPM. Almost impossible!',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',snap:'Snap!',huff:'Huff!',phew:'Phew~',yay:'Yay!'},
+  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',snap:'Snap!',huff:'Huff!',phew:'Phew~',yay:'Yay!'},
 };
 const lang='en';
 const t=(k,v={})=>(L[lang][k]||L.en[k]||k).replace(/\{(\w+)\}/g,(_,x)=>v[x]??'');
@@ -63,7 +63,7 @@ function headPos(ch,phi){
 const headX=c=>headPos(c.char||'cat',c.phi);
 const prog=c=>Math.max(0,Math.min(1,(headX(c)-S0)/(TRACK-S0)));
 // computer's average speed per level (it varies ±18% around this)
-const DIFF=[{k:'easy',rpm:100},{k:'normal',rpm:160},{k:'hard',rpm:220},{k:'champion',rpm:300}].map(d=>({...d,w:d.rpm*2*Math.PI/60}));
+const DIFF=[{k:'easy',rpm:100},{k:'normal',rpm:160},{k:'hard',rpm:250},{k:'champion',rpm:330}].map(d=>({...d,w:d.rpm*2*Math.PI/60}));
 const champOpen=()=>store.get('cr-champ')==='1';
 const SK=[['#6fd14a','#2f7d1f','#ffd23f'],['#ff9a3c','#b5560e','#fff1a8'],['#4fb3ff','#1f6ea8','#ffffff'],['#ff6b9a','#b02d5c','#ffffff'],['#b38bff','#5e3bb0','#ffffff'],['#ffd23f','#9a7a05','#ffffff'],['#3fd6c6','#13806f','#ffffff'],['#ff5b4f','#a32118','#ffe9a8']].map(([body,dark,spot])=>({body,dark,spot}));
 let myChar=CHARS.includes(store.get('cr-char'))?store.get('cr-char'):'cat',botChar=null;
@@ -941,9 +941,102 @@ function results(){
   ${endNote?`<p class="small">${esc(endNote)}</p>`:''}
   ${boardNote?`<p class="small">${esc(boardNote)}</p>`:''}
   ${again}
-  <div class="row"><button class="sec" data-act="${mode==='online'?'leave':'home'}">${mode==='online'?t('leave'):'🏠 '+t('home')}</button><button class="sec" data-act="copy">${t('copyRes')}</button></div>
+  <div class="row"><button class="sec" data-act="${mode==='online'?'leave':'home'}">${mode==='online'?t('leave'):'🏠 '+t('home')}</button><button class="go small" data-act="card">${t('sharePicBtn')}</button></div>
   <p class="small" id="msg" aria-live="polite"></p></div>`;
 }
+// ---------- result picture: your animal celebrating with its trophy ----------
+function trophy(x,y,s){
+  ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.lineJoin='round';
+  ctx.fillStyle='rgba(255,230,120,.45)';ctx.beginPath();ctx.arc(0,-6,30,0,7);ctx.fill();
+  ctx.strokeStyle='#b77800';ctx.lineWidth=2.4;ctx.fillStyle='#ffd23f';
+  ctx.beginPath();ctx.ellipse(-17,-12,7,9,0,0,7);ctx.ellipse(17,-12,7,9,0,0,7);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-15,-24);ctx.lineTo(15,-24);ctx.quadraticCurveTo(14,2,0,6);ctx.quadraticCurveTo(-14,2,-15,-24);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillRect(-3,5,6,9);ctx.strokeRect(-3,5,6,9);rr(-11,13,22,7,2);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#fff7c2';ctx.beginPath();for(let k=0;k<10;k++){const q=k%2?2.6:6.5,a=-Math.PI/2+k*Math.PI/5;ctx.lineTo(Math.cos(a)*q,-11+Math.sin(a)*q)}ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.7)';ctx.beginPath();ctx.ellipse(-8,-17,2.5,5,.3,0,7);ctx.fill();
+  ctx.restore();
+}
+function medal(x,y,s,p){
+  ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+  ctx.fillStyle='#4fb3ff';ctx.beginPath();ctx.moveTo(-9,-30);ctx.lineTo(-2,-8);ctx.lineTo(4,-10);ctx.lineTo(-3,-30);ctx.fill();ctx.fillStyle='#ff6b8a';ctx.beginPath();ctx.moveTo(9,-30);ctx.lineTo(2,-8);ctx.lineTo(-4,-10);ctx.lineTo(3,-30);ctx.fill();
+  const col=p===2?'#d9e2ea':p===3?'#e7a46a':'#a6e86a';ctx.fillStyle=col;ctx.strokeStyle='#6b7a86';ctx.lineWidth=2.2;ctx.beginPath();ctx.arc(0,4,14,0,7);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#2b3a46';ctx.font='800 15px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(p),0,5);
+  ctx.restore();
+}
+function popper(x,y,ang,s,seed){
+  ctx.save();ctx.translate(x,y);ctx.rotate(ang);ctx.scale(s,s);
+  const col=['#ff6b8a','#ffd23f','#4fb3ff','#6fd14a','#c9b3ff','#ff9a3c'];
+  for(let i=0;i<46;i++){const r=hash(seed+i),q=hash(seed+i*3.7),d=60+r*330,a=-Math.PI/2+(q-.5)*1.1;ctx.save();ctx.translate(Math.cos(a)*d,Math.sin(a)*d);ctx.rotate(r*6);ctx.fillStyle=col[i%6];
+    if(i%3)ctx.fillRect(-5,-2.5,10,5);else{ctx.beginPath();ctx.arc(0,0,4,0,7);ctx.fill()}ctx.restore()}
+  ctx.lineCap='round';for(let k=0;k<4;k++){ctx.strokeStyle=col[(k+seed)%6];ctx.lineWidth=4;ctx.beginPath();const a=-Math.PI/2+(k-1.5)*.28;for(let j=0;j<=24;j++){const d=40+j*9,w=Math.sin(j*.9+k)*10;ctx.lineTo(Math.cos(a)*d-Math.sin(a)*w,Math.sin(a)*d+Math.cos(a)*w)}ctx.stroke()}
+  ctx.fillStyle='#ff9a3c';ctx.strokeStyle='#a34a00';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(-22,-30);ctx.lineTo(22,-30);ctx.lineTo(4,60);ctx.lineTo(-4,60);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.strokeStyle='#ffd23f';ctx.lineWidth=5;for(let k=0;k<3;k++){ctx.beginPath();ctx.moveTo(-18+k*4,-12+k*24);ctx.lineTo(18-k*4,-4+k*24);ctx.stroke()}
+  ctx.fillStyle='#ffe27a';ctx.beginPath();ctx.ellipse(0,-30,22,7,0,0,7);ctx.fill();ctx.stroke();
+  ctx.restore();
+}
+function cardStats(){
+  const order=standings(),c=mode==='duo'?(winner||racers[0]):me;
+  return {c,order,place:order.indexOf(c)+1,n:racers.length};
+}
+function resultCard(){
+  const {c,place,n}=cardStats(),Wc=1080,Hc=1350,cv2=document.createElement('canvas');cv2.width=Wc;cv2.height=Hc;
+  const saved=ctx,savedWin=winner,hab=HAB[c.char]||'garden';
+  const sky={garden:['#7fd0ff','#e9f9ff'],desert:['#ffb36b','#fff0c9'],pond:['#7fd0ff','#e9f9ff'],sea:['#1f7fc4','#8adaf7'],ice:['#9fd6ff','#f4fcff']}[hab];
+  const ground={garden:'#5cb83c',desert:'#eec57e',pond:'#62c0e8',sea:'#e3cf94',ice:'#f6fcff'}[hab];
+  const first=place===1;
+  try{
+    ctx=cv2.getContext('2d');
+    const g=ctx.createLinearGradient(0,0,0,Hc);g.addColorStop(0,sky[0]);g.addColorStop(.75,sky[1]);ctx.fillStyle=g;ctx.fillRect(0,0,Wc,Hc);
+    ctx.save();ctx.translate(Wc/2,640);ctx.fillStyle='rgba(255,255,255,.22)';for(let k=0;k<16;k++){ctx.rotate(Math.PI/8);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-60,-900);ctx.lineTo(60,-900);ctx.closePath();ctx.fill()}ctx.restore();
+    ctx.fillStyle=ground;ctx.beginPath();ctx.ellipse(Wc/2,1010,700,150,0,Math.PI,0);ctx.lineTo(Wc,Hc);ctx.lineTo(0,Hc);ctx.closePath();ctx.fill();
+    popper(110,1000,.55,1.35,3);popper(Wc-110,1000,-.55,1.35,11);
+    // the animal, big, with its winning face
+    const f={...c,done:null,left:false};winner=f;noShadow=true;
+    const S=2.8,hx=headX(f);
+    ctx.save();ctx.translate(Wc/2+60*S-hx*S,960-178*S);ctx.scale(S,S);
+    const hd=(DRAW[f.char]||drawCat)(f,performance.now(),true);
+    const tx=hd.x+4,ty=hd.y-hd.r-34;
+    ctx.lineCap='round';[[-1,-14],[1,14]].forEach(([s,dx])=>{ctx.strokeStyle=f.dark;ctx.lineWidth=5.5;ctx.beginPath();ctx.moveTo(hd.x+s*hd.r*.75,hd.y+2);ctx.quadraticCurveTo(hd.x+s*hd.r*1.5,hd.y-hd.r-6,tx+dx*.8,ty+14);ctx.stroke();ctx.strokeStyle=f.body;ctx.lineWidth=3;ctx.stroke()});
+    face(hd.x,hd.y,hd.r,'win',performance.now(),f);
+    if(first)trophy(tx,ty,1.25);else medal(tx,ty+6,1.25,place);
+    ctx.restore();
+    for(let i=0;i<70;i++){const x=hash(i*7.1)*Wc,y=hash(i*3.3)*900,col=['#ff6b8a','#ffd23f','#4fb3ff','#6fd14a','#c9b3ff','#ff9a3c'][i%6];ctx.save();ctx.translate(x,y);ctx.rotate(hash(i)*6);ctx.fillStyle=col;ctx.globalAlpha=.85;ctx.fillRect(-7,-3.5,14,7);ctx.restore()}
+    // headline
+    let head,sub;
+    if(mode==='solo'){head=first?(diff===3?'CHAMPION!':'YOU WON!'):'SO CLOSE!';sub=t('vsCpu')+' · '+t(DIFF[diff].k)}
+    else if(mode==='online'){head=first?'1ST PLACE!':ord(place).toUpperCase()+' PLACE!';sub=t('online')+' · '+n+' '+t('players')}
+    else{head=(c.name||'').toUpperCase()+' WINS!';sub=t('duo')}
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
+    let fs=150;ctx.font=`800 ${fs}px "Baloo 2",sans-serif`;while(ctx.measureText(head).width>Wc-90&&fs>60){fs-=6;ctx.font=`800 ${fs}px "Baloo 2",sans-serif`}
+    ctx.lineWidth=22;ctx.strokeStyle='#14301f';ctx.strokeText(head,Wc/2,150);ctx.fillStyle=first?'#ffd23f':'#ffffff';ctx.fillText(head,Wc/2,150);
+    ctx.font='700 46px "Baloo 2",sans-serif';ctx.lineWidth=10;ctx.strokeText(sub,Wc/2,250);ctx.fillStyle='#fff';ctx.fillText(sub,Wc/2,250);
+    const who=(myName()&&mode!=='duo'?myName()+' the ':'')+t('ch_'+c.char);
+    ctx.font='700 40px "Baloo 2",sans-serif';ctx.lineWidth=9;ctx.strokeText(who,Wc/2,310);ctx.fillStyle='#ffe9a8';ctx.fillText(who,Wc/2,310);
+    // stat tiles
+    const topK=Math.round(Math.min(MAXKMH,STEP*GAIN*c.top*KMH)),tiles=[['TIME',c.done!=null?fmt(c.done):'—'],['TOP SPEED',topK+' km/h'],['TOP RPM',String(Math.round(c.top*60))]];
+    const tw=310,gap=25,x0=(Wc-3*tw-2*gap)/2,y0=1080;
+    tiles.forEach(([k,v],i)=>{const x=x0+i*(tw+gap);ctx.fillStyle='rgba(20,48,31,.88)';rr(x,y0,tw,170,26);ctx.fill();
+      ctx.fillStyle='#bfe8c9';ctx.font='800 34px "Baloo 2",sans-serif';ctx.fillText(k,x+tw/2,y0+48);
+      ctx.fillStyle=i===2&&c.top*60>=REDRPM?'#ff7a5c':'#ffffff';let vs=72;ctx.font=`800 ${vs}px "Baloo 2",sans-serif`;while(ctx.measureText(v).width>tw-30){vs-=4;ctx.font=`800 ${vs}px "Baloo 2",sans-serif`}ctx.fillText(v,x+tw/2,y0+115)});
+    ctx.fillStyle='#14301f';ctx.font='700 34px "Baloo 2",sans-serif';ctx.fillText('🐛 Caterpillar Race · '+location.host,Wc/2,1305);
+  }finally{ctx=saved;winner=savedWin;noShadow=false}
+  return cv2;
+}
+let cardURL='';
+function showCard(){
+  panel='card';const cv2=resultCard();cardURL=cv2.toDataURL('image/png');
+  ov.innerHTML=`<div class="panel"><h2>🎉 ${t('yourPic')}</h2><img class="card" src="${cardURL}" alt="${esc(t('picAlt'))}">
+  <div class="row">${navigator.share?`<button class="go small" data-act="sharepic">📤 ${t('sharePic')}</button>`:''}<button class="${navigator.share?'sec':'go small'}" data-act="savepic">⬇️ ${t('savePic')}</button></div>
+  <div class="row"><button class="sec" data-act="backres">← ${t('back')}</button><button class="sec" data-act="copy">${t('copyText')}</button></div>
+  <p class="small">${t('picHint')}</p><p class="small" id="msg" aria-live="polite"></p></div>`;
+}
+async function sharePic(){
+  try{const blob=await (await fetch(cardURL)).blob(),file=new File([blob],'caterpillar-race.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:shareText,title:t('title')});return}
+    await navigator.share({text:shareText,title:t('title'),url:location.origin});
+  }catch(e){if(e&&e.name!=='AbortError')savePic()}
+}
+function savePic(){const a=document.createElement('a');a.href=cardURL;a.download='caterpillar-race.png';document.body.appendChild(a);a.click();a.remove();say(t('picSaved'))}
 function say(s){const m=document.getElementById('msg');if(m)m.textContent=s}
 function copyText(s,ok){try{navigator.clipboard.writeText(s).then(()=>say(ok),()=>say(s))}catch(e){say(s)}}
 function saveNick(){const i=document.getElementById('nick');if(i){const v=i.value.trim().slice(0,14);store.set('cr-nick',v);return v}return myName()}
@@ -991,6 +1084,10 @@ ov.addEventListener('click',e=>{
   if(act==='leave'){leaveRoom();return}
   if(act==='copylink'&&net){copyText(roomLink(net.code),t('copied'));return}
   if(act==='sharelink'&&net){navigator.share({title:t('title'),text:t('invite'),url:roomLink(net.code)}).catch(()=>{});return}
+  if(act==='card'){showCard();return}
+  if(act==='sharepic'){sharePic();return}
+  if(act==='savepic'){savePic();return}
+  if(act==='backres'){results();return}
   if(act==='copy'){copyText(shareText,t('copyOk'))}
 });
 ov.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.target.id==='nick'||e.target.id==='code')){const b=ov.querySelector('.nav button.go');if(b)b.click()}});
