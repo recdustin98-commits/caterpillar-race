@@ -1083,10 +1083,13 @@ function showCard(){
   <div class="row"><button class="sec" data-act="backres">← ${t('back')}</button><button class="sec" data-act="copy">${t('copyText')}</button></div>
   <p class="small">${t('picHint')}</p><p class="small" id="msg" aria-live="polite"></p></div>`;
 }
+// the message that goes with a shared picture always ends with a tappable game link
+const gameURL=()=>location.origin+'/';
+const shareMsg=()=>/https?:\/\//.test(shareText)?shareText:shareText+'\n'+gameURL();
 async function sharePic(){
   try{const blob=await (await fetch(cardURL)).blob(),file=new File([blob],'caterpillar-race.png',{type:'image/png'});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:shareText,title:t('title')});return}
-    await navigator.share({text:shareText,title:t('title'),url:location.origin});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:shareMsg(),title:t('title')});return}
+    await navigator.share({text:shareText,title:t('title'),url:gameURL()});
   }catch(e){if(e&&e.name!=='AbortError')savePic()}
 }
 function savePic(){const a=document.createElement('a');a.href=cardURL;a.download='caterpillar-race.png';document.body.appendChild(a);a.click();a.remove();say(t('picSaved'))}
@@ -1141,7 +1144,7 @@ ov.addEventListener('click',e=>{
   if(act==='sharepic'){sharePic();return}
   if(act==='savepic'){savePic();return}
   if(act==='backres'){results();return}
-  if(act==='copy'){copyText(shareText,t('copyOk'))}
+  if(act==='copy'){copyText(shareMsg(),t('copyOk'))}
 });
 ov.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.target.id==='nick'||e.target.id==='code')){const b=ov.querySelector('.nav button.go');if(b)b.click()}});
 ov.addEventListener('input',e=>{if(e.target.id==='code'){const v=e.target.value.replace(/\D/g,'').slice(0,4);if(v!==e.target.value)e.target.value=v;codeDraft=v}});
