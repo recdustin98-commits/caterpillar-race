@@ -150,7 +150,9 @@ function drawCat(c,now,ghost){
   const base=178,sp=Math.min(CAP,Math.max(0,c.w)),br=RM?0:Math.sin(now/300+c.ph)*.7;
   const seg=[];
   const hx0=headX(c);
-  for(let i=0;i<N;i++){const psi=c.phi*1.25-i*DELTA,lift=6*(1-Math.cos(psi))/2,r=10+3*Math.sin(Math.PI*(i+1)/(N+1));seg.push({x:hx0-13-(N-1-i)*SP,y:base-r-lift+(i%2?br:-br),r,lift})}
+  // Body lies flat; a single segment pops up at a time and that bump walks from tail to head.
+  const bump=((c.phi*1.25/(2*Math.PI))*(N+1))%(N+1)-.5;
+  for(let i=0;i<N;i++){const d=Math.abs(i-bump),k=d<1?(1+Math.cos(Math.PI*d))/2:0,lift=11*k,r=10+3*Math.sin(Math.PI*(i+1)/(N+1));seg.push({x:hx0-13-(N-1-i)*SP,y:base-r-lift,r,lift})}
   if(!ghost){const x0=seg[0].x,x1=seg[N-1].x;ctx.fillStyle='rgba(30,60,20,.22)';ctx.beginPath();ctx.ellipse((x0+x1)/2+6,base+1,(x1-x0)/2+20,4,0,0,7);ctx.fill()}
   ctx.fillStyle=c.dark;
   seg.forEach(s=>{const down=s.lift<1.5,ly=down?base-1:s.y+s.r-1;ctx.beginPath();ctx.ellipse(s.x-3,ly,3.2,down?2.8:2,0,0,7);ctx.ellipse(s.x+4,ly,3.2,down?2.8:2,0,0,7);ctx.fill()});
