@@ -155,7 +155,7 @@ function drawCat(c,now,ghost){
   ctx.fillStyle=c.dark;
   seg.forEach(s=>{const down=s.lift<2.5,ly=down?base-1:s.y+s.r-1;ctx.beginPath();ctx.ellipse(s.x-3,ly,3.2,down?2.8:2,0,0,7);ctx.ellipse(s.x+4,ly,3.2,down?2.8:2,0,0,7);ctx.fill()});
   for(let i=0;i<N;i++){const s=seg[i];ctx.fillStyle=c.body;ctx.strokeStyle=c.dark;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();ctx.stroke();ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.arc(s.x-3,s.y-4,s.r*.35,0,7);ctx.fill();if(i%2){ctx.fillStyle=c.spot;ctx.beginPath();ctx.arc(s.x+1,s.y-s.r*.55,2.4,0,7);ctx.fill()}}
-  const hs=seg[N-1],hx=hs.x+13,hy=hs.y-7;
+  const hs=seg[N-1],hx=hs.x+13,hy=base-20;
   const a=RM?0:Math.sin(now/140+c.ph)*.2+Math.min(.5,sp*.02)*Math.sin(now/60);
   ctx.strokeStyle=c.dark;ctx.lineWidth=2.5;ctx.lineCap='round';
   [[-5,-1.85],[6,-1.3]].forEach(([dx,b])=>{const ang=b+a,sx=hx+dx,sy=hy-14,ex=sx+Math.cos(ang)*22,ey=sy+Math.sin(ang)*22;ctx.beginPath();ctx.moveTo(sx,sy);ctx.quadraticCurveTo(sx+3,sy-14,ex,ey);ctx.stroke();ctx.fillStyle='#ff4f6d';ctx.beginPath();ctx.arc(ex,ey,4,0,7);ctx.fill()});
@@ -212,6 +212,12 @@ function exprOf(c){
   if(state!=='race')return 'slow';
   return c.disp>=EX_RED?'red':c.disp>=EX_FAST?'fast':'slow';
 }
+function mixHex(a,b,t){ // blend by hue (green -> yellow -> orange -> red) so the face never turns muddy brown
+  const hsl=h=>{const[r,g2,b2]=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255),mx=Math.max(r,g2,b2),mn=Math.min(r,g2,b2),l=(mx+mn)/2,d=mx-mn;let hh=0,s=0;if(d){s=d/(1-Math.abs(2*l-1));hh=mx===r?((g2-b2)/d)%6:mx===g2?(b2-r)/d+2:(r-g2)/d+4;hh*=60;if(hh<0)hh+=360}return[hh,s,l]};
+  const A=hsl(a),B=hsl(b);let dh=B[0]-A[0];if(dh>180)dh-=360;if(dh<-180)dh+=360;
+  const h=(A[0]+dh*t+360)%360,s=A[1]+(B[1]-A[1])*t,l=A[2]+(B[2]-A[2])*t;
+  return `hsl(${h.toFixed(1)},${(s*100).toFixed(1)}%,${(l*100).toFixed(1)}%)`;
+}
 function drop(x,y,s,a){ctx.save();ctx.globalAlpha*=a;ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='#6cc4ff';ctx.strokeStyle='#2a8fd0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,-6);ctx.quadraticCurveTo(4.5,0,0,4);ctx.quadraticCurveTo(-4.5,0,0,-6);ctx.fill();ctx.stroke();ctx.restore()}
 // One face, six moods. Drawn in units of a 17px head, facing right, centred on the head.
 function face(cx,cy,r,ex,now,c){
@@ -219,7 +225,7 @@ function face(cx,cy,r,ex,now,c){
   if(ex==='ready'&&!RM)ctx.translate(Math.sin(now/35)*.9,0);
   // 200-300 RPM: the sweating face slowly blushes; 300+: full red, huffing, glowing outline
   const flush=ex==='red'?1:ex==='fast'?Math.max(0,Math.min(1,(c.disp-EX_FLUSH)/(EX_RED-EX_FLUSH))):0;
-  if(flush>0){ctx.fillStyle=`rgba(255,${60-30*flush|0},${50-30*flush|0},${ex==='red'?.72:.45*flush})`;ctx.beginPath();ctx.arc(0,0,17.5,0,7);ctx.fill()}
+  if(flush>0){ctx.fillStyle=mixHex(c.body,'#ff4234',ex==='red'?1:.15+.7*flush);ctx.beginPath();ctx.arc(0,0,16.2,0,7);ctx.fill()}
   if(ex==='red'&&!RM){ctx.strokeStyle=`rgba(255,40,40,${.55+.4*Math.sin(now/90)})`;ctx.lineWidth=2.2;ctx.beginPath();ctx.arc(0,0,19.5,0,7);ctx.stroke()}
   const eye=(x,y,s,px,big)=>{ctx.fillStyle='#fff';ctx.strokeStyle=ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,s,0,7);ctx.fill();ctx.stroke();ctx.fillStyle=ink;ctx.beginPath();ctx.arc(x+px,y+1,s*(big?.55:.42),0,7);ctx.fill();if(big){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x+px+1,y-1,s*.2,0,7);ctx.fill()}};
   const cheeks=(col)=>{ctx.fillStyle=col;ctx.beginPath();ctx.arc(10,6,4,0,7);ctx.fill();ctx.beginPath();ctx.arc(-9,6,3.4,0,7);ctx.fill()};
@@ -233,22 +239,15 @@ function face(cx,cy,r,ex,now,c){
   }else if(ex==='ready'){
     cheeks('rgba(255,110,130,.55)');eye(0,-5,6.8,1.5,true);eye(11,-4,5.8,1.5,true);
     ctx.strokeStyle=ink;ctx.lineWidth=1.8;ctx.beginPath();ctx.arc(7,7,2.6,0,7);ctx.stroke();
-  }else if(ex==='fast'){
+  }else if(ex==='fast'||ex==='red'){
     cheeks('rgba(255,80,80,.55)');
     ctx.strokeStyle=ink;ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(-6,-13);ctx.lineTo(4,-9.5);ctx.moveTo(7,-9.5);ctx.lineTo(16,-12.5);ctx.stroke();
     ctx.fillStyle='#fff';ctx.strokeStyle=ink;ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(0,-4,6,3.6,0,0,7);ctx.fill();ctx.stroke();ctx.beginPath();ctx.ellipse(11,-4,5,3.2,0,0,7);ctx.fill();ctx.stroke();
     ctx.fillStyle=ink;ctx.beginPath();ctx.arc(2,-4,2.3,0,7);ctx.arc(13,-4,2,0,7);ctx.fill();
     ctx.fillStyle='#fff';ctx.strokeStyle=ink;ctx.lineWidth=1.5;rr(-1,3,15,7,2);ctx.fill();ctx.stroke();
     ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(4,3);ctx.lineTo(4,10);ctx.moveTo(9,3);ctx.lineTo(9,10);ctx.moveTo(-1,6.5);ctx.lineTo(14,6.5);ctx.stroke();
-    if(!RM)for(let i=0;i<3;i++){const tt=((now/520)+i/3)%1;drop(-15-tt*20,-13+tt*12-Math.sin(tt*Math.PI)*6,.9,1-tt)}
-  }else if(ex==='red'){
-    cheeks('rgba(255,70,70,.7)');
-    ctx.strokeStyle=ink;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(-5,-9);ctx.lineTo(2,-5);ctx.lineTo(-5,-1);ctx.moveTo(15,-8);ctx.lineTo(8,-4);ctx.lineTo(15,0);ctx.stroke();
-    ctx.fillStyle='#7a1f2b';ctx.strokeStyle=ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(7,7,6.5,5.5,0,0,7);ctx.fill();ctx.stroke();
-    ctx.fillStyle='#ff7fa3';ctx.beginPath();ctx.moveTo(4,9);ctx.quadraticCurveTo(8,18,12,9);ctx.fill();
-    if(!RM){for(let i=0;i<5;i++){const tt=((now/330)+i/5)%1,side=i%2?1:-1;drop(side>0?16+tt*14:-15-tt*20,-14+tt*14-Math.sin(tt*Math.PI)*8,.9,1-tt)}
-      for(let i=0;i<3;i++){const tt=((now/700)+i/3)%1;ctx.fillStyle=`rgba(255,255,255,${.85*(1-tt)})`;ctx.beginPath();ctx.arc(-6+i*8,-22-tt*20,3.5+tt*4,0,7);ctx.fill()}
-      if(Math.floor(now/450)%2){ctx.font='800 11px "Baloo 2",sans-serif';ctx.fillStyle='#a32118';ctx.textAlign='left';ctx.fillText(t('huff'),20,14)}}
+    if(!RM){const nd=ex==='red'?5:3,sp=ex==='red'?360:520;for(let i=0;i<nd;i++){const tt=((now/sp)+i/nd)%1;drop(-15-tt*20,-13+tt*12-Math.sin(tt*Math.PI)*6,.9,1-tt)}
+      if(ex==='red')for(let i=0;i<3;i++){const tt=((now/700)+i/3)%1;ctx.fillStyle=`rgba(255,255,255,${.85*(1-tt)})`;ctx.beginPath();ctx.arc(-6+i*8,-22-tt*20,3.5+tt*4,0,7);ctx.fill()}}
   }else if(ex==='win'){
     cheeks('rgba(255,110,150,.7)');
     ctx.strokeStyle=ink;ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(-6,-3);ctx.quadraticCurveTo(0,-11,5,-3);ctx.moveTo(7,-3);ctx.quadraticCurveTo(11.5,-10,16,-3);ctx.stroke();
