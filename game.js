@@ -30,7 +30,7 @@ const L={
   board:'Leaderboard',boardTitle:'Fastest caterpillars',p24:'24 hours',p7:'7 days',pAll:'All time',nickOpt:'Nickname (for the leaderboard)',
   boardEmpty:'No times yet. Be the first!',boardErr:'Couldn\'t load the leaderboard. Check your internet.',boardSaving:'Saving to leaderboard…',
   boardRank:'Leaderboard: you\'re #{r} of {n} in the last 24 hours',boardNoNick:'Add a nickname before the race to join the leaderboard.',boardFail:'Couldn\'t save to the leaderboard.',loading:'Loading…',boardNote:'Your best time counts once per period.',
-  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',snap:'Snap!',huff:'Huff!',phew:'Phew~',yay:'Yay!'},
+  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 300 RPM. Almost impossible!',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',snap:'Snap!',huff:'Huff!',phew:'Phew~',yay:'Yay!'},
 };
 const lang='en';
 const t=(k,v={})=>(L[lang][k]||L.en[k]||k).replace(/\{(\w+)\}/g,(_,x)=>v[x]??'');
@@ -62,10 +62,13 @@ function headPos(ch,phi){
 }
 const headX=c=>headPos(c.char||'cat',c.phi);
 const prog=c=>Math.max(0,Math.min(1,(headX(c)-S0)/(TRACK-S0)));
-const DIFF=[{k:'easy',w:9},{k:'normal',w:14},{k:'hard',w:19}];
+// computer's average speed per level (it varies ±18% around this)
+const DIFF=[{k:'easy',rpm:100},{k:'normal',rpm:160},{k:'hard',rpm:220},{k:'champion',rpm:300}].map(d=>({...d,w:d.rpm*2*Math.PI/60}));
+const champOpen=()=>store.get('cr-champ')==='1';
 const SK=[['#6fd14a','#2f7d1f','#ffd23f'],['#ff9a3c','#b5560e','#fff1a8'],['#4fb3ff','#1f6ea8','#ffffff'],['#ff6b9a','#b02d5c','#ffffff'],['#b38bff','#5e3bb0','#ffffff'],['#ffd23f','#9a7a05','#ffffff'],['#3fd6c6','#13806f','#ffffff'],['#ff5b4f','#a32118','#ffe9a8']].map(([body,dark,spot])=>({body,dark,spot}));
 let myChar=CHARS.includes(store.get('cr-char'))?store.get('cr-char'):'cat',botChar=null;
-let mode=qs.get('room')?'online':'solo',diff=1,state='menu',startT=0,firstDone=0,endEl=0,winner=null,racers=[],me=null,endNote='';
+let mode=qs.get('room')?'online':'solo',diff=Math.min(3,Math.max(0,+(store.get('cr-diff')??1)||0)),state='menu',startT=0,firstDone=0,endEl=0,winner=null,racers=[],me=null,endNote='';
+if(diff===3&&!champOpen())diff=2;
 const hash=k=>{const s=Math.sin(k*127.1+311.7)*43758.5453;return s-Math.floor(s)};
 const fmt=ms=>(ms/1000).toFixed(2)+'s';
 const rpmOf=w=>Math.max(0,w)*60/(2*Math.PI);
@@ -837,7 +840,7 @@ function menu(){
     h+=`<h2>${t('p2Animal')}</h2><p class="small">${t('p1Is',{a:`<b>${t('ch_'+myChar)}</b>`})} · ${t('selected',{a:`<b>${t('ch_'+p2Char)}</b>`})}</p>${animalGrid(p2Char,'char2')}<p class="small">${t('duoHint')}</p>${navRow(t('start'),'start')}`;
   }else if(pg==='solo'){
     const best=store.get('cr2-best-'+diff),d=t(DIFF[diff].k);
-    h+=`<h2>${t('nameDiff')}</h2><label>${t('difficulty')}</label><div class="seg" data-g="diff">${DIFF.map((x,i)=>`<button data-v="${i}" class="${i===diff?'on':''}">${t(x.k)}</button>`).join('')}</div>
+    h+=`<h2>${t('nameDiff')}</h2><label>${t('difficulty')}</label><div class="seg diff4" data-g="diff">${DIFF.map((x,i)=>{const lk=i===3&&!champOpen();return `<button data-v="${i}" class="${i===diff?'on':''}" ${lk?'disabled aria-disabled="true"':''}>${lk?'🔒 ':''}${t(x.k)}</button>`}).join('')}</div><p class="small">${champOpen()?t('champHint'):t('champLocked')}</p>
     ${nickIn(t('nickOpt'))}<p class="small">${best?t('best',{d,t:fmt(+best)}):t('nobest',{d})}</p>${navRow(t('start'),'start')}`;
   }else{
     h+=`<h2>${t('nameRoom')}</h2>${nickIn(t('nick'))}`;
@@ -915,6 +918,7 @@ function finish(){
   const order=standings();
   winner=order[0]&&(order[0].done!=null||mode==='online')?order[0]:null;
   if(mode==='solo'&&me.done!=null){const k='cr2-best-'+diff,b=+store.get(k)||0,d=t(DIFF[diff].k);if(!b||me.done<b){store.set(k,String(me.done));endNote=b?t('newBest',{d}):t('firstBest',{d})}else endNote=t('best',{d,t:fmt(b)})}
+  if(mode==='solo'&&diff===2&&winner===me&&!champOpen()){store.set('cr-champ','1');endNote=(endNote?endNote+' ':'')+t('champUnlocked')}
   if(mode==='solo')shareText=t('shareSolo',{d:t(DIFF[diff].k),r:winner===me?t('won'):t('lost'),t:me.done!=null?' · '+fmt(me.done):'',rpm:Math.round(me.top*60)});
   else if(mode==='online'&&me){const p=order.indexOf(me)+1;shareText=t('shareOnline',{p:ord(p),n:racers.length,t:me.done!=null?' · '+fmt(me.done):'',u:net?roomLink(net.code):location.origin})}
   else if(winner)shareText=t('wins',{n:winner.name})+(winner.done!=null?' '+fmt(winner.done):'');
@@ -961,7 +965,7 @@ ov.addEventListener('click',e=>{
   if(act==='keep'){if(state==='race'||state==='count')raceOv();return}
   if(act==='quityes'){if(mode==='online'){leaveRoom();return}finishId++;state='menu';si=0;menu();return}
   if(gp==='mode'){saveForm();mode=b.dataset.v;menu();return}
-  if(gp==='diff'){saveForm();diff=+b.dataset.v;menu();return}
+  if(gp==='diff'){saveForm();diff=+b.dataset.v;store.set('cr-diff',String(diff));menu();return}
   if(gp==='char'){saveForm();myChar=b.dataset.v;store.set('cr-char',myChar);menu();return}
   if(gp==='char2'){saveForm();p2Char=b.dataset.v;store.set('cr-char2',p2Char);menu();return}
   if(gp==='otab'){saveForm();onTab=b.dataset.v;menu();return}

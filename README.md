@@ -6,7 +6,7 @@ Draw circles on the screen, like turning a wheel, to make your caterpillar crawl
 
 ## Modes
 - **Practice** — endless track, coaching tips, hold 300+ RPM for 5 seconds
-- **vs Computer** — Easy / Normal / Hard
+- **vs Computer** — Easy (100 RPM) / Normal (160) / Hard (220) / Champion (300, unlocked by beating Hard)
 - **1 phone, 2 players** — split screen
 - **Online (2–8 players)** — create a race, share the link, everyone plays on their own phone
 
