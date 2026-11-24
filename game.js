@@ -151,7 +151,7 @@ function drawCat(c,now,ghost){
   const seg=[];
   const hx0=headX(c);
   // Body lies flat; a single segment pops up at a time and that bump walks from tail to head.
-  const bump=((c.phi*1.25/(2*Math.PI))*(N+1))%(N+1)-.5;
+  const bump=((c.phi*(1.25/3)/(2*Math.PI))*(N+1))%(N+1)-.5;
   for(let i=0;i<N;i++){const d=Math.abs(i-bump),k=d<1?(1+Math.cos(Math.PI*d))/2:0,lift=11*k,r=10+3*Math.sin(Math.PI*(i+1)/(N+1));seg.push({x:hx0-13-(N-1-i)*SP,y:base-r-lift,r,lift})}
   if(!ghost){const x0=seg[0].x,x1=seg[N-1].x;ctx.fillStyle='rgba(30,60,20,.22)';ctx.beginPath();ctx.ellipse((x0+x1)/2+6,base+1,(x1-x0)/2+20,4,0,0,7);ctx.fill()}
   ctx.fillStyle=c.dark;
