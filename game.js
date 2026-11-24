@@ -71,7 +71,7 @@ const ro=new ResizeObserver(resize);ro.observe(cv);resize();
 
 // ---------- game model ----------
 const TRACK=2400,START=40,HUD=30;
-const N=10,SP=13,STEP=34,DELTA=.6,LIFT=13,GAIN=1.4,CAP=52,MAXRPM=500,REDRPM=400;
+const N=10,SP=13,STEP=34,DELTA=.6,LIFT=13,GAIN=1.4,CAP=52,MAXRPM=500,REDRPM=300;
 const KMH=100/(STEP*GAIN*CAP/(2*Math.PI)),MAXKMH=100;
 const g=p=>(p-Math.sin(p))/(2*Math.PI);
 const headOff=phi=>(N-1)*SP+STEP*g(phi-(N-1)*DELTA);
@@ -132,7 +132,7 @@ function upd(c,now,dt){
     if(mode==='practice'){if(rpmOf(sp)>=300){c.hold+=dt/1000;c.bestHold=Math.max(c.bestHold,c.hold);if(c.hold>=5&&!c.goalDone){c.goalDone=true;c.goalAt=now}}else c.hold=0}
     else if(headX(c)>=TRACK){c.done=now-startT;if(!firstDone)firstDone=now;if(mode==='online'&&c===me&&net)net.send({t:'fin',time:c.done,spin:c.spin,top:c.top})}
   }
-  const hx=headX(c);if(c.px!=null&&dt>0){const v=(hx-c.px)/dt*1000;c.vs+=(v-c.vs)*(1-Math.exp(-dt/350))}c.px=hx;c.kmh=Math.max(0,c.vs)*KMH;
+  const hx=headX(c);if(c.px!=null&&dt>0){const v=(hx-c.px)/dt*1000;c.vs+=(v-c.vs)*(1-Math.exp(-dt/350))}c.px=hx;c.kmh=Math.min(MAXKMH,Math.max(0,c.vs)*KMH);
   c.pv+=(Math.max(-3,Math.min(3,-sp*.15))-c.pv)*.15;
 }
 function standings(){
@@ -217,7 +217,8 @@ function drop(x,y,s,a){ctx.save();ctx.globalAlpha*=a;ctx.translate(x,y);ctx.scal
 function face(cx,cy,r,ex,now,c){
   const ink='#14301f';ctx.save();ctx.translate(cx,cy);ctx.scale(r/17,r/17);
   if(ex==='ready'&&!RM)ctx.translate(Math.sin(now/35)*.9,0);
-  if(ex==='red'){ctx.fillStyle='rgba(255,70,70,.2)';ctx.beginPath();ctx.arc(0,0,17,0,7);ctx.fill()}
+  if(ex==='red'){const heat=Math.max(0,Math.min(1,(c.disp-EX_RED)/(REDRPM-EX_RED)));ctx.fillStyle=`rgba(255,${60-30*heat|0},${50-30*heat|0},${.22+.48*heat})`;ctx.beginPath();ctx.arc(0,0,17.5,0,7);ctx.fill();
+    if(heat>=1&&!RM){ctx.strokeStyle=`rgba(255,40,40,${.5+.4*Math.sin(now/90)})`;ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,19,0,7);ctx.stroke()}}
   const eye=(x,y,s,px,big)=>{ctx.fillStyle='#fff';ctx.strokeStyle=ink;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,s,0,7);ctx.fill();ctx.stroke();ctx.fillStyle=ink;ctx.beginPath();ctx.arc(x+px,y+1,s*(big?.55:.42),0,7);ctx.fill();if(big){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x+px+1,y-1,s*.2,0,7);ctx.fill()}};
   const cheeks=(col)=>{ctx.fillStyle=col;ctx.beginPath();ctx.arc(10,6,4,0,7);ctx.fill();ctx.beginPath();ctx.arc(-9,6,3.4,0,7);ctx.fill()};
   ctx.lineCap='round';ctx.lineJoin='round';
