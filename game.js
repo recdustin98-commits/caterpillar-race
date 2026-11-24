@@ -81,8 +81,7 @@ const SIG={cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86
 // Every character moves the same average distance per turn (fair races); only the look differs.
 function headPos(ch,phi){
   if(ch==='inch')return S0+2*STEP*g(phi/2);
-  if(ch==='centi'||ch==='turtle')return S0+STEP*phi/(2*Math.PI);
-  return X0+headOff(phi);
+  return S0+STEP*phi/(2*Math.PI);
 }
 const headX=c=>headPos(c.char||'cat',c.phi);
 const prog=c=>Math.max(0,Math.min(1,(headX(c)-S0)/(TRACK-S0)));
@@ -150,10 +149,11 @@ function hills(vw,off,base,col,wl,amp){ctx.fillStyle=col;ctx.beginPath();ctx.mov
 function drawCat(c,now,ghost){
   const base=178,sp=Math.min(CAP,Math.max(0,c.w)),br=RM?0:Math.sin(now/300+c.ph)*.7;
   const seg=[];
-  for(let i=0;i<N;i++){const psi=c.phi-i*DELTA,lift=LIFT*(1-Math.cos(psi))/2,r=10+3*Math.sin(Math.PI*(i+1)/(N+1));seg.push({x:X0+i*SP+STEP*g(psi),y:base-r-lift+(i%2?br:-br),r,lift})}
+  const hx0=headX(c);
+  for(let i=0;i<N;i++){const psi=c.phi*1.25-i*DELTA,lift=6*(1-Math.cos(psi))/2,r=10+3*Math.sin(Math.PI*(i+1)/(N+1));seg.push({x:hx0-13-(N-1-i)*SP,y:base-r-lift+(i%2?br:-br),r,lift})}
   if(!ghost){const x0=seg[0].x,x1=seg[N-1].x;ctx.fillStyle='rgba(30,60,20,.22)';ctx.beginPath();ctx.ellipse((x0+x1)/2+6,base+1,(x1-x0)/2+20,4,0,0,7);ctx.fill()}
   ctx.fillStyle=c.dark;
-  seg.forEach(s=>{const down=s.lift<2.5,ly=down?base-1:s.y+s.r-1;ctx.beginPath();ctx.ellipse(s.x-3,ly,3.2,down?2.8:2,0,0,7);ctx.ellipse(s.x+4,ly,3.2,down?2.8:2,0,0,7);ctx.fill()});
+  seg.forEach(s=>{const down=s.lift<1.5,ly=down?base-1:s.y+s.r-1;ctx.beginPath();ctx.ellipse(s.x-3,ly,3.2,down?2.8:2,0,0,7);ctx.ellipse(s.x+4,ly,3.2,down?2.8:2,0,0,7);ctx.fill()});
   for(let i=0;i<N;i++){const s=seg[i];ctx.fillStyle=c.body;ctx.strokeStyle=c.dark;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();ctx.stroke();ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.arc(s.x-3,s.y-4,s.r*.35,0,7);ctx.fill();if(i%2){ctx.fillStyle=c.spot;ctx.beginPath();ctx.arc(s.x+1,s.y-s.r*.55,2.4,0,7);ctx.fill()}}
   const hs=seg[N-1],hx=hs.x+13,hy=base-20;
   const a=RM?0:Math.sin(now/140+c.ph)*.2+Math.min(.5,sp*.02)*Math.sin(now/60);
