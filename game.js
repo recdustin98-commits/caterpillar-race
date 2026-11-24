@@ -624,7 +624,7 @@ const MEL=[72,76,79,76,81,79,76,74,72,74,76,79,76,74,72,0,77,81,84,81,79,76,72,7
 const mf=n=>440*Math.pow(2,(n-69)/12);
 function musicTick(){
   if(!AC||AC.state!=='running')return;
-  const racing=state==='race'||state==='count',want=SND.music?(racing?.35:1):0;
+  const racing=state==='race'||state==='count',want=SND.music?(racing?.21:.7):0;
   musicBus.gain.setTargetAtTime(want,AC.currentTime,.3);
   if(!SND.music){mNext=0;return}
   const spb=60/132/2;
