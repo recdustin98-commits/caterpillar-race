@@ -944,12 +944,15 @@ function results(fresh){
   else title=winner?t('wins',{n:winner.name}):'—';
   const rows=order.map((c,i)=>`<tr${c===me&&mode==='online'?' style="font-weight:800"':''}><td>${i+1}</td><td><span class="dot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.pc||c.body};margin-right:4px"></span><span class="ic">${icImg(c.char)}</span>${esc(c.name)}</td><td>${c.left?t('leftTag'):c.done!=null?fmt(c.done):t('dnf')}</td><td>${Math.round(c.top*60)}</td></tr>`).join('');
   const again=mode==='online'?(net&&net.status()==='ok'?readyArea():''):`<button class="go" data-act="start">${t('rematch')}</button>`;
+  const pic=ensureCard(),canShare=!!navigator.share;
   ov.innerHTML=`<div class="panel"><h2>${esc(title)}</h2>
+  <button class="cardbtn" data-act="card" aria-label="${esc(t('picAlt'))}"><img class="card mini" src="${pic}" alt="${esc(t('picAlt'))}"></button>
+  ${again}
+  <div class="row">${canShare?`<button class="sec" data-act="sharepic">📤 ${t('sharePic')}</button>`:''}<button class="sec" data-act="savepic">⬇️ ${t('savePic')}</button></div>
   <table class="rk"><thead><tr><th>${t('rank')}</th><th>${t('racer')}</th><th>${t('time')}</th><th>${t('topRpm')}</th></tr></thead><tbody>${rows}</tbody></table>
   ${endNote?`<p class="small">${esc(endNote)}</p>`:''}
   ${boardNote?`<p class="small">${esc(boardNote)}</p>`:''}
-  ${again}
-  <div class="row"><button class="sec" data-act="${mode==='online'?'leave':'home'}">${mode==='online'?t('leave'):'🏠 '+t('home')}</button><button class="go small" data-act="card">${t('sharePicBtn')}</button></div>
+  <div class="row"><button class="sec" data-act="${mode==='online'?'leave':'home'}">${mode==='online'?t('leave'):'🏠 '+t('home')}</button><button class="sec" data-act="copy">${t('copyText')}</button></div>
   <p class="small" id="msg" aria-live="polite"></p></div>`;
 }
 // ---------- result picture: your animal celebrating with its trophy ----------
@@ -1071,9 +1074,10 @@ function resultCard(){
   }finally{ctx=saved;winner=savedWin;noShadow=false;noYay=false}
   return cv2;
 }
-let cardURL='';
+let cardURL='',cardFor=-1;
+function ensureCard(){if(cardFor!==finishId||!cardURL){cardURL=resultCard().toDataURL('image/png');cardFor=finishId}return cardURL}
 function showCard(){
-  panel='card';const cv2=resultCard();cardURL=cv2.toDataURL('image/png');
+  panel='card';ensureCard();
   ov.innerHTML=`<div class="panel"><h2>🎉 ${t('yourPic')}</h2><img class="card" src="${cardURL}" alt="${esc(t('picAlt'))}">
   <div class="row">${navigator.share?`<button class="go small" data-act="sharepic">📤 ${t('sharePic')}</button>`:''}<button class="${navigator.share?'sec':'go small'}" data-act="savepic">⬇️ ${t('savePic')}</button></div>
   <div class="row"><button class="sec" data-act="backres">← ${t('back')}</button><button class="sec" data-act="copy">${t('copyText')}</button></div>
