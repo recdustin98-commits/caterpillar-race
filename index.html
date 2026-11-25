@@ -108,6 +108,14 @@ tbody tr+tr td{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent
 .ul figcaption b{display:block;font-size:20px}.ul figcaption small{display:block;font-size:14px}
 @keyframes pop{0%{transform:scale(.3) rotate(-8deg);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1)}}
 .go.goldb{background:linear-gradient(#ffe27a,#ffb300);box-shadow:0 4px 0 #a36a00}
+.homeb.backb{left:54px;font-weight:800;font-size:22px;color:var(--ink)}
+.panel:has(.backb)>h2{padding:6px 0 0 100px;text-align:left;font-size:24px;min-height:44px}
+.lvstrip{margin:2px 0 6px}.lvstrip .cells{display:grid;grid-template-columns:repeat(30,1fr);gap:2px}
+.lvstrip i{height:12px;border-radius:3px;background:color-mix(in srgb,var(--ink) 14%,transparent)}
+.lvstrip i.ok{background:var(--on)}.lvstrip i.nx{background:#fff;box-shadow:inset 0 0 0 2.5px var(--orange)}
+.lvstrip i.dg:not(.ok){background:#ffe27a}.lvstrip i.kg:not(.ok){background:#c9a6ff}
+.lvstrip .ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px}
+.tile .minibar{display:block;width:100%;height:5px;margin-top:4px;border-radius:3px;background:rgba(255,255,255,.3)}.tile .minibar i{display:block;height:100%;border-radius:3px;background:#fff}
 @media(min-width:900px){.stage{border-radius:22px;width:calc(100% - 8vw)}}
 </style>
 </head>

@@ -30,7 +30,7 @@ const L={
   board:'Leaderboard',boardTitle:'Fastest caterpillars',p24:'24 hours',p7:'7 days',pAll:'All time',nickOpt:'Nickname (for the leaderboard)',
   boardEmpty:'No times yet. Be the first!',boardErr:'Couldn\'t load the leaderboard. Check your internet.',boardSaving:'Saving to leaderboard…',
   boardRank:'Leaderboard: you\'re #{r} of {n} in the last 24 hours',boardNoNick:'Add a nickname before the race to join the leaderboard.',boardFail:'Couldn\'t save to the leaderboard.',loading:'Loading…',boardNote:'Your best time counts once per period.',
-  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',nameShown:'Shown on the leaderboard.',changeAnimal:'Change animal',close:'Close',ch_dragon:'Golden Dragon',ch_king:'Dragon King',letsRace:"Let's race!",changeBtn:'✏️ Change',theAnimal:'the {a}',cpuTile:'vs Computer',cpuTileSub:'30 levels · unlock animals',onLv:"⭐ You're on Lv {n}",allDone:'⭐ All 30 levels cleared!',anyTile:'Race anyone',anyTileSub:'Jump into a race online',racingNow:'{n} racing now',friendsTile:'Race friends',friendsSub:'Private race with a code',sameTile:'Same phone',sameSub:'2 players, 1 phone',meTitle:'Animal & name',yourName:'Your name',newName:'🎲 New fun name',typeName:'Or type your own name (optional)',saveName:'Save name',useAuto:'Use my fun name',badName:'Please pick a different name.',nameSaved:'Name saved.',lockLv:'Lv {n}',lockedMsg:'Clear level {n} to unlock the {a}.',doneBtn:'Done',
+  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',lvLost:'LEVEL {n} · SO CLOSE!',nextUp:'Next: Lv {n}',nextAnimal:'Clear Lv {n} → {a}',cpuRpm:'Computer ≈ {r} RPM',back2:'Back',lvOf:'{n} / 30 cleared',nameShown:'Shown on the leaderboard.',changeAnimal:'Change animal',close:'Close',ch_dragon:'Golden Dragon',ch_king:'Dragon King',letsRace:"Let's race!",changeBtn:'✏️ Change',theAnimal:'the {a}',cpuTile:'vs Computer',cpuTileSub:'30 levels · unlock animals',onLv:"⭐ You're on Lv {n}",allDone:'⭐ All 30 levels cleared!',anyTile:'Race anyone',anyTileSub:'Jump into a race online',racingNow:'{n} racing now',friendsTile:'Race friends',friendsSub:'Private race with a code',sameTile:'Same phone',sameSub:'2 players, 1 phone',meTitle:'Animal & name',yourName:'Your name',newName:'🎲 New fun name',typeName:'Or type your own name (optional)',saveName:'Save name',useAuto:'Use my fun name',badName:'Please pick a different name.',nameSaved:'Name saved.',lockLv:'Lv {n}',lockedMsg:'Clear level {n} to unlock the {a}.',doneBtn:'Done',
  finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyRule:'Starts right away with 8 racers, or 15 s after a 2nd racer joins.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
  nextLevel:'Next level →',tryAgain:'Try again',levelsBtn:'📋 Levels',levels:'Pick a level',levelN:'Level {n}',cpuAbout:'Computer: about {r} RPM',levelCleared:'LEVEL {n} CLEARED!',newAnimal:'🎉 New animal!',newAnimals:'🎉 {n} new animals!',legendary:'🐉 LEGENDARY unlock!',raceAs:'Race as {a} now',seePic:'See my race picture',lvJump:'Level jump! You skipped to level {n}.',allCleared:'You beat all 30 levels!',bestLv:'Your best on level {n}: {t}',newBestLv:'New best on level {n}!',
  lvCol:'Level',lvShort:'Lv {n}',onlineLv:'Online',waitingForYou:'Everyone is waiting for you!',leaveQ:'Leave the race?',stay:'Stay',leaveYes:'Leave',invitedT:"You're invited!",joinAs:'You will race as:',friendsTitle:'Race friends',p2Title:"Player 2's animal",paceLbl:'PACE',raceLbl:'race',
@@ -89,7 +89,7 @@ const rpmOf=w=>Math.max(0,w)*60/(2*Math.PI);
 
 const mk=(sk,name,kind,id,ch)=>({...sk,id,name,char:ALLC.includes(ch)?ch:'cat',kind:kind||'human',phi:0,acc:0,w:0,spin:0,top:0,done:null,left:false,ph:Math.random()*6,pv:0,disp:0,bt:0,btw:0,tphi:0,tw:0,rt:0,ang:0,px:null,vs:0,kmh:0,hold:0,bestHold:0,goalDone:false});
 function setup(ids){
-  if(mode==='solo'){const bc=botChar||(botChar=lvl===NLV?'king':(l=>l[Math.floor(Math.random()*l.length)])(CHARS.filter(k=>k!==myChar&&k!=='dragon')));racers=[mk(SIG[bc],lvl===NLV?t('ch_king'):t('cpu'),'bot',null,bc),mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[1]}
+  if(mode==='solo'){const bc=botChar||(botChar=lvl===NLV?'king':(l=>l[Math.floor(Math.random()*l.length)])(CHARS.filter(k=>k!==myChar&&k!=='dragon')));racers=[mk(SIG[bc],(lvl===NLV?t('ch_king'):t('cpu'))+' · '+t('lvShort',{n:lvl}),'bot',null,bc),mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[1]}
   else if(mode==='practice'){racers=[mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[0]}
   else if(mode==='duo'){racers=[mk(SIG[myChar],t('p1'),'human',null,myChar),mk(p2Char===myChar?SK[1]:SIG[p2Char],t('p2'),'human',null,p2Char)];me=null}
   else{
@@ -617,7 +617,8 @@ function hud(now){
   ctx.fillStyle='#fff';ctx.font='700 15px "Baloo 2",sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(fmt(el),12,HUD/2+1);
   if(mode==='practice'){ctx.textAlign='right';ctx.fillStyle='#cfe3d6';ctx.fillText(t('practice'),W-12,HUD/2+1);return}
   if(!split()){if(net){ctx.textAlign='right';ctx.fillStyle='#cfe3d6';ctx.fillText(anyone?t('anyTile'):t('room')+' '+net.code,W-12,HUD/2+1)}return}
-  const x0=84,x1=W-30;
+  let x0=84;const x1=W-30;
+  if(mode==='solo'){const lt=t('lvShort',{n:raceLv});ctx.font='800 13px "Baloo 2",sans-serif';const lw=ctx.measureText(lt).width+16;rr(66,HUD/2-10,lw,20,10);ctx.fillStyle='#ffd23f';ctx.fill();ctx.fillStyle='#5a3a00';ctx.textAlign='center';ctx.fillText(lt,66+lw/2,HUD/2+1);x0=66+lw+22}
   ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x0,HUD/2);ctx.lineTo(x1,HUD/2);ctx.stroke();
   for(let yy=0;yy<3;yy++)for(let xx=0;xx<2;xx++){ctx.fillStyle=(xx+yy)%2?'#14301f':'#fff';ctx.fillRect(x1+6+xx*5,HUD/2-7.5+yy*5,5,5)}
   racers.forEach(c=>marker(c,x0+(x1-x0)*prog(c),HUD/2,30,true));
@@ -641,6 +642,9 @@ function draw(now){
   hud(now);
   if(state==='count'||(state==='race'&&now-startT<600)){
     const tx=state==='count'?String(Math.max(1,Math.ceil((startT-now)/1000))):t('go');
+    if(mode==='solo'&&state==='count'){const m=Math.min(W,H),ly=mid-m*.17;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
+      ctx.font='800 '+Math.round(m*.085)+'px "Baloo 2",sans-serif';ctx.lineWidth=8;ctx.strokeStyle='#14301f';ctx.fillStyle='#ffd23f';const lt=t('levelN',{n:raceLv}).toUpperCase()+(raceLv===NLV?' 👑':'');ctx.strokeText(lt,W/2,ly);ctx.fillText(lt,W/2,ly);
+      ctx.font='700 '+Math.round(m*.042)+'px "Baloo 2",sans-serif';ctx.lineWidth=5;ctx.fillStyle='#fff';const st=t('cpuRpm',{r:LV[raceLv-1]});ctx.strokeText(st,W/2,ly+m*.075);ctx.fillText(st,W/2,ly+m*.075)}
     ctx.font='800 '+Math.round(Math.min(W,H)*.18)+'px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';ctx.lineWidth=10;ctx.strokeStyle='#14301f';ctx.fillStyle=state==='count'?'#fff':'#ffd23f';
     ctx.strokeText(tx,W/2,mid);ctx.fillText(tx,W/2,mid);
   }
@@ -904,7 +908,14 @@ const icImg=(ch,cls)=>`<img class="${cls||''}" src="${iconURL(ch)}" alt="">`;
 // ---------- screens: home -> one tap per mode ----------
 let nameBack='home',invite=!!qs.get('room'),onTab='create',cap=Math.min(8,Math.max(2,+store.get('cr-cap')||4)),codeDraft=(qs.get('room')||'').replace(/\D/g,'').slice(0,4),meBack='home';
 let p2Char=(k=>isOpen(k)&&k!==myChar?k:CHARS.find(x=>isOpen(x)&&x!==myChar))(store.get('cr-char2'));
-const homeBtn=ask=>`<button class="homeb" data-act="${ask?'homeask':'home'}" aria-label="${t('home')}" title="${t('home')}">🏠</button>`;
+const homeBtn=(ask,back)=>`<button class="homeb" data-act="${ask?'homeask':'home'}" aria-label="${t('home')}" title="${t('home')}">🏠</button>${back?`<button class="homeb backb" data-act="${back}" aria-label="${t('back2')}" title="${t('back2')}">←</button>`:''}`;
+// where you are in the 30 levels: cleared = green, next = orange ring, 29 = dragon, 30 = crown
+function lvStrip(){
+  const c=cleared(),nx=Math.min(NLV,c+1),na=CHARS.filter(k=>k in UNLOCK&&UNLOCK[k]>c).sort((a,b)=>UNLOCK[a]-UNLOCK[b])[0];
+  const cells=LV.map((r,i)=>{const n=i+1;return `<i class="${n<=c?'ok':''}${n===nx&&c<NLV?' nx':''}${n===29?' dg':''}${n===NLV?' kg':''}"></i>`}).join('');
+  return `<div class="lvstrip" role="img" aria-label="${t('lvOf',{n:c})}"><div class="cells">${cells}</div><div class="ends"><span>${t('lvShort',{n:1})}</span><span>${t('lvOf',{n:c})}</span><span>🐉 👑</span></div>
+  <p class="small" style="margin:2px 0 0">${c>=NLV?t('allCleared'):t('nextUp',{n:nx})+(na?' · '+t('nextAnimal',{n:UNLOCK[na],a:t('ch_'+na)}):'')}</p></div>`;
+}
 const lockLvl=k=>UNLOCK[k];
 function animalGrid(sel,g,skip){return `<div class="chars" data-g="${g}">${CHARS.map(k=>{const op=isOpen(k),dis=skip===k;return `<button data-v="${k}" class="${k===sel?'on':''}${op?'':' lk'}${k==='dragon'?' gold':''}" aria-pressed="${k===sel}" ${dis?'disabled':''}>${icImg(k)}<span>${op?t('ch_'+k):'🔒 '+t('lockLv',{n:lockLvl(k)})}</span></button>`}).join('')}</div>`}
 function meCard(){return `<div class="me"><button class="ic2" data-act="me" aria-label="${t('changeAnimal')}">${icImg(myChar)}</button><span class="mt"><button class="nmb" data-act="name" aria-label="${t('editName')}"><b>${esc(myName())}</b> <span aria-hidden="true">✏️</span></button><span class="sub"><small>${t('theAnimal',{a:t('ch_'+myChar)})}</small><button class="ed" data-act="me">${t('changeAnimal')}</button></span></span></div>`}
@@ -920,11 +931,11 @@ const progLv=()=>Math.min(NLV,cleared()+1);
 function closeNet(){if(net){net.send({t:'bye'});net.close()}anyone=false}
 function menu(){if(invite){inviteScreen();return}home()}
 function home(){
-  panel='home';state='menu';finishId++;closeNet();mode='solo';lvl=progLv();botChar=null;setup();
+  panel='home';state='menu';finishId++;closeNet();mode='solo';raceLv=lvl=progLv();botChar=null;setup();
   const badge=cleared()>=NLV?t('allDone'):t('onLv',{n:progLv()});
   ov.innerHTML=`<div class="panel home">${meCard()}<h2>${t('letsRace')}</h2>
   <div class="tiles">
-   <button class="tile c1" data-act="cpu"><span class="e">🤖</span><b>${t('cpuTile')}</b><small>${t('cpuTileSub')}</small><span class="live">${badge}</span></button>
+   <button class="tile c1" data-act="cpu"><span class="e">🤖</span><b>${t('cpuTile')}</b><small>${t('cpuTileSub')}</small><span class="live">${badge}</span><span class="minibar" aria-hidden="true"><i style="width:${Math.round(cleared()/NLV*100)}%"></i></span></button>
    <button class="tile c2" data-act="any"><span class="e">🌍</span><b>${t('anyTile')}</b><small>${t('anyTileSub')}</small><span class="live" id="anyLive"${anyCount>0?'':' hidden'}><i></i>${t('racingNow',{n:anyCount})}</span></button>
    <button class="tile c3" data-act="friends"><span class="e">👫</span><b>${t('friendsTile')}</b><small>${t('friendsSub')}</small></button>
    <button class="tile c4" data-act="duo"><span class="e">📱</span><b>${t('sameTile')}</b><small>${t('sameSub')}</small></button>
@@ -935,7 +946,7 @@ function home(){
 }
 function meScreen(){
   panel='me';
-  ov.innerHTML=`<div class="panel">${homeBtn()}<h2>${t('pickAnimal')}</h2>${animalGrid(myChar,'char')}
+  ov.innerHTML=`<div class="panel">${homeBtn(false,meBack==='home'?null:'medone')}<h2>${t('pickAnimal')}</h2>${animalGrid(myChar,'char')}
   <button class="go" data-act="medone">${t('doneBtn')}</button><p class="small" id="msg" aria-live="polite"></p></div>`;
 }
 function friends(){
@@ -957,9 +968,9 @@ function duoScreen(){
   <button class="go" data-act="start">${t('start')}</button><p class="small" id="msg" aria-live="polite"></p></div>`;
 }
 function levelsScreen(){
-  panel='levels';state='menu';closeNet();mode='solo';
+  const fromRes=panel==='results';panel='levels';
   const top=progLv();
-  ov.innerHTML=`<div class="panel">${homeBtn()}<h2>${t('levels')}</h2><div class="lvs" data-g="lvpick">${LV.map((r,i)=>{const n=i+1,op=n<=top;return `<button data-v="${n}" class="${n<=cleared()?'ok':n===top?'cur':''}" ${op?'':'disabled'} aria-label="${t('levelN',{n})}">${n===NLV?(op?'👑30':'🔒👑'):op?n:'🔒'}</button>`}).join('')}</div>
+  ov.innerHTML=`<div class="panel">${homeBtn(false,fromRes?'backres':null)}<h2>${t('levels')}</h2><div class="lvs" data-g="lvpick">${LV.map((r,i)=>{const n=i+1,op=n<=top;return `<button data-v="${n}" class="${n<=cleared()?'ok':n===top?'cur':''}" ${op?'':'disabled'} aria-label="${t('levelN',{n})}">${n===NLV?(op?'👑30':'🔒👑'):op?n:'🔒'}</button>`}).join('')}</div>
   <p class="small">${t('cpuAbout',{r:LV[top-1]})} · ${t('levelN',{n:top})}</p></div>`;
 }
 function roomLink(code){return location.origin+location.pathname+'?room='+code+(qs.get('local')==='1'?'&local=1':'')}
@@ -987,7 +998,7 @@ function lobby(){
   if(st==='fail'||st==='full'||st==='noroom'){ov.innerHTML=`<div class="panel">${homeBtn()}<h2>${t('room')} ${esc(n.code)}</h2><p>${st==='full'?t('full',{m:n.cap()}):st==='noroom'?t('noRoom',{c:esc(n.code)}):t('offline')}</p><button class="go" data-act="leave">${t('back')}</button></div>`;return}
   setup();
   const link=roomLink(n.code),full=n.members().length>=n.cap();
-  ov.innerHTML=`<div class="panel">${homeBtn(true)}<p class="small" style="margin:0">${t('roomCode')}</p><p class="code">${esc(n.code)}</p>
+  ov.innerHTML=`<div class="panel">${homeBtn(true,invite?null:'lobbyback')}<p class="small" style="margin:0">${t('roomCode')}</p><p class="code">${esc(n.code)}</p>
   ${full?'':`<p class="link" id="lnk">${esc(link)}</p><div class="row"><button class="sec" data-act="copylink">🔗 ${t('copy')}</button>${navigator.share?`<button class="sec" data-act="sharelink">${t('share')}</button>`:''}</div>`}
   ${playerList()}${readyArea()}
   ${endNote?`<p class="small">${esc(endNote)}</p>`:''}
@@ -1066,7 +1077,7 @@ function results(fresh){
   panel='results';
   const order=standings();
   let title;
-  if(mode==='solo')title=winner===me?(raceLv===NLV?t('allCleared'):t('levelCleared',{n:raceLv})):t('cpuWin');
+  if(mode==='solo')title=winner===me?(raceLv===NLV?t('allCleared'):t('levelCleared',{n:raceLv})):t('lvLost',{n:raceLv});
   else if(mode==='online'&&me){const p=order.indexOf(me)+1;title=p===1?t('youWin'):t('place',{p:ord(p),n:racers.length})}
   else title=winner?t('wins',{n:winner.name}):'—';
   const rows=order.map((c,i)=>`<tr${c===me&&mode==='online'?' style="font-weight:800"':''}><td>${i+1}</td><td><span class="dot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.pc||c.body};margin-right:4px"></span><span class="ic">${icImg(c.char)}</span>${esc(c.name)}</td><td>${c.left?t('leftTag'):c.done!=null?fmt(c.done):t('dnf')}</td><td>${Math.round(c.top*60)}</td></tr>`).join('');
@@ -1075,7 +1086,7 @@ function results(fresh){
   else if(mode==='solo')again=`<button class="go" data-act="start">${wonLv?(raceLv===NLV?t('rematch'):t('nextLevel')):t('tryAgain')}</button>`+(anyone?`<button class="go alt" data-act="anyback">🌍 ${t('anyTile')}</button>`:'');
   else again=`<button class="go" data-act="start">${t('rematch')}</button>`;
   const pic=ensureCard(),canShare=!!navigator.share;
-  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net)}<h2>${esc(title)}</h2>
+  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net)}<h2>${esc(title)}</h2>${mode==='solo'?lvStrip():''}
   <button class="cardbtn" data-act="card" aria-label="${esc(t('picAlt'))}"><img class="card mini" src="${pic}" alt="${esc(t('picAlt'))}"></button>
   ${again}
   <div class="row">${canShare?`<button class="sec" data-act="sharepic">📤 ${t('sharePic')}</button>`:''}<button class="sec" data-act="savepic">⬇️ ${t('savePic')}</button></div>
@@ -1209,7 +1220,7 @@ let cardURL='',cardFor=-1;
 function ensureCard(){if(cardFor!==finishId||!cardURL){cardURL=resultCard().toDataURL('image/png');cardFor=finishId}return cardURL}
 function showCard(){
   panel='card';ensureCard();
-  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net)}<h2>🎉 ${t('yourPic')}</h2><img class="card" src="${cardURL}" alt="${esc(t('picAlt'))}">
+  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net,'backres')}<h2>🎉 ${t('yourPic')}</h2><img class="card" src="${cardURL}" alt="${esc(t('picAlt'))}">
   <div class="row">${navigator.share?`<button class="go small" data-act="sharepic">📤 ${t('sharePic')}</button>`:''}<button class="${navigator.share?'sec':'go small'}" data-act="savepic">⬇️ ${t('savePic')}</button></div>
   <div class="row"><button class="sec" data-act="backres">← ${t('back')}</button><button class="sec" data-act="copy">${t('copyText')}</button></div>
   <p class="small">${t('picHint')}</p><p class="small" id="msg" aria-live="polite"></p></div>`;
@@ -1302,7 +1313,7 @@ ov.addEventListener('click',e=>{
   if(gp==='otab'){saveForm();onTab=b.dataset.v;friends();return}
   if(gp==='cap'){cap=+b.dataset.v;store.set('cr-cap',String(cap));friends();return}
   if(gp==='period'){lbPeriod=b.dataset.v;loadBoard();return}
-  if(gp==='lvpick'){lvl=+b.dataset.v;mode='solo';startLocal();return}
+  if(gp==='lvpick'){closeNet();lvl=+b.dataset.v;mode='solo';startLocal();return}
   if(act==='home'){home();return}
   if(act==='menu'){menu();return}
   if(act==='me'){meBack=panel;meScreen();return}
@@ -1322,6 +1333,8 @@ ov.addEventListener('click',e=>{
   if(act==='keepwait'){aloneSince=Date.now();aloneWait=30000;sig='';matchScreen();return}
   if(act==='anyagain'||act==='switchany'){finishId++;enterMatch();return}
   if(act==='levels'){levelsScreen();return}
+  if(act==='lobbyback'){confirmBox(t('leaveQ'),'stay',t('stay'),'leavefr',t('leaveYes'));return}
+  if(act==='leavefr'){closeNet();clearRoomParam();invite=false;friends();return}
   if(act==='uninvite'){clearRoomParam();invite=false;home();return}
   if(act==='board'){loadBoard();return}
   if(act==='raceas'){myChar=b.dataset.v;store.set('cr-char',myChar);mode='solo';startLocal();return}
