@@ -1361,16 +1361,19 @@ ov.addEventListener('input',e=>{if(e.target.id==='code'){const v=e.target.value.
 // ---------- input: draw circles ----------
 const ptr=new Map();
 function who(y){if(mode!=='duo')return me;return y-cv.getBoundingClientRect().top<HUD+(H-HUD)/2?racers[0]:racers[1]}
-cv.addEventListener('pointerdown',e=>{try{cv.setPointerCapture(e.pointerId)}catch(err){}ptr.set(e.pointerId,{c:who(e.clientY),cx:e.clientX,cy:e.clientY,pa:null,sum:0})});
-function moveP(p,x,y){
+// only ONE finger per racer drives it (extra fingers used to add speed: 3 fingers = 3x)
+const driver=new Map();
+const isDriver=(p,id)=>{if(!p.c)return false;const d=driver.get(p.c);if(d==null||!ptr.has(d)){driver.set(p.c,id);return true}return d===id};
+cv.addEventListener('pointerdown',e=>{try{cv.setPointerCapture(e.pointerId)}catch(err){}const c=who(e.clientY);ptr.set(e.pointerId,{c,cx:e.clientX,cy:e.clientY,pa:null,sum:0});if(c&&!ptr.has(driver.get(c)))driver.set(c,e.pointerId)});
+function moveP(p,x,y,id){
   p.cx+=(x-p.cx)*.07;p.cy+=(y-p.cy)*.07;
   const dx=x-p.cx,dy=y-p.cy;if(dx*dx+dy*dy<144){p.pa=null;return}
   const a=Math.atan2(dy,dx);
-  if(p.pa!=null){let d=a-p.pa;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;if(Math.abs(d)<1.3){p.sum=p.sum*.9+d;feed(p.c,Math.abs(p.sum)>.15?d*Math.sign(p.sum):0)}}
+  if(p.pa!=null){let d=a-p.pa;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;if(Math.abs(d)<1.3){p.sum=p.sum*.9+d;if(isDriver(p,id))feed(p.c,Math.abs(p.sum)>.15?d*Math.sign(p.sum):0)}}
   p.pa=a;
 }
-cv.addEventListener('pointermove',e=>{const p=ptr.get(e.pointerId);if(!p||(state!=='race'&&state!=='count'))return;if(!p.c)p.c=who(e.clientY);const evs=e.getCoalescedEvents?e.getCoalescedEvents():[];(evs.length?evs:[e]).forEach(v=>moveP(p,v.clientX,v.clientY))});
-const up=e=>{ptr.delete(e.pointerId)};
+cv.addEventListener('pointermove',e=>{const p=ptr.get(e.pointerId);if(!p||(state!=='race'&&state!=='count'))return;if(!p.c)p.c=who(e.clientY);const evs=e.getCoalescedEvents?e.getCoalescedEvents():[];(evs.length?evs:[e]).forEach(v=>moveP(p,v.clientX,v.clientY,e.pointerId))});
+const up=e=>{const p=ptr.get(e.pointerId);ptr.delete(e.pointerId);if(p&&p.c&&driver.get(p.c)===e.pointerId){driver.delete(p.c);for(const [id,q] of ptr)if(q.c===p.c){driver.set(p.c,id);q.pa=null;q.sum=0;break}}};
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 addEventListener('keydown',e=>{
   if(e.repeat||state!=='race'||e.target.tagName==='INPUT')return;const k=e.key.toLowerCase();let c=null;
