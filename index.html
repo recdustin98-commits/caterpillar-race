@@ -70,9 +70,12 @@ tbody tr+tr td{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent
 .panel{position:relative}
 .homeb{position:absolute;left:8px;top:8px;width:40px;height:40px;border:0;border-radius:12px;background:var(--seg);font-size:20px;line-height:1;cursor:pointer;z-index:2}
 .panel:has(.homeb)>h2{padding:2px 40px 0}
-.me{display:flex;align-items:center;gap:10px;width:100%;background:var(--seg);border:0;border-radius:14px;padding:6px 10px;margin:0 0 8px;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
-.me .ic2 img{width:64px;height:38px;object-fit:contain;display:block}.me .mt b{display:block;font-size:17px;line-height:1.1}.me .mt small{color:var(--muted);font-size:12.5px}
-.me .ed{margin-left:auto;flex:none;font-weight:800;font-size:13px;color:var(--on);border:2px solid var(--on);border-radius:10px;padding:2px 8px}
+.me{display:flex;align-items:center;gap:8px;width:100%;background:var(--seg);border-radius:14px;padding:6px 8px;margin:0 0 8px;color:var(--ink);text-align:left}
+.me button{border:0;background:none;color:inherit;font:inherit;cursor:pointer;padding:0}.me .mt{min-width:0;flex:1}
+.me .nmb{display:block;text-align:left;font-size:18px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.me .sub{display:flex;align-items:center;gap:6px;margin-top:2px}.me .sub small{flex:1;min-width:0}.me .nmb span{font-size:14px}
+.namebox .x{left:auto;right:8px}.namebox h2{font-size:24px;padding:4px 40px 0}
+.me .ic2 img{width:64px;height:38px;object-fit:contain;display:block}.me .mt b{display:inline;font-size:18px;line-height:1.2}.me .mt small{color:var(--muted);font-size:12.5px}
+.me .ed{margin-left:auto;flex:none;font-weight:800!important;font-size:12.5px!important;color:var(--on)!important;border:2px solid var(--on)!important;border-radius:10px;padding:2px 7px!important;line-height:1.3}
 .panel.home h2{margin:2px 0 8px;font-size:26px}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:118px;padding:10px 10px 9px;border:0;border-radius:16px;color:#fff;text-align:left;font:inherit;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.2)}
