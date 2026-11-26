@@ -602,7 +602,8 @@ function strip(y0,h){
     ctx.fillStyle=c.pc||c.body;ctx.beginPath();ctx.arc(xo+9,y,4.5,0,7);ctx.fill();
     const nameW=two?Math.min(62,cw*.33):Math.min(104,W*.27);
     ctx.font=(c===me?'800 ':'600 ')+(two?'12px':'13px')+' "Baloo 2",sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle=c.left?'rgba(255,255,255,.45)':'#fff';
-    let nm=c.name;while(nm.length>1&&ctx.measureText(nm).width>nameW-4)nm=nm.slice(0,-1);if(nm!==c.name)nm=nm.slice(0,-1)+'…';
+    let nm=c.name;if(c.isCpu&&/^🤖 \D+ \d+$/.test(nm)&&ctx.measureText(nm).width>nameW-4)nm='🤖'+nm.match(/(\d+)$/)[1]; // "🤖3" instead of "🤖 Comp…"
+    const nm0=nm;while(nm.length>1&&ctx.measureText(nm).width>nameW-4)nm=nm.slice(0,-1);if(nm!==nm0)nm=nm.slice(0,-1)+'…';
     ctx.fillText(nm,xo+17,y+1);
     const x0=xo+nameW+26,x1=xo+cw-(two?40:66);
     ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();
@@ -794,15 +795,25 @@ function makeTransport(room,onMsg,onStatus){
     return{send:m=>bc.postMessage(m),close:()=>bc.close()};
   }
   const sb=getSb();if(!sb){setTimeout(()=>onStatus('fail'),0);return{send(){},close(){}}}
-  const ch=sb.channel('cr-room-'+room,{config:{broadcast:{self:false,ack:false}}});
-  ch.on('broadcast',{event:'m'},({payload})=>onMsg(payload));
-  let done=false;
-  ch.subscribe(st=>{if(st==='SUBSCRIBED'&&!done){done=true;onStatus('ok')}else if((st==='CHANNEL_ERROR'||st==='TIMED_OUT')&&!done){done=true;onStatus('fail')}});
+  // supabase-js hands back the SAME channel for the same name, so a channel still open (or closing) under this
+  // name must be fully removed first; otherwise closing the old one also kills the new one (Race anyone froze at "Starting in 10 s")
+  const topic='cr-room-'+room;let ch=null,closed=false,done=false,tries=0;
+  const start=()=>{
+    if(closed)return;
+    const ex=sb.getChannels().filter(c=>c.topic==='realtime:'+topic);
+    if(ex.length&&tries++<4){Promise.all(ex.map(c=>sb.removeChannel(c).catch(()=>{}))).then(()=>setTimeout(start,60));return}
+    ch=sb.channel(topic,{config:{broadcast:{self:false,ack:false}}});
+    ch.on('broadcast',{event:'m'},({payload})=>{if(!closed)onMsg(payload)});
+    ch.subscribe(st=>{if(closed)return;if(st==='SUBSCRIBED'&&!done){done=true;onStatus('ok')}else if((st==='CHANNEL_ERROR'||st==='TIMED_OUT')&&!done){done=true;onStatus('fail')}});
+  };
+  (closingT[topic]||Promise.resolve()).then(start);
   // supabase-js drops a send that comes too soon after the previous one, so space them out; keep only the newest position update
   const q=[];let busy=false;
-  const pump=()=>{if(!q.length){busy=false;return}busy=true;ch.send({type:'broadcast',event:'m',payload:q.shift()});setTimeout(pump,35)};
-  return{send:m=>{if(m.t==='st'){const i=q.findIndex(x=>x.t==='st');if(i>=0){q[i]=m;return}}q.push(m);if(!busy)pump()},close:()=>{try{sb.removeChannel(ch)}catch(e){}}};
+  const pump=()=>{if(closed){q.length=0;busy=false;return}if(!q.length){busy=false;return}busy=true;if(!ch||!done){setTimeout(pump,120);return}ch.send({type:'broadcast',event:'m',payload:q.shift()});setTimeout(pump,35)};
+  return{send:m=>{if(closed)return;if(m.t==='st'){const k=q.findIndex(x=>x.t==='st');if(k>=0){q[k]=m;return}}q.push(m);if(!busy)pump()},
+    close:()=>{if(closed)return;closed=true;if(ch){const c=ch,pr=sb.removeChannel(c).catch(()=>{});closingT[topic]=pr;pr.then(()=>{if(closingT[topic]===pr)delete closingT[topic]})}}};
 }
+const closingT={};
 function newCode(){return String(1000+Math.floor(Math.random()*9000))}
 function joinRoom(code,capSet){
   if(net)net.close();
@@ -1260,20 +1271,20 @@ function startLocal(){
 function leaveRoom(){closeNet();clearRoomParam();invite=false;onTab='create';state='menu';home()}
 // ---------- Race anyone: one shared room where whoever is waiting gets matched ----------
 const ANYROOM='ANY';
-const ANYMIN=4,ANYALONE=10000;let raceBots=[],anyCount=0,anyPeekAt=0,pairAt=0,aloneSince=0,aloneWait=10000,switchOffer=false;
+const ANYMIN=4,ANYALONE=10000;let matchOk=false;let peekTr=null,peekTimer=0;const stopPeek=()=>{clearTimeout(peekTimer);if(peekTr){try{peekTr.close()}catch(e){}peekTr=null}};let raceBots=[],anyCount=0,anyPeekAt=0,pairAt=0,aloneSince=0,aloneWait=10000,switchOffer=false;
 function anyPeek(){
   // listen to the shared room for a few seconds (without joining) to count who is racing there
   if(Date.now()-anyPeekAt<20000)return;anyPeekAt=Date.now();
   const seen=new Map();let tr=null;
   try{tr=makeTransport(ANYROOM,m=>{if(m&&m.t==='hi'&&m.id)seen.set(m.id,1)},()=>{})}catch(e){return}
-  setTimeout(()=>{try{tr.close()}catch(e){}anyCount=seen.size;const el=document.getElementById('anyLive');if(el&&panel==='home'){el.hidden=anyCount<1;el.innerHTML=`<i></i>${t('racingNow',{n:anyCount})}`}},4500);
+  peekTr=tr;peekTimer=setTimeout(()=>{if(peekTr===tr){try{tr.close()}catch(e){}peekTr=null}else return;anyCount=seen.size;const el=document.getElementById('anyLive');if(el&&panel==='home'){el.hidden=anyCount<1;el.innerHTML=`<i></i>${t('racingNow',{n:anyCount})}`}},4500);
 }
 function pool(){if(!net)return[];return net.all().filter(p=>p.id===myId?state==='match':p.ph==='match').sort((a,b)=>(a.ws||0)-(b.ws||0)||(a.id<b.id?-1:1))}
 function startAnyone(){
-  closeNet();clearRoomParam();invite=false;anyone=true;mode='online';
+  stopPeek();closeNet();clearRoomParam();invite=false;anyone=true;mode='online';
   joinRoom(ANYROOM,MAXP);enterMatch();
 }
-function enterMatch(){raceBots=[];anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
+function enterMatch(){raceBots=[];matchOk=false;anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
 function matchTick(){
   if(!anyone||!net)return;
   const others=[...net.peers.values()].filter(p=>p.ph==='match');
@@ -1282,6 +1293,8 @@ function matchTick(){
     if(want!==switchOffer){switchOffer=want;if(state==='race'||state==='count')raceOv();else if(panel==='results')results()}
     return}
   if(state!=='match')return;
+  if(net.status()!=='ok'){if(panel==='match'||panel==='alone')matchScreen();return}
+  if(!matchOk){matchOk=true;aloneSince=Date.now()} // count the 10 s only once we're actually connected
   const pl=pool();
   if(pl.length>=2){if(!pairAt)pairAt=Date.now()}else pairAt=0;
   if(pl.length>=2)aloneSince=Date.now();
@@ -1297,13 +1310,13 @@ function matchTick(){
   if(panel==='match'||panel==='alone')matchScreen();
 }
 function matchScreen(){
-  panel='match';const pl=pool(),n=pl.length,left=pairAt?Math.max(0,Math.ceil((15000-(Date.now()-pairAt))/1000)):Math.max(0,Math.ceil((ANYALONE-(Date.now()-aloneSince))/1000));
-  const s2=n+'|'+pl.map(p=>p.id+p.ch).join(',')+'|'+left;if(s2===sig&&ov.querySelector('.match'))return;sig=s2;
+  panel='match';const conn=!net||net.status()!=='ok';const pl=pool(),n=pl.length,left=conn?null:pairAt?Math.max(0,Math.ceil((15000-(Date.now()-pairAt))/1000)):Math.max(0,Math.ceil((ANYALONE-(Date.now()-aloneSince))/1000));
+  const s2=n+'|'+pl.map(p=>p.id+p.ch).join(',')+'|'+left+'|'+conn;if(s2===sig&&ov.querySelector('.match'))return;sig=s2;
   const deg=Math.round(360*Math.min(1,n/MAXP));
   ov.innerHTML=`<div class="panel match">${homeBtn()}<h2>${t('finding')}</h2>
   <div class="spin" style="--p:${deg}deg"><span>${n}/${MAXP}</span></div>
   <ul class="players">${pl.map(p=>`<li><span class="ic">${icImg(p.id===myId?myChar:(p.ch||'cat'))}</span>${esc(p.id===myId?autoName():p.name)}${p.id===myId?' ('+t('you')+')':''}</li>`).join('')}<li class="empty">${t('lookingMore',{k:MAXP-n})}</li></ul>
-  ${left!=null?`<p class="small"><b>${t('startIn',{s:left})}</b></p>`:''}<p class="small">${t('anyRule')} ${t('funNames')}</p>
+  ${conn?`<p class="small"><b>${net&&net.status()==='fail'?t('offline'):t('joining')}</b></p>`:left!=null?`<p class="small"><b>${t('startIn',{s:left})}</b></p>`:''}<p class="small">${t('anyRule')} ${t('funNames')}</p>
   <div class="row"><button class="sec" data-act="home">${t('cancel')}</button><button class="sec" data-act="anycpu">${t('raceCpu')}</button></div></div>`;
 }
 function aloneScreen(){
