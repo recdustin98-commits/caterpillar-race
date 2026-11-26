@@ -55,11 +55,11 @@ const L={
  fact_frill:'Frilled lizards pop open a big frill around their neck to look scary, then run away on two legs.',
  fact_peng:'Gentoo penguins are the fastest swimming birds in the world — up to 22 miles per hour!',
  fact_imugi:'In Korean legend, an Imugi waits 1,000 years to catch a magic pearl and become a dragon.',
- fact_dragon:'In Korean stories, dragons live in the water and the sky, bring the rain, and hold a magic pearl.',goal_red:'Move only while the {w} sleeps!',goal_catch:'Catch the falling {i}!',goal_egg:'Carry the {i} home safely!',goal_chase:'Escape the {f}!',goal_chaseB:'BOSS: escape the {f}!',goal_runner:'Catch the {f}!',goal_duck:'Lead the {f} home!',goal_gates:'Get through the {g}!',goal_water:'Run across the water!',goal_heat:'Dash across the hot sand!',goal_slide:'Slide and jump to the finish!',
- how_red:'{e} Spin while the {w} sleeps. When it opens its eyes, STOP right away or you get caught.',how_catch:'{e} Be under each spot when the {i} land. Speed up or slow down to get there on time. Catch 3 of 5 to pass.',how_egg:'{e} Stay under {l} RPM or the {i} cracks. 3 cracks and it breaks!',how_chase:'{e} The {f} is right behind you and sometimes speeds up. Don\'t let it catch your tail!',how_gates2:'Falling rocks block the path — wait for them to stop.',how_runner:'{e} The {f} runs ahead. Catch it before it reaches the finish!',how_duck:'{e} The {f} follow you. Keep a steady speed between {lo} and {hi} RPM or one gets lost. Bring 2 home to pass.',how_gates:'{e} The {g} open and close. Arrive while they are open — the dot turns green.',how_water:'💧 Stay above {w} RPM or you start to sink.',how_heat:'🔥 Spinning over {h} RPM heats you up. Too hot and you must stop to cool down.',how_slide:'⛰️ Push hard up the hills, then zoom down the other side. Reach each jump with {j}+ RPM or you splash into the icy water!',how_tide:'🌊 Tide waves cover the path. Wait for the water to go out — your rival has to wait too.',
+ fact_dragon:'In Korean stories, dragons live in the water and the sky, bring the rain, and hold a magic pearl.',goal_red:'Move only while the {w} sleeps!',redWake:'👀 Waking up!',redStop:'🛑 STOP!',goal_catch:'Catch the falling {i}!',goal_egg:'Carry the {i} home safely!',goal_chase:'Escape the {f}!',goal_chaseB:'BOSS: escape the {f}!',goal_runner:'Catch the {f}!',goal_duck:'Lead the {f} home!',goal_gates:'Get through the {g}!',goal_water:'Run across the water!',goal_heat:'Dash across the hot sand!',goal_slide:'Slide and jump to the finish!',
+ how_red:'{e} Spin while the {w} sleeps. When you hear the rising sound and the screen glows yellow, it is waking up — slow down. When it turns red, STOP right away or you get caught.',how_catch:'{e} Be under each spot when the {i} land. Speed up or slow down to get there on time. Catch 3 of 5 to pass.',how_egg:'{e} Stay under {l} RPM or the {i} cracks. 3 cracks and it breaks!',how_chase:'{e} The {f} is right behind you and sometimes speeds up. Don\'t let it catch your tail!',how_gates2:'Falling rocks block the path — wait for them to stop.',how_runner:'{e} The {f} runs ahead. Catch it before it reaches the finish!',how_duck:'{e} The {f} follow you. Keep a steady speed between {lo} and {hi} RPM or one gets lost. Bring 2 home to pass.',how_gates:'{e} The {g} open and close. Arrive while they are open — the dot turns green.',how_water:'💧 Stay above {w} RPM or you start to sink.',how_heat:'🔥 Spinning over {h} RPM heats you up. Too hot and you must stop to cool down.',how_slide:'⛰️ Push hard up the hills, then zoom down the other side. Reach each jump with {j}+ RPM or you splash into the icy water!',how_tide:'🌊 Tide waves cover the path. Wait for the water to go out — your rival has to wait too.',
  star_finish:'Finish',star_m1:'Under {t} s, max 1 {e}',star_m0:'Under {t} s, no {e}',star_w1:'Win, max 1 {e}',star_w0:'Win, no {e}',star_catch:'Catch {n}',star_catchAll:'Catch all 5',star_duck:'{n} home',star_duckAll:'All 4 home',star_run:'Catch it',star_runBy:'Catch it before {p}%',star_obst1:'Under {t} s, max 1 bump',star_obst0:'Under {t} s, no bumps',goal_zone:'Keep your speed between {lo} and {hi} RPM',goal_sprint:'Reach {r} RPM and finish',
  star_win:'Win',star_under:'Under {t} s',star_zone:'{p}% in the zone',star_top:'Top {r} RPM',startMission:'▶ Start mission',
- misDone:'MISSION {n} COMPLETE!',misFail:'MISSION {n} · TRY AGAIN',nextMission:'Next mission →',retryMission:'Try again',mapBtn:'🗺️ Map',backMap:'🗺️ Back to mission map',
+ misDone:'MISSION {n} COMPLETE!',misFail:'MISSION {n} · TRY AGAIN',nextMission:'Next mission →',retryMission:'🔁 Try again',mapBtn:'🗺️ Map',backMap:'🗺️ Back to mission map',backMapS:'🗺️ Missions',
  imugiLore:'A giant serpent from Korean legend. It waits 1,000 years in deep water, hoping to catch the magic pearl (yeouiju) and rise into the sky as a dragon. Beat it before it becomes a dragon!',
  zoneNow:'Zone {p}%',topNow:'Top {r} / {g}',goalT:'Goal {t}s',dragonStars:'Collect {n} ⭐ to unlock the Golden Dragon.',quitSent:'You left this race.',cpuN:'🤖 Computer {n}',addBot:'＋ Add computer',botNote:'Computers race at about your group\'s level and are always ready. If a friend joins a full room, a computer makes room.',lvLost:'LEVEL {n} · SO CLOSE!',nextUp:'Next: Lv {n}',nextAnimal:'Clear Lv {n} → {a}',cpuRpm:'Computer ≈ {r} RPM',back2:'Back',lvOf:'{n} / 30 cleared',nameShown:'Shown on the leaderboard.',changeAnimal:'Change animal',close:'Close',ch_dragon:'Golden Dragon',ch_king:'Dragon King',letsRace:"Let's race!",changeBtn:'✏️ Change',theAnimal:'the {a}',cpuTile:'vs Computer',cpuTileSub:'30 levels · unlock animals',onLv:"⭐ You're on Lv {n}",allDone:'⭐ All 30 levels cleared!',anyTile:'Play anyone',anyTileSub:'Race online',racingNow:'{n} racing now',friendsTile:'Play friends',friendsSub:'Private race with a code',sameTile:'Same phone',sameSub:'2 players, 1 phone',meTitle:'Animal & name',yourName:'Your name',newName:'🎲 New fun name',typeName:'Or type your own name (optional)',saveName:'Save name',useAuto:'Use my fun name',badName:'Please pick a different name.',nameSaved:'Name saved.',lockLv:'M{n}',lockedMsg:'Pass mission {n} to unlock the {a}.',doneBtn:'Done',
  finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyStart:'▶ Start now ({k} racers)',waitCreator:'Waiting for {n} to start…',anyRule:'Starts by itself when all 8 places are full. The first racer in the room can start sooner.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
@@ -277,7 +277,7 @@ function initMX(m){
   if(!m)return null;const X={t0:0,heat:0,got:0,fol:4,lost:[]},R=m.rpm,rnd=(a,b)=>a+Math.random()*(b-a),bt=BOT_T[m.n-1];
   const gateKind=m.type==='gates'?m.gate:m.gate;
   if(gateKind){const fr=m.type==='chase'?[.3,.5,.7]:m.type==='beat'?[.25,.5,.75]:[.2,.4,.6,.8];X.gates=fr.map(f=>({x:obX(f),P:rnd(2.2,3.4),open:.55,ph:rnd(0,3)}))}
-  if(m.type==='red'){const ph=[];let tt=0;while(tt<bt*4){const g=Math.max(1.4,Math.min(5,bt*rnd(.1,.18)));ph.push(['green',tt,tt+g]);tt+=g;ph.push(['warn',tt,tt+.8]);tt+=.8;const r2=Math.max(1,Math.min(3,bt*rnd(.06,.1)));ph.push(['red',tt,tt+r2]);tt+=r2}X.ph=ph}
+  if(m.type==='red'){const ph=[];let tt=0;while(tt<bt*4){const g=Math.max(1.4,Math.min(5,bt*rnd(.1,.18)));ph.push(['green',tt,tt+g]);tt+=g;ph.push(['warn',tt,tt+1]);tt+=1;const r2=Math.max(1,Math.min(3,bt*rnd(.06,.1)));ph.push(['red',tt,tt+r2]);tt+=r2}X.ph=ph}
   if(m.type==='catch'){X.items=[.18,.34,.5,.66,.82].map((f,i)=>{const x=obX(f);return{x,t:.8+(x-S0)/UPS(R)*[1.25,1.05,1.2,1.1,1.15][i]*rnd(.97,1.03)}})}
   if(m.type==='chase'){X.ch={x:S0-110-200,v:0,next:0,delay:1,close:false}}
   if(m.type==='runner'){X.run={x:S0+260,v:0,next:0}}
@@ -324,6 +324,7 @@ function misStep(c,now,hx,dt){
 function misWorld(now,dt){
   const m=curMis(),X=MX,c=me;if(!m||!X||state!=='race'||!c||c.done!=null)return;
   if(m.type==='ski'){skiWorld(now,dt);return}
+  if(m.type==='red'){const p=redPhase((now-startT)/1000)[0];if(p!==X.lastPh){if(X.lastPh){if(p==='warn'){sfx.wake();buzz(80)}else if(p==='red'){sfx.alarm();buzz(200)}else sfx.beep()}X.lastPh=p}}
   const t=(now-startT)/1000,hx=headX(c),R=m.rpm,o=c.ob||(c.ob={bumps:0,hit:{},stun:0,boost:0,low:0,msg:'',msgT:0,px:hx});
   const say=(x,ms)=>{o.msg=x;o.msgT=now+(ms||1300)};
   if(X.ch){const ch=X.ch;if(t>ch.delay){if(now>ch.next){ch.next=now+1000+Math.random()*1600;ch.surge=Math.random()<.35;ch.v=UPS(R*(m.cbase+(ch.surge?.28:0)))}
@@ -365,7 +366,9 @@ function drawMis(m,now,cam,vw,c){
   if(m.type==='slide'){drawHills(cam,vw,T);X.seg.forEach(([k,a,b])=>{if(k==='kick'||k==='down')return;const x0=obX(a);if(x0<cam-80||x0>cam+vw+80)return;const sx=x0-30,hy=hillH(sx);
     ctx.fillStyle='#7a5530';ctx.fillRect(sx-1.5,128-hy,3,32);rr(sx-26,106-hy,52,24,6);ctx.fillStyle=k==='jump'?'#fff3c4':'#ffe3d6';ctx.fill();ctx.strokeStyle=k==='jump'?'#e0a000':'#c4560c';ctx.lineWidth=2;ctx.stroke();ctx.font='800 11px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#14301f';ctx.fillText(k==='jump'?'🚀 '+m.jmin+'+':'⛰️ push!',sx,118.5-hy)})}
   if(!isMe){ctx.restore();return}
-  if(m.type==='red'){const p=redPhase(t)[0],wx=cam+vw*.5,wy=58;ctx.strokeStyle='#6b4a2a';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(wx-60,wy+22);ctx.lineTo(wx+60,wy+18);ctx.stroke();watcherArt(m.watch,wx,wy,p,T)}
+  if(m.type==='red'){const p=redPhase(t)[0],wx=cam+vw*.84,wy=106;ctx.fillStyle='#7a5530';rr(wx-6,wy+20,12,40,3);ctx.fill();ctx.fillStyle='#8a6a4a';rr(wx-22,wy+16,44,8,4);ctx.fill();
+    if(p!=='green'){const gl=ctx.createRadialGradient(wx,wy,4,wx,wy,60);gl.addColorStop(0,p==='red'?'rgba(255,60,40,.45)':'rgba(255,200,40,.4)');gl.addColorStop(1,'rgba(255,200,40,0)');ctx.fillStyle=gl;ctx.beginPath();ctx.arc(wx,wy,60,0,7);ctx.fill()}
+    ctx.save();ctx.translate(wx,wy);ctx.scale(1.2,1.2);ctx.translate(-wx,-wy);watcherArt(m.watch,wx,wy,p,T);ctx.restore()}
   if(m.type==='catch')X.items.forEach(it=>{if(it.x<cam-40||it.x>cam+vw+40)return;const left=it.t-t;
     if(!it.done){ctx.strokeStyle='rgba(20,48,31,.45)';ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.ellipse(it.x,177,16,5,0,0,7);ctx.stroke();ctx.setLineDash([]);
       if(left<1.6){const y=177-left/1.6*140;ctx.fillStyle='rgba(20,48,31,.18)';ctx.beginPath();ctx.ellipse(it.x,179,8+(1-left/1.6)*8,3,0,0,7);ctx.fill();itemArt(m.item,it.x,y-8)}
@@ -1152,7 +1155,7 @@ function draw(now){
     ctx.fillStyle='#14301f';ctx.fillRect(0,HUD+lh-1.5,W,3);mid=HUD+lh;
   }
   hud(now);
-  if(mode==='solo'&&MIS[raceLv-1]&&(state==='race'||state==='done'||state==='count')){goalChip(now);speedMeter(now)}
+  if(mode==='solo'&&MIS[raceLv-1]&&(state==='race'||state==='done'||state==='count')){goalChip(now);speedMeter(now);redFrame(now)}
   if(state==='count'||(state==='race'&&now-startT<600)){
     const tx=state==='count'?String(Math.max(1,Math.ceil((startT-now)/1000))):t('go');
     if(mode==='solo'&&state==='count'){const m=Math.min(W,H),ly=mid-m*.17;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
@@ -1259,6 +1262,10 @@ function speedMeter(now){
   const px=X(val);ctx.fillStyle='#fff';rr(px-2.5,by-5,5,bh+10,2.5);ctx.fill();ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=1;ctx.stroke();
   ctx.restore();
 }
+function redFrame(now){const m=curMis();if(!m||m.type!=='red'||state!=='race')return;const p=redPhase((now-startT)/1000)[0];if(p==='green')return;
+  const pul=RM?1:.6+.4*Math.abs(Math.sin(now/120));ctx.save();ctx.strokeStyle=p==='red'?`rgba(224,64,47,${pul})`:`rgba(255,190,30,${pul})`;ctx.lineWidth=10;ctx.strokeRect(5,HUD+5,W-10,H-HUD-10);
+  ctx.font='900 '+Math.round(Math.min(34,W/14))+'px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=6;ctx.strokeStyle='rgba(20,48,31,.85)';ctx.fillStyle=p==='red'?'#ff6b5a':'#ffd23f';
+  const msg=p==='red'?t('redStop'):t('redWake'),y=HUD+(H-HUD)*.44;ctx.strokeText(msg,W*.4,y);ctx.fillText(msg,W*.4,y);ctx.restore()}
 function goalChip(now){
   const m=MIS[raceLv-1],c=me;if(!m||!c||m.type==='beat'&&!m.water&&!m.gate)return;
   let tx,ok=false;
@@ -1312,6 +1319,8 @@ const sfx={
   sad(){[[466,.42],[440,.42],[415,.42],[392,1.1]].reduce((tt,[f,d],i)=>{tone(f,d,{type:'sawtooth',v:.09,at:tt,glide:i===3?370:f*.97});tone(f*1.006,d,{type:'triangle',v:.06,at:tt});return tt+d},0);tone(98,.25,{type:'sine',v:.18,at:2.4,glide:60})},
   tap(){tone(880,.07,{type:'triangle',v:.1,glide:1320})},
   beep(){tone(587,.16,{type:'square',v:.1})},
+  wake(){[[330,.18],[440,.18],[554,.3]].reduce((tt,[f,d])=>{tone(f,d,{type:'triangle',v:.2,at:tt,glide:f*1.06});return tt+d+.05},0)},
+  alarm(){for(let i=0;i<3;i++)tone(880,.12,{type:'square',v:.16,at:i*.16})},
   go(){[523,659,784,1047].forEach((f,i)=>tone(f,.28,{type:'square',v:.09,at:i*.06}))},
   ding(){tone(1568,.6,{type:'triangle',v:.18});tone(2093,.45,{type:'sine',v:.08,at:.03})},
   win(){[523,659,784,1047,0,784,1047].forEach((f,i)=>f&&tone(f,i===6?.6:.15,{type:'square',v:.09,at:i*.12}));[262,392,523].forEach((f,i)=>tone(f,.9,{type:'triangle',v:.07,at:.72+i*.01}))},
@@ -1819,7 +1828,8 @@ function results(fresh){
   let again;
   if(mode==='online')again=anyone?`<button class="go" data-act="anyagain">${t('rematch')}</button>`:(net&&net.status()==='ok'?`<button class="go" data-act="tolobby">${t('rematch')}</button>`:'');
   else if(mode==='solo'){const back=`<button class="go alt" data-act="map">${t('backMap')}</button>`;
-    again=raceLv===31?`<button class="go" data-act="mretry">${t('skiAgain')}</button>${back}`:(lastStars>0&&raceLv<NLV?`<button class="go" data-act="mnext">${t('nextMission')}</button><div class="row"><button class="sec" data-act="mretry">${t('retryMission')}</button><button class="sec" data-act="map">${t('mapBtn')}</button></div>`:`<button class="go" data-act="mretry">${t('retryMission')}</button>${back}`)}
+    const pair=`<div class="row two"><button class="go alt half" data-act="mretry">${raceLv===31?t('skiAgain'):t('retryMission')}</button><button class="go alt half" data-act="map">${t('backMapS')}</button></div>`;
+    again=raceLv===31?pair:(lastStars>0&&raceLv<NLV?`<button class="go" data-act="mnext">${t('nextMission')}</button>${pair}`:pair)}
   else if(mode==='duo')again=`<button class="go" data-act="duo">${t('rematch')}</button>`;
   else again=`<button class="go" data-act="start">${t('rematch')}</button>`;
   const pic=ensureCard(),canShare=!!navigator.share;
