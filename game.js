@@ -36,7 +36,7 @@ const L={
  misTile:'Mission',misTileSub:'6 worlds · 30 missions · unlock animals',starsOf:'⭐ {n} / 90 stars',notBoard:'Not on leaderboard',
  mapTitle:'Mission map',dragonAt:'Golden Dragon at {n} ⭐',startHere:'START · You start with these 4',unlockTag:'UNLOCK',unlockedTag:'UNLOCKED',worldN:'World {w} · {name}',missionN:'Mission {n}',misShort:'M{n}',
  goal_beat:'Beat the {a}!',goal_boss:'BOSS: beat the {a}!',goal_time:'Finish in under {t} s',goal_obst:'Obstacle course! Finish in under {t} s',goal_red:'Move only while the {w} sleeps!',goal_catch:'Catch the falling {i}!',goal_egg:'Carry the {i} home safely!',goal_chase:'Escape the {f}!',goal_chaseB:'BOSS: escape the {f}!',goal_runner:'Catch the {f}!',goal_duck:'Lead the {f} home!',goal_gates:'Get through the {g}!',goal_water:'Run across the water!',goal_heat:'Dash across the hot sand!',goal_slide:'Slide and jump to the finish!',
- how_red:'{e} Spin while the {w} sleeps. When it opens its eyes, STOP right away or you get caught.',how_catch:'{e} Be under each spot when the {i} land. Speed up or slow down to get there on time. Catch 3 of 5 to pass.',how_egg:'{e} Stay under {l} RPM or the {i} cracks. 3 cracks and it breaks!',how_chase:'{e} The {f} is right behind you and sometimes speeds up. Don\'t let it catch your tail!',how_gates2:'Falling rocks block the path — wait for them to stop.',how_runner:'{e} The {f} runs ahead. Catch it before it reaches the finish!',how_duck:'{e} The {f} follow you. Keep a steady speed between {lo} and {hi} RPM or one gets lost. Bring 2 home to pass.',how_gates:'{e} The {g} open and close. Arrive while they are open — the dot turns green.',how_water:'💧 Stay above {w} RPM or you start to sink.',how_heat:'🔥 Spinning over {h} RPM heats you up. Too hot and you must stop to cool down.',how_slide:'⛰️ Uphill slows you, downhill keeps your speed. Reach each jump with {j}+ RPM or you splash!',how_tide:'🌊 Tide waves cover the path. Wait for the water to go out — your rival has to wait too.',
+ how_red:'{e} Spin while the {w} sleeps. When it opens its eyes, STOP right away or you get caught.',how_catch:'{e} Be under each spot when the {i} land. Speed up or slow down to get there on time. Catch 3 of 5 to pass.',how_egg:'{e} Stay under {l} RPM or the {i} cracks. 3 cracks and it breaks!',how_chase:'{e} The {f} is right behind you and sometimes speeds up. Don\'t let it catch your tail!',how_gates2:'Falling rocks block the path — wait for them to stop.',how_runner:'{e} The {f} runs ahead. Catch it before it reaches the finish!',how_duck:'{e} The {f} follow you. Keep a steady speed between {lo} and {hi} RPM or one gets lost. Bring 2 home to pass.',how_gates:'{e} The {g} open and close. Arrive while they are open — the dot turns green.',how_water:'💧 Stay above {w} RPM or you start to sink.',how_heat:'🔥 Spinning over {h} RPM heats you up. Too hot and you must stop to cool down.',how_slide:'⛰️ Push hard up the hills, then zoom down the other side. Reach each jump with {j}+ RPM or you splash into the icy water!',how_tide:'🌊 Tide waves cover the path. Wait for the water to go out — your rival has to wait too.',
  star_finish:'Finish',star_m1:'Under {t} s, max 1 {e}',star_m0:'Under {t} s, no {e}',star_w1:'Win, max 1 {e}',star_w0:'Win, no {e}',star_catch:'Catch {n}',star_catchAll:'Catch all 5',star_duck:'{n} home',star_duckAll:'All 4 home',star_run:'Catch it',star_runBy:'Catch it before {p}%',star_obst1:'Under {t} s, max 1 bump',star_obst0:'Under {t} s, no bumps',goal_zone:'Keep your speed between {lo} and {hi} RPM',goal_sprint:'Reach {r} RPM and finish',
  star_win:'Win',star_under:'Under {t} s',star_zone:'{p}% in the zone',star_top:'Top {r} RPM',startMission:'▶ Start mission',
  misDone:'MISSION {n} COMPLETE!',misFail:'MISSION {n} · TRY AGAIN',nextMission:'Next mission →',retryMission:'Try again',mapBtn:'🗺️ Map',
@@ -98,8 +98,8 @@ const MSPEC=[
  ['water',{as:'basil'}],['gates',{gate:'wave'}],['catch',{item:'shell'}],['chase',{as:'puffer',foe:'shark'}],['beat',{opp:'crab',gate:'tide'}],
  ['red',{watch:'fox'}],['obst',{}],['egg',{item:'fruit'}],['heat',{as:'frill'}],['chase',{foe:'storm'}],
  ['egg',{item:'pegg'}],['obst',{}],['runner',{foe:'fish'}],['slide',{as:'peng',course:'ice'}],['chase',{foe:'avalanche'}],
- ['gates',{gate:'rocks'}],['obst',{}],['duck',{fol:'firefly'}],['slide',{course:'river'}],['chase',{foe:'imugi',gate:'rocks'}]];
-const MBASE={2:54.1,4:26.5,5:24.5,8:22.1,9:22.3,11:16.8,12:17.3,14:14.5,16:26.1,17:16.1,18:12.3,19:11.9,20:11.4,21:10.8,22:11.6,24:10,25:8.7,26:10.3,27:11.9,29:7.3,30:7.8};
+ ['gates',{gate:'rocks'}],['obst',{}],['duck',{fol:'firefly'}],['catch',{item:'star'}],['chase',{foe:'imugi',gate:'rocks'}]];
+const MBASE={2:54.1,4:26.5,5:24.5,8:22.1,9:22.3,11:16.8,12:17.3,14:14.5,16:26.1,17:16.1,18:12.3,19:11.9,20:11.4,21:10.8,22:11.6,24:9.6,25:8.7,26:10.3,27:11.9,30:7.8};
 const MIS=MSPEC.map(([type,ex],i)=>{
   const w=Math.floor(i/5),k=i%5,n=i+1,rpm=LV[i],bt=BOT_T[i],r5=x=>Math.round(x/5)*5,tg=(a,b,c)=>[r1(bt*a),r1(bt*b),Math.max(5.9,r1(bt*c))];
   const m={n,w,k,type,rpm,boss:k===4,opp:null,...ex};
@@ -241,7 +241,7 @@ function obArt(a,x0,x1,now){
 // gates · lead the babies · run on water · overheat · slopes & jumps (+ obstacle courses above)
 const FOE={mouse:['🐭','field mouse'],shark:['🦈','shark'],storm:['🌪️','sandstorm'],avalanche:['🏔️','avalanche'],fish:['🐟','runaway fish'],garter:['🐍','garter snake'],imugi:['🐉','Imugi']};
 const WATCH={owl:['🦉','owl'],fox:['🦊','desert fox']};
-const ITEM={apple:['🍎','apple','apples'],shell:['🐚','shell','shells']};
+const ITEM={apple:['🍎','apple','apples'],shell:['🐚','shell','shells'],star:['⭐','star','stars']};
 const EGG={egg:['🥚',"robin's egg"],fruit:['🍈','cactus fruit'],pegg:['🥚','penguin egg']};
 const GATE={dam:['🪵','beaver-dam gates'],wave:['🌊','waves'],rocks:['🪨','falling rocks'],tide:['🌊','tide waves']};
 const FOL={duck:['🐥','ducklings'],firefly:['✨','baby fireflies']};
@@ -255,12 +255,16 @@ function initMX(m){
   const gateKind=m.type==='gates'?m.gate:m.gate;
   if(gateKind){const fr=m.type==='chase'?[.3,.5,.7]:m.type==='beat'?[.25,.5,.75]:[.2,.4,.6,.8];X.gates=fr.map(f=>({x:obX(f),P:rnd(2.2,3.4),open:.55,ph:rnd(0,3)}))}
   if(m.type==='red'){const ph=[];let tt=0;while(tt<bt*4){const g=Math.max(1.4,Math.min(5,bt*rnd(.1,.18)));ph.push(['green',tt,tt+g]);tt+=g;ph.push(['warn',tt,tt+.8]);tt+=.8;const r2=Math.max(1,Math.min(3,bt*rnd(.06,.1)));ph.push(['red',tt,tt+r2]);tt+=r2}X.ph=ph}
-  if(m.type==='catch'){X.items=[.18,.34,.5,.66,.82].map((f,i)=>{const x=obX(f);return{x,t:.8+(x-S0)/UPS(R)*[1.2,.95,1.15,1,1.1][i]*rnd(.97,1.03)}})}
+  if(m.type==='catch'){X.items=[.18,.34,.5,.66,.82].map((f,i)=>{const x=obX(f);return{x,t:.8+(x-S0)/UPS(R)*[1.25,1.05,1.2,1.1,1.15][i]*rnd(.97,1.03)}})}
   if(m.type==='chase'){X.ch={x:S0-110-200,v:0,next:0,delay:1,close:false}}
   if(m.type==='runner'){X.run={x:S0+260,v:0,next:0}}
-  if(m.type==='slide')X.seg=m.course==='ice'?[['up',.10,.20],['down',.26,.38],['jump',.46,.51],['up',.57,.66],['down',.72,.84],['jump',.9,.94]]:[['down',.08,.16],['jump',.22,.27],['up',.34,.42],['jump',.5,.55],['down',.62,.7],['jump',.78,.83]];
+  if(m.type==='slide')X.seg=[['up',.10,.20],['down',.26,.38],['kick',.43,.46],['jump',.46,.51],['up',.57,.66],['down',.72,.84],['kick',.87,.90],['jump',.90,.94]];
   return X;
 }
+// ground height (px above the flat path) for the slide course: two snowy hills and two jumps over icy water
+const HILL=[[0,0],[.10,0],[.20,48],[.26,48],[.38,0],[.43,0],[.46,16],[.4601,0],[.57,0],[.66,48],[.72,48],[.84,0],[.87,0],[.90,16],[.9001,0],[1.2,0]];
+function hillH(x){const f=(x-S0)/(TRACK-S0);for(let i=1;i<HILL.length;i++){const [f0,h0]=HILL[i-1],[f1,h1]=HILL[i];if(f<=f1){const u=f1>f0?Math.max(0,Math.min(1,(f-f0)/(f1-f0))):1;return h0+(h1-h0)*(1-Math.cos(u*Math.PI))/2}}return 0}
+const slideMis=()=>{const m=curMis();return m&&m.type==='slide'?m:null};
 const gateOpen=(g,t)=>((t+g.ph)%g.P)<g.P*g.open;
 const redPhase=t=>{const p=MX&&MX.ph&&MX.ph.find(q=>t>=q[1]&&t<q[2]);return p||['green',0,1]};
 function misFail(c,now,x){if(c.kind!=='human'||c.done!=null)return;c.failed=x;c.done=now-startT;if(!firstDone)firstDone=now;const o=c.ob;if(o){o.msg=x;o.msgT=now+4000}sfx.sad&&sfx.sad()}
@@ -283,7 +287,7 @@ function misStep(c,now,hx,dt){
     if(m.type==='duck'){if(t>2&&X.fol>0&&(c.disp<m.dlo||c.disp>m.dhi)){o.low+=dt;if(o.low>1200){o.low=0;X.fol--;X.lost.push(hx-150-X.fol*28);o.bumps++;sfx.boing();say((FOL[m.fol]||FOL.duck)[0]+' One got lost! Steady!')}}else o.low=0}
     if(m.type==='slide')X.seg.forEach(([k,a,b],i)=>{const x0=obX(a),x1=obX(b);
       if(k==='up'&&hx>=x0&&hx<=x1)mult*=.6;
-      if(k==='down'){if(o.px<x0&&hx>=x0)X.carry=Math.max(c.w,0);if(hx>=x0&&hx<=x1){X.carry=(X.carry||0)*Math.exp(-dt/2500);c.minSp=Math.max(c.minSp,X.carry*1.25)}}
+      if(k==='down'){if(o.px<x0&&hx>=x0)X.carry=Math.max(c.w,0);if(hx>=x0&&hx<=x1){mult*=1.35;X.carry=(X.carry||0)*Math.exp(-dt/2500);c.minSp=Math.max(c.minSp,X.carry*1.25)}}
       if(k==='jump'){if(o.px<x0&&hx>=x0){if(c.disp>=m.jmin){X.air={x0,x1,sp:Math.max(c.w,0)*1.15};sfx.whoosh();say('🚀 Jump!',900)}else{bump('💦 Too slow — splash!',1300,'splash');X.air=null}}}});
     if(X.air){if(hx>=X.air.x1)X.air=null;else c.minSp=Math.max(c.minSp,X.air.sp)}
   }
@@ -305,7 +309,7 @@ function misWorld(now,dt){
     let v=r.v;if(r.x-hx<80)v=Math.max(v,UPS(R*.8));r.x+=v*dt/1000;
     if(hx>=r.x-8){c.caughtAt=prog(c);c.done=now-startT;if(!firstDone)firstDone=now;sfx.ding();say('🎉 Got it!',4000)}
     else if(r.x>=TRACK)misFail(c,now,(FOE[m.foe]||FOE.mouse)[0]+' It got away!')}
-  if(X.items)X.items.forEach(it=>{if(it.done||t<it.t)return;it.done=1;if(it.x<=hx+24&&it.x>=hx-130){it.got=1;X.got++;sfx.ding();say(ITEM[m.item][0]+' Got it! '+X.got+'/5',900)}else{it.miss=1;say('Missed!',700)}});
+  if(X.items)X.items.forEach(it=>{if(it.done||t<it.t)return;it.done=1;if(it.x<=hx+40&&it.x>=hx-150){it.got=1;X.got++;sfx.ding();say(ITEM[m.item][0]+' Got it! '+X.got+'/5',900)}else{it.miss=1;say('Missed!',700)}});
 }
 // what to do right now (top-left chip)
 function misHint(c,now){
@@ -320,7 +324,7 @@ function misHint(c,now){
     case 'water':return{tx:'💧 Stay above '+m.wmin+(o.bumps?' · 💦 '+o.bumps:''),ok:c.disp>=m.wmin};
     case 'heat':return{tx:'🔥 Heat '+Math.round(X.heat)+'% · cool under '+m.hot,ok:X.heat<70};
     case 'gates':return{tx:(GATE[m.gate]||GATE.dam)[0]+' Time it! · bonks '+o.bumps,ok:!c.blocked};
-    case 'slide':{const hx=headX(c),nx=X.seg.find(([k,a,b])=>obX(b)>=hx);if(!nx)return{tx:'🏁 Go go go!',ok:true};const k=nx[0];return k==='jump'?{tx:'🚀 Jump at '+m.jmin+'+',ok:c.disp>=m.jmin}:k==='up'?{tx:'⛰️ Uphill — push!',ok:true}:{tx:'🛷 Downhill — glide!',ok:true}}
+    case 'slide':{const hx=headX(c),nx=X.seg.find(([k,a,b])=>obX(b)>=hx);if(!nx)return{tx:'🏁 Go go go!',ok:true};const k=nx[0];return k==='jump'||k==='kick'?{tx:'🚀 Jump at '+m.jmin+'+',ok:c.disp>=m.jmin}:k==='up'?{tx:'⛰️ Uphill — push!',ok:true}:{tx:'🛷 Downhill — whee!',ok:true}}
     case 'beat':return m.water?{tx:'💧 Stay above '+m.wmin,ok:c.disp>=m.wmin}:{tx:'🌊 Wait for the tide · bonks '+o.bumps,ok:!c.blocked};
   }
   return null;
@@ -331,8 +335,8 @@ function drawMis(m,now,cam,vw,c){
   if(X.gates)X.gates.forEach(g=>{if(g.x<cam-60||g.x>cam+vw+60)return;const op=gateOpen(g,t),left=op?(g.P*g.open-((t+g.ph)%g.P)):(g.P-((t+g.ph)%g.P));gateArt(m.gate,g.x,op,T);
     ctx.strokeStyle=op?'#2f9e3a':'#e0402f';ctx.lineWidth=4;ctx.beginPath();ctx.arc(g.x,112,9,-Math.PI/2,-Math.PI/2+Math.PI*2*Math.min(1,left/(op?g.P*g.open:g.P*(1-g.open))));ctx.stroke();ctx.fillStyle=op?'#2f9e3a':'#e0402f';ctx.beginPath();ctx.arc(g.x,112,5,0,7);ctx.fill()});
   if(m.type==='water'||m.water){const a=obX(.06),b=obX(.95);ctx.fillStyle='rgba(70,160,230,.75)';ctx.fillRect(a,160,b-a,34);ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.4;for(let x=Math.max(a,Math.floor(cam/40)*40);x<Math.min(b,cam+vw);x+=40){const y=166+hash(x)*22+Math.sin(T/400+x)*2;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+7,y-3,x+14,y);ctx.stroke()}}
-  if(m.type==='slide')X.seg.forEach(([k,a,b])=>{const x0=obX(a),x1=obX(b);if(x1<cam-80||x0>cam+vw+80)return;slideArt(k,x0,x1,m.course,T);
-    const sx=x0-30;ctx.fillStyle='#7a5530';ctx.fillRect(sx-1.5,128,3,32);rr(sx-24,108,48,22,6);ctx.fillStyle=k==='jump'?'#fff3c4':k==='up'?'#ffe3d6':'#e3f4ff';ctx.fill();ctx.font='800 11px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#14301f';ctx.fillText(k==='jump'?'🚀 '+m.jmin+'+':k==='up'?'⛰️ up':'🛷 down',sx,119.5)});
+  if(m.type==='slide'){drawHills(cam,vw,T);X.seg.forEach(([k,a,b])=>{if(k==='kick'||k==='down')return;const x0=obX(a);if(x0<cam-80||x0>cam+vw+80)return;const sx=x0-30,hy=hillH(sx);
+    ctx.fillStyle='#7a5530';ctx.fillRect(sx-1.5,128-hy,3,32);rr(sx-26,106-hy,52,24,6);ctx.fillStyle=k==='jump'?'#fff3c4':'#ffe3d6';ctx.fill();ctx.strokeStyle=k==='jump'?'#e0a000':'#c4560c';ctx.lineWidth=2;ctx.stroke();ctx.font='800 11px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#14301f';ctx.fillText(k==='jump'?'🚀 '+m.jmin+'+':'⛰️ push!',sx,118.5-hy)})}
   if(!isMe){ctx.restore();return}
   if(m.type==='red'){const p=redPhase(t)[0],wx=cam+vw*.5,wy=58;ctx.strokeStyle='#6b4a2a';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(wx-60,wy+22);ctx.lineTo(wx+60,wy+18);ctx.stroke();watcherArt(m.watch,wx,wy,p,T)}
   if(m.type==='catch')X.items.forEach(it=>{if(it.x<cam-40||it.x>cam+vw+40)return;const left=it.t-t;
@@ -361,7 +365,8 @@ function watcherArt(k,x,y,p,T){
   if(p==='green'){ctx.fillStyle='#5b3fb0';ctx.font='800 13px "Baloo 2",sans-serif';ctx.textAlign='left';ctx.fillText('z z',x+22,y-20)}
   else{ctx.fillStyle=p==='red'?'#e0402f':'#ffb020';ctx.font='900 20px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillText(p==='red'?'!!':'?',x+30,y-16)}
 }
-function itemArt(k,x,y){if(k==='apple'){ctx.fillStyle='#e8402f';ctx.beginPath();ctx.arc(x-3,y,7,0,7);ctx.arc(x+3,y,7,0,7);ctx.fill();ctx.strokeStyle='#6b4a2a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y-6);ctx.lineTo(x+1,y-11);ctx.stroke();ctx.fillStyle='#4fb53c';ctx.beginPath();ctx.ellipse(x+5,y-10,4,2,-.5,0,7);ctx.fill()}
+function itemArt(k,x,y){if(k==='star'){ctx.fillStyle='#ffd23f';ctx.strokeStyle='#e0a000';ctx.lineWidth=1.5;ctx.beginPath();for(let i=0;i<10;i++){const r=i%2?4.5:10,a=-Math.PI/2+i*Math.PI/5;ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();return}
+  if(k==='apple'){ctx.fillStyle='#e8402f';ctx.beginPath();ctx.arc(x-3,y,7,0,7);ctx.arc(x+3,y,7,0,7);ctx.fill();ctx.strokeStyle='#6b4a2a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y-6);ctx.lineTo(x+1,y-11);ctx.stroke();ctx.fillStyle='#4fb53c';ctx.beginPath();ctx.ellipse(x+5,y-10,4,2,-.5,0,7);ctx.fill()}
   else{ctx.fillStyle='#ffd8c2';ctx.strokeStyle='#d98a6a';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(x,y+7);ctx.lineTo(x-9,y-3);ctx.quadraticCurveTo(x,y-12,x+9,y-3);ctx.closePath();ctx.fill();ctx.stroke();for(let i=-1;i<=1;i++){ctx.beginPath();ctx.moveTo(x,y+6);ctx.lineTo(x+i*6,y-6);ctx.stroke()}}}
 function foeArt(k,x,T,cam){
   if(k==='garter'||k==='imugi'){const f=mk(SIG[k],'','bot',null,k);f.phi=(x-S0)*2*Math.PI/STEP;f.w=30;f.ph=1;drawRacer(f,T,false);return}
@@ -379,6 +384,19 @@ function folArt(k,x,T,lost){const hop=RM||lost?0:Math.abs(Math.sin(T/110))*5,y=1
   if(k==='firefly'){const gl=.5+.5*Math.sin(T/200);const g2=ctx.createRadialGradient(x,y-8,1,x,y-8,14);g2.addColorStop(0,'rgba(255,245,150,'+(lost?.3:gl)+')');g2.addColorStop(1,'rgba(255,245,150,0)');ctx.fillStyle=g2;ctx.beginPath();ctx.arc(x,y-8,14,0,7);ctx.fill();ctx.fillStyle='#3d2f5a';ctx.beginPath();ctx.ellipse(x,y-8,4,3,0,0,7);ctx.fill()}
   else{ctx.fillStyle=lost?'#f0dc8a':'#ffe14d';ctx.beginPath();ctx.ellipse(x,y-6,9,7,0,0,7);ctx.fill();ctx.beginPath();ctx.arc(x+7,y-13,5,0,7);ctx.fill();ctx.fillStyle='#ff9a3c';ctx.beginPath();ctx.moveTo(x+11,y-13);ctx.lineTo(x+16,y-12);ctx.lineTo(x+11,y-10);ctx.fill();ctx.fillStyle='#14301f';ctx.beginPath();ctx.arc(x+8,y-15,1.3,0,7);ctx.fill()}
   if(lost){ctx.fillStyle='#4aa3df';ctx.beginPath();ctx.arc(x+4,y-20,2,0,7);ctx.fill();ctx.font='800 10px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillStyle='#14301f';ctx.fillText('?',x,y-26)}}
+function drawHills(cam,vw,T){
+  const L=Math.max(cam-30,S0-300),Rr=cam+vw+30,pts=[];for(let x=L;x<=Rr;x+=6)pts.push([x,hillH(x)]);
+  // snowy hill body
+  ctx.fillStyle='#f4f9fd';ctx.beginPath();ctx.moveTo(L,240);pts.forEach(([x,h])=>ctx.lineTo(x,160-h));ctx.lineTo(Rr,240);ctx.closePath();ctx.fill();
+  // the icy path follows the ground
+  ctx.fillStyle='#cfe6f5';ctx.beginPath();pts.forEach(([x,h],i)=>i?ctx.lineTo(x,160-h):ctx.moveTo(x,160-h));for(let i=pts.length-1;i>=0;i--)ctx.lineTo(pts[i][0],194-pts[i][1]*.65);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#9fc8e4';ctx.lineWidth=2;ctx.beginPath();pts.forEach(([x,h],i)=>i?ctx.lineTo(x,160-h):ctx.moveTo(x,160-h));ctx.stroke();
+  // speed lines on the downhills
+  ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=2;[[.26,.38],[.72,.84]].forEach(([a,b])=>{for(let x=obX(a)+20;x<obX(b)-10;x+=36){const h=hillH(x);ctx.beginPath();ctx.moveTo(x,176-h*.8);ctx.lineTo(x+18,176-hillH(x+18)*.8);ctx.stroke()}});
+  // icy water in the jump gaps
+  [[.46,.51],[.90,.94]].forEach(([a,b])=>{const x0=obX(a),x1=obX(b);if(x1<L||x0>Rr)return;ctx.fillStyle='#3b8fd0';ctx.fillRect(x0,156,x1-x0,90);ctx.fillStyle='#ffffff';for(let i=0;i<3;i++){const x=x0+(i+.5)*(x1-x0)/3+Math.sin(T/400+i)*3;rr(x-8,168+i*7,16,5,2);ctx.fill()}
+    ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1.5;for(let i=0;i<4;i++){const y=190+i*10;ctx.beginPath();ctx.moveTo(x0+6,y);ctx.lineTo(x1-6,y);ctx.stroke()}});
+}
 function slideArt(k,x0,x1,course,T){const ice=course==='ice',w=x1-x0;
   if(k==='up'){ctx.fillStyle=ice?'#e8f4fc':'#7a8a5a';ctx.beginPath();ctx.moveTo(x0,160);ctx.lineTo(x1,142);ctx.lineTo(x1,160);ctx.closePath();ctx.fill();ctx.fillStyle=ice?'rgba(160,200,230,.35)':'rgba(90,60,30,.25)';ctx.fillRect(x0,160,w,34);ctx.font='800 16px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(20,48,31,.4)';ctx.fillText('↗',x0+w/2,180)}
   else if(k==='down'){ctx.fillStyle=ice?'rgba(170,225,255,.85)':'rgba(120,190,240,.6)';ctx.fillRect(x0,160,w,34);ctx.strokeStyle='#fff';ctx.lineWidth=2;for(let x=x0+10;x<x1-20;x+=34){ctx.beginPath();ctx.moveTo(x,170+hash(x)*14);ctx.lineTo(x+20,170+hash(x)*14);ctx.stroke()}ctx.font='800 16px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(20,48,31,.4)';ctx.fillText('↘',x0+w/2,180)}
@@ -396,7 +414,7 @@ function apRPM(c,now){const m=curMis();if(!m)return 0;const R=m.rpm*(window.__AP
     case 'red':{const p=redPhase(t)[0];return p==='green'?R:0}
     case 'catch':{const nx=X.items.find(it=>!it.done);if(!nx)return R;const d=nx.x+40-hx,tl=Math.max(.15,nx.t-t);return Math.max(0,Math.min(R*1.6,d/tl/UPS(1)))}
     case 'egg':return Math.min(R,m.lim*.93);case 'duck':return Math.max(m.dlo*1.1,Math.min(m.dhi*.9,R));case 'water':return Math.max(R,m.wmin*1.06);
-    case 'heat':return Math.min(R,m.hot*.97);case 'slide':{const nx=X.seg.find(([k,a])=>k==='jump'&&obX(a)>hx);return nx&&obX(nx[1])-hx<200?Math.max(R,m.jmin*1.08):R}
+    case 'heat':return Math.min(R,m.hot*.97);case 'slide':{const nx=X.seg.find(([k,a])=>k==='jump'&&obX(a)>hx);return nx&&obX(nx[1])-hx<260?Math.max(R,m.jmin*1.1):R}
     case 'beat':return m.water?Math.max(R,m.wmin*1.06):R;
     case 'obst':{const L=obLayout(m);for(const [k,a,b] of L){const x0=obX(a),x1=obX(b);if(hx<x0-60||hx>x1)continue;if(k==='quiet')return Math.min(R,m.qmax*.9);if(k==='push')return Math.max(R,m.pmin*1.1);if(k==='boost')return Math.max(R,m.bmin*1.05)}return R}
   }return R}
@@ -865,7 +883,11 @@ function drawLane(c,ghosts,y0,lh,now,withLabel){
   for(let yy=0;yy<3;yy++)for(let xx=0;xx<4;xx++){ctx.fillStyle=(xx+yy)%2?'#14301f':'#fff';ctx.fillRect(TRACK+22+xx*8,88+yy*8,8,8)}
   }
   ctx.globalAlpha=.25;ghosts.forEach(o=>{if(!o.left)drawRacer(o,now,true)});ctx.globalAlpha=1;
-  const air=c===me&&MX&&MX.air;if(air){const f=Math.max(0,Math.min(1,(headX(c)-air.x0)/(air.x1-air.x0)));ctx.save();ctx.translate(0,-Math.sin(f*Math.PI)*46)}drawRacer(c,now,false);if(air)ctx.restore();drawMisFx(c,now);
+  const air=c===me&&MX&&MX.air,hl=c===me&&slideMis();
+  if(air||hl){const hx=headX(c);ctx.save();
+    if(air){const f=Math.max(0,Math.min(1,(hx-air.x0)/(air.x1-air.x0)));ctx.translate(0,-(16*(1-f)+Math.sin(f*Math.PI)*50))}
+    else{const h1=hillH(hx),h0=hillH(hx-110),an=Math.atan2(h1-h0,110);ctx.translate(0,-h1);ctx.translate(hx,176);ctx.rotate(-an);ctx.translate(-hx,-176)}}
+  drawRacer(c,now,false);if(air||hl)ctx.restore();drawMisFx(c,now);
   if(c.ob){const hx=headX(c),o=c.ob;
     if(now<o.stun){for(let k=0;k<3;k++){const an=now/180+k*2.1;ctx.fillStyle='#ffd23f';ctx.font='800 13px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillText('★',hx-8+Math.cos(an)*14,128+Math.sin(an)*5)}}
     if(now<o.boost){ctx.strokeStyle='rgba(255,210,63,.8)';ctx.lineWidth=2.5;for(let k=0;k<4;k++){const y=168+k*6;ctx.beginPath();ctx.moveTo(hx-60-k*10,y);ctx.lineTo(hx-24-k*6,y);ctx.stroke()}}
@@ -973,7 +995,7 @@ function draw(now){
     ctx.fillStyle='#14301f';ctx.fillRect(0,HUD+lh-1.5,W,3);mid=HUD+lh;
   }
   hud(now);
-  if(mode==='solo'&&MIS[raceLv-1]&&(state==='race'||state==='done'||state==='count'))goalChip(now);
+  if(mode==='solo'&&MIS[raceLv-1]&&(state==='race'||state==='done'||state==='count')){goalChip(now);speedMeter(now)}
   if(state==='count'||(state==='race'&&now-startT<600)){
     const tx=state==='count'?String(Math.max(1,Math.ceil((startT-now)/1000))):t('go');
     if(mode==='solo'&&state==='count'){const m=Math.min(W,H),ly=mid-m*.17;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
@@ -1031,6 +1053,36 @@ function missionStars(m,c,won){
   if(m.type==='obst'){const b=(c.ob&&c.ob.bumps)||0;return T<=m.g[2]&&b===0?3:T<=m.g[1]&&b<=1?2:T<=m.g[0]?1:0}
   if(m.type==='zone'){const p=c.zall?100*c.zin/c.zall:0;return p>=m.g[2]?3:p>=m.g[1]?2:p>=m.g[0]?1:0}
   return top>=m.g[2]?3:top>=m.g[1]?2:top>=m.g[0]?1:0;
+}
+// what speed is allowed right now: {lo, hi, max, label} (RPM) or a heat bar
+function meterSpec(c,now){
+  const m=curMis();if(!m||!c||state!=='race'||c.done!=null)return null;const X=MX,t=(now-startT)/1000,R=m.rpm;
+  switch(m.type){
+    case 'egg':return{lo:0,hi:m.lim,max:m.lim*1.6,label:EGG[m.item][0]+' Under '+m.lim};
+    case 'duck':return{lo:m.dlo,hi:m.dhi,max:m.dhi*1.45,label:(FOL[m.fol]||FOL.duck)[0]+' Stay '+m.dlo+'–'+m.dhi};
+    case 'water':return{lo:m.wmin,hi:1e9,max:m.wmin*2,label:'💧 Stay above '+m.wmin};
+    case 'beat':return m.water?{lo:m.wmin,hi:1e9,max:m.wmin*2,label:'💧 Stay above '+m.wmin}:null;
+    case 'red':{const p=redPhase(t)[0];return p==='green'?{lo:0,hi:1e9,max:R*1.5,label:'🟢 GO!'}:{lo:0,hi:35,max:R*1.5,label:p==='red'?'🔴 FREEZE!':'🟡 Slow down…'}}
+    case 'heat':return{heat:true,val:X.heat,label:'🔥 Heat · cool under '+m.hot,hot:m.hot};
+    case 'slide':{const hx=headX(c),nx=X.seg.find(([k,a])=>k==='jump'&&obX(a)>hx);return nx&&obX(nx[1])-hx<420?{lo:m.jmin,hi:1e9,max:m.jmin*1.8,label:'🚀 Jump at '+m.jmin+'+'}:null}
+    case 'obst':{const hx=headX(c),W0=OBW[m.w];for(const [k,a,b] of obLayout(m)){const x0=obX(a),x1=obX(b);if(hx>x1+2)continue;if(x0-hx>420)return null;
+      return k==='push'?{lo:m.pmin,hi:1e9,max:m.pmin*2,label:W0.push[1]+' Keep '+m.pmin+'+'}:k==='quiet'?{lo:0,hi:m.qmax,max:m.qmax*2,label:W0.quiet[1]+' Under '+m.qmax}:{lo:m.bmin,hi:1e9,max:m.bmin*1.6,label:W0.boost[1]+' Boost at '+m.bmin+'+'}}return null}
+  }return null}
+function speedMeter(now){
+  const c=me,sp=meterSpec(c,now);if(!sp)return;
+  const narrow=W<640,mw=Math.min(300,narrow?W-24:W-460),mx=(W-mw)/2,my=narrow?HUD+78:HUD+8,val=sp.heat?sp.val:Math.round(c.disp),
+    ok=sp.heat?val<70:val>=sp.lo&&val<=sp.hi;
+  ctx.save();rr(mx,my,mw,58,12);ctx.fillStyle=ok?'rgba(20,60,36,.9)':'rgba(150,32,24,.92)';ctx.fill();
+  ctx.fillStyle='#fff';ctx.textBaseline='middle';ctx.textAlign='left';ctx.font='800 14px "Baloo 2",sans-serif';
+  const msg=ok?sp.label:sp.heat?'🔥 Too hot! Slow down':val>sp.hi?'⬇ Too fast! Slow down':'⬆ Too slow! Spin faster';ctx.fillText(msg,mx+10,my+15);
+  ctx.textAlign='right';ctx.font='800 22px "Baloo 2",sans-serif';ctx.fillText(sp.heat?Math.round(val)+'%':String(val),mx+mw-(sp.heat?10:42),my+16);if(!sp.heat){ctx.font='700 10px "Baloo 2",sans-serif';ctx.fillText('RPM',mx+mw-10,my+18)}
+  const bx=mx+10,bw=mw-20,by=my+33,bh=12,max=sp.heat?100:sp.max,X=v=>bx+bw*Math.max(0,Math.min(1,v/max));
+  rr(bx,by,bw,bh,6);ctx.fillStyle='#e0402f';ctx.fill();
+  if(sp.heat){const g=X(70);ctx.save();rr(bx,by,bw,bh,6);ctx.clip();ctx.fillStyle='#3fae5a';ctx.fillRect(bx,by,g-bx,bh);ctx.fillStyle='#ffb020';ctx.fillRect(g,by,X(90)-g,bh);ctx.restore()}
+  else{const a=X(sp.lo),b=X(Math.min(sp.hi,max));ctx.save();rr(bx,by,bw,bh,6);ctx.clip();ctx.fillStyle='#3fae5a';ctx.fillRect(a,by,b-a,bh);ctx.restore();
+    ctx.font='700 10px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillStyle='#fff';if(sp.lo>0)ctx.fillText(sp.lo,a,by+bh+8);if(sp.hi<max)ctx.fillText(sp.hi,b,by+bh+8)}
+  const px=X(val);ctx.fillStyle='#fff';rr(px-2.5,by-5,5,bh+10,2.5);ctx.fill();ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=1;ctx.stroke();
+  ctx.restore();
 }
 function goalChip(now){
   const m=MIS[raceLv-1],c=me;if(!m||!c||m.type==='beat'&&!m.water&&!m.gate)return;
