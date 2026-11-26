@@ -109,6 +109,10 @@ const isOpen=k=>CHARS.includes(k)&&(k==='dragon'?totalStars()>=DRAGON_STARS:!(k 
 const firstOpen=k=>isOpen(k)?k:'cat';
 let lvl=Math.max(1,Math.min(NLV,+store.get('cr-lv')||cleared()+1,cleared()+1));
 const botW=()=>LV[lvl-1]*2*Math.PI/60;
+// my speed = average RPM of my last 5 finished races (race time ≈ 2823 / RPM); before any race, my mission's speed
+const spdList=()=>{try{const a=JSON.parse(store.get('cr-spd')||'[]');return Array.isArray(a)?a.filter(x=>x>0):[]}catch(e){return[]}};
+const mySpd=()=>{const a=spdList();return a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):LV[progLv()-1]};
+const addSpd=ms=>{if(!(ms>0))return;const a=spdList();a.push(Math.min(500,Math.round(2823/(ms/1000))));store.set('cr-spd',JSON.stringify(a.slice(-5)))};
 const SK=[['#6fd14a','#2f7d1f','#ffd23f'],['#ff9a3c','#b5560e','#fff1a8'],['#4fb3ff','#1f6ea8','#ffffff'],['#ff6b9a','#b02d5c','#ffffff'],['#b38bff','#5e3bb0','#ffffff'],['#ffd23f','#9a7a05','#ffffff'],['#3fd6c6','#13806f','#ffffff'],['#ff5b4f','#a32118','#ffe9a8']].map(([body,dark,spot])=>({body,dark,spot}));
 let myChar=firstOpen(store.get('cr-char')),botChar=null;
 let mode=qs.get('room')?'online':'solo',anyone=false,state='menu',startT=0,firstDone=0,endEl=0,winner=null,racers=[],me=null,endNote='';
@@ -124,7 +128,7 @@ function setup(ids){
   else{
     const mem=net?net.members():[];
     const list=ids||mem.map(p=>p.id);
-    racers=list.map((id,i)=>{const p=mem.find(x=>x.id===id)||(net&&net.peers.get(id))||raceBots.find(x=>x.id===id),cc=id===myId?myChar:(p&&p.ch),isBot=!!(p&&p.bot),mine=isBot&&p.owner===myId;const c=mk({...(SIG[cc]||SIG.cat),pc:SK[i%8].body},id===myId?(net?net.me.name:myName()):(p?p.name:'Racer'),id===myId?'human':mine?'bot':'remote',id,id===myId?myChar:(p&&p.ch));if(isBot){c.owner=p.owner;c.isCpu=true;if(mine)c.bw=LV[Math.max(1,Math.min(NLV,p.lv||1))-1]*2*Math.PI/60}return c});
+    racers=list.map((id,i)=>{const p=mem.find(x=>x.id===id)||(net&&net.peers.get(id))||raceBots.find(x=>x.id===id),cc=id===myId?myChar:(p&&p.ch),isBot=!!(p&&p.bot),mine=isBot&&p.owner===myId;const c=mk({...(SIG[cc]||SIG.cat),pc:SK[i%8].body},id===myId?(net?net.me.name:myName()):(p?p.name:'Racer'),id===myId?'human':mine?'bot':'remote',id,id===myId?myChar:(p&&p.ch));if(isBot){c.owner=p.owner;c.isCpu=true;if(mine)c.bw=(p.rpm||LV[Math.max(1,Math.min(NLV,p.lv||1))-1])*2*Math.PI/60}return c});
     if(!racers.length)racers=[mk(SK[0],myName(),'human',myId,myChar)];
     me=racers.find(r=>r.id===myId)||null;
   }
@@ -152,7 +156,7 @@ function upd(c,now,dt){
   if(state==='race'&&c.done==null&&c.kind==='human'&&mode==='solo'){const ms=MIS[raceLv-1];if(ms&&ms.type==='zone'){c.zall=(c.zall||0)+dt;if(c.disp>=ms.lo&&c.disp<=ms.hi)c.zin=(c.zin||0)+dt}}
   if(state==='race'&&c.done==null&&c.kind!=='remote'){
     c.phi+=sp*GAIN*dt/1000;c.spin+=sp*dt/1000;c.top=Math.max(c.top,sp/(2*Math.PI));
-    if(mode!=='practice'&&headX(c)>=TRACK){c.done=now-startT;if(!firstDone)firstDone=now;if(c.kind==='human'){sfx.ding();buzz(120)}if(mode==='online'&&c===me&&net)net.send({t:'fin',time:c.done,spin:c.spin,top:c.top});if(mode==='online'&&c.kind==='bot'&&net)net.send({t:'fin',b:c.id,time:c.done,spin:c.spin,top:c.top})}
+    if(mode!=='practice'&&headX(c)>=TRACK){c.done=now-startT;if(!firstDone)firstDone=now;if(c.kind==='human'){sfx.ding();buzz(120);if(c===me)addSpd(c.done)}if(mode==='online'&&c===me&&net)net.send({t:'fin',time:c.done,spin:c.spin,top:c.top});if(mode==='online'&&c.kind==='bot'&&net)net.send({t:'fin',b:c.id,time:c.done,spin:c.spin,top:c.top})}
   }
   const hx=headX(c);if(c.px!=null&&dt>0){const v=(hx-c.px)/dt*1000;c.vs+=(v-c.vs)*(1-Math.exp(-dt/350))}c.px=hx;c.kmh=Math.min(MAXKMH,Math.max(0,c.vs)*KMH);
   c.pv+=(Math.max(-3,Math.min(3,-sp*.15))-c.pv)*.15;
@@ -907,7 +911,7 @@ function joinRoom(code,capSet){
   let status='connecting',hb=0,lastHi=0;
   const n={code,me:me0,peers,status:()=>status,
     send:m=>{m.id=myId;tr.send(m)},
-    hello:()=>{lastHi=Date.now();const h={t:'hi',name:me0.name,ready:me0.ready,joined:me0.joined,ph:anyone&&mode==='solo'?'cpu':state,ch:myChar,cap:me0.cap,ws:me0.ws,lv:progLv(),bots:me0.bots.map(b=>({id:b.id,ch:b.ch,n:b.n})),mb:anyone&&state==='match'?visBots().map(b=>({id:b.id,name:b.name,ch:b.ch})):[]};if(state==='count'&&curIds){h.rid=curRid;h.ids=curIds;h.left=Math.max(0,startT-performance.now())}n.send(h)},
+    hello:()=>{lastHi=Date.now();const h={t:'hi',name:me0.name,ready:me0.ready,joined:me0.joined,ph:anyone&&mode==='solo'?'cpu':state,ch:myChar,cap:me0.cap,ws:me0.ws,lv:progLv(),sp:mySpd(),bots:me0.bots.map(b=>({id:b.id,ch:b.ch,n:b.n})),mb:anyone&&state==='match'?visBots().map(b=>({id:b.id,name:b.name,ch:b.ch})):[]};if(state==='count'&&curIds){h.rid=curRid;h.ids=curIds;h.left=Math.max(0,startT-performance.now())}n.send(h)},
     all:()=>[me0,...[...peers.values()]].sort((a,b)=>a.joined-b.joined||(a.id<b.id?-1:1)),
     cap:()=>{if(n.any)return MAXP;const a=n.all(),f=a.find(p=>p.cap);return Math.min(MAXP,Math.max(2,(a[0]&&a[0].cap)||(f&&f.cap)||MAXP))},
     humans:()=>n.any?n.all():n.all().slice(0,n.cap()),
@@ -932,7 +936,7 @@ function joinRoom(code,capSet){
     const p=peers.get(m.id);if(p)p.seen=Date.now();
     if(m.t==='who'){n.hello();return}
     if(m.t==='hi'){
-      peers.set(m.id,{id:m.id,name:cleanName(m.name)||'Racer',ready:!!m.ready,joined:+m.joined||Date.now(),ph:m.ph,ch:CHARS.includes(m.ch)?m.ch:'cat',ws:+m.ws||0,lv:Math.max(1,Math.min(NLV,+m.lv||1)),mb:(Array.isArray(m.mb)?m.mb:[]).slice(0,3).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,name:cleanName(b.name)||'Racer',ch:b.ch})),bots:(Array.isArray(m.bots)?m.bots:[]).slice(0,MAXP).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,ch:b.ch,n:Math.max(1,Math.min(9,+b.n||1))})),cap:(+m.cap>=2&&+m.cap<=MAXP)?+m.cap:null,seen:Date.now()});
+      peers.set(m.id,{id:m.id,name:cleanName(m.name)||'Racer',ready:!!m.ready,joined:+m.joined||Date.now(),ph:m.ph,ch:CHARS.includes(m.ch)?m.ch:'cat',ws:+m.ws||0,lv:Math.max(1,Math.min(NLV,+m.lv||1)),sp:Math.max(0,Math.min(500,+m.sp||0)),mb:(Array.isArray(m.mb)?m.mb:[]).slice(0,3).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,name:cleanName(b.name)||'Racer',ch:b.ch})),bots:(Array.isArray(m.bots)?m.bots:[]).slice(0,MAXP).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,ch:b.ch,n:Math.max(1,Math.min(9,+b.n||1))})),cap:(+m.cap>=2&&+m.cap<=MAXP)?+m.cap:null,seen:Date.now()});
       if(!me0.cap){const c0=n.cap();if(c0<MAXP||m.cap)me0.cap=c0}
       if(status==='noroom'){status='ok';refreshPanel(true)}
       if(!p)n.hello();
@@ -1453,6 +1457,9 @@ function matchTick(){
     if(due){
       const ids=pl.slice(0,MAXP).map(p=>p.id),rid=Math.random().toString(36).slice(2,8);
       raceBots=mBots.slice(0,Math.max(0,Math.min(3,ANYMIN-ids.length)));
+      // computers race within ±30% of the fastest real player's speed (last-5-race average RPM)
+      const best=Math.max(...pl.slice(0,MAXP).map(q=>q.id===myId?mySpd():(q.sp||LV[(q.lv||1)-1])));
+      raceBots.forEach(b=>{b.rpm=Math.max(40,Math.min(500,Math.round(best*(.7+Math.random()*.6))))});
       ids.push(...raceBots.map(b=>b.id));
       net.send({t:'go',delay:3000,ids,rid,bots:raceBots.map(b=>({id:b.id,name:b.name,ch:b.ch}))});startRace(3000,ids,rid);return}
   }else{mBots=[];mPlanFor=0}
