@@ -68,6 +68,9 @@ const headOff=phi=>(N-1)*SP+STEP*g(phi-(N-1)*DELTA);
 const X0=START+120-headOff(0),S0=START+120;
 const CHARS=['cat','inch','snail','turtle','centi','garter','basil','crab','puffer','shrimp','frill','peng','imugi','dragon'];
 const ALLC=[...CHARS,'king']; // 'king' is the level-30 boss, never playable
+// in a mission every lane uses that mission's world; elsewhere each animal races at its own home
+const WHAB=['garden','pond','sea','desert','ice','waterfall'];
+const habOf=ch=>mode==='solo'&&MIS[raceLv-1]?WHAB[MIS[raceLv-1].w]:(HAB[ch]||'garden');
 const HAB={cat:'garden',inch:'garden',centi:'garden',snail:'garden',garter:'garden',frill:'desert',basil:'pond',turtle:'sea',puffer:'sea',shrimp:'sea',crab:'sea',peng:'ice',dragon:'volcano',king:'volcano',imugi:'waterfall'};
 const SIG={cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86a',dark:'#3f8a24',spot:'#fff6a8'},centi:{body:'#c9b3ff',dark:'#5b3fb0',spot:'#ff4f97'},turtle:{body:'#5fc79a',dark:'#2e7d5b',spot:'#ffe27a'},snail:{body:'#f1d2b0',dark:'#a5784e',spot:'#f0a35e'},garter:{body:'#5cbf6a',dark:'#2f7d4a',spot:'#ffe27a'},frill:{body:'#e3ad66',dark:'#8a5a2b',spot:'#ff8a5c'},basil:{body:'#6fd14a',dark:'#2f7d1f',spot:'#c9f59a'},puffer:{body:'#ffd84a',dark:'#b8860b',spot:'#fff4c8'},shrimp:{body:'#ff9a76',dark:'#c2482a',spot:'#ffd1c2'},crab:{body:'#ff7a5c',dark:'#b23a22',spot:'#ffd0c0'},peng:{body:'#2b2f36',dark:'#0f1115',spot:'#ffffff',gauge:'#6cc4ff'},dragon:{body:'#ffcf3f',dark:'#b77800',spot:'#ff8a3c'},imugi:{body:'#3fa58f',dark:'#1f5f5b',spot:'#bfe8c8'},king:{body:'#d8283c',dark:'#4a0710',spot:'#2b2b2b'}};
 // Every character moves the same average distance per turn (fair races); only the look differs.
@@ -548,7 +551,7 @@ function gauges(c,y0,R){
 function drawLane(c,ghosts,y0,lh,now,withLabel){
   const s=lh/220,vw=W/s,prac=mode==='practice',cam=prac?headX(c)-vw*.62:Math.max(-vw*.15,Math.min(headX(c)-vw*.52,TRACK+260-vw));
   ctx.save();ctx.beginPath();ctx.rect(0,y0,W,lh);ctx.clip();ctx.translate(0,y0);ctx.scale(s,s);
-  const hab=HAB[c.char]||'garden',sea=hab==='sea';
+  const hab=habOf(c.char),sea=hab==='sea';
   // sky top, sky bottom, far hills, near hills, ground, path, path edge
   const P={garden:['#86cfff','#e6f7ff','#acdf8e','#86cc66','#5cb83c','#dcb57d','#c39459'],sea:['#1f7fc4','#7fd3f5','#3e98b8','#5ab3bd','#e3cf94','#f0dfab','#d2bb7a'],desert:['#ffb878','#ffeec4','#f5cf8c','#ebb66a','#eec57e','#f6dba6','#d6a45e'],pond:['#86cfff','#e6f7ff','#a6dc8e','#7cc866','#5cb83c','#62c0e8','#3b9ccc'],ice:['#9fd6ff','#f2fbff','#e4f4ff','#c9e7fa','#f6fcff','#d3ecfb','#a7d1ec'],waterfall:['#14203d','#3b5a8a','#2c3e66','#33466e','#2f5a6e','#4a7fa0','#9fd6ff'],volcano:c.char==='king'?['#1b0b2e','#7a1a2a','#2a0f1a','#3a1420','#3a1a1a','#2a1010','#ff7a1a']:['#3b1d6e','#d2508a','#4a1f3a','#5e2a40','#5b3a2e','#4a2c22','#ff7a1a']}[hab];
   const gr=ctx.createLinearGradient(0,0,0,150);gr.addColorStop(0,P[0]);gr.addColorStop(1,P[1]);ctx.fillStyle=gr;ctx.fillRect(0,0,vw+2,222);
@@ -1326,6 +1329,7 @@ function animalShot(ch,what,seed,place){
       ctx.lineCap='round';[-1,1].forEach(s2=>{ctx.save();ctx.translate(hx+s2*(2.5+op*10),hy);ctx.rotate(s2*(.35+op));ctx.fillStyle=f.body;ctx.strokeStyle=f.dark;ctx.lineWidth=1.6;ctx.beginPath();ctx.ellipse(0,0,4,6.5,0,0,7);ctx.fill();ctx.stroke();ctx.restore()});
       ctx.strokeStyle='#ffd23f';ctx.lineWidth=2.2;[[-1,-1],[0,-1.3],[1,-1]].forEach(([dx,dy])=>{ctx.beginPath();ctx.moveTo(hx+dx*8,hy-9+dy*2);ctx.lineTo(hx+dx*13,hy-9+dy*8);ctx.stroke()});
       face(hd.x,hd.y,hd.r,'win',1000+seed*137,f);
+    }else if(what==='lose'){face(hd.x,hd.y,hd.r,'lose',1000,f) // missed the mission: no medal, no trophy
     }else{
       const tx=hd.x+4,ty=hd.y-hd.r-34;
       ctx.lineCap='round';[[-1,-14],[1,14]].forEach(([s2,dx])=>{ctx.strokeStyle=f.dark;ctx.lineWidth=5.5;ctx.beginPath();ctx.moveTo(hd.x+s2*hd.r*.75,hd.y+2);ctx.quadraticCurveTo(hd.x+s2*hd.r*1.5,hd.y-hd.r-6,tx+dx*.8,ty+14);ctx.stroke();ctx.strokeStyle=f.body;ctx.lineWidth=3;ctx.stroke()});
@@ -1341,7 +1345,7 @@ function animalShot(ch,what,seed,place){
 }
 function resultCard(){
   const {c,place,n}=cardStats(),Wc=1080,Hc=1350,cv2=document.createElement('canvas');cv2.width=Wc;cv2.height=Hc;
-  const saved=ctx,savedWin=winner,hab=HAB[c.char]||'garden';
+  const saved=ctx,savedWin=winner,hab=habOf(c.char);
   const sky={waterfall:['#14203d','#5b7ab8'],volcano:['#3b1d6e','#ff9a3c'],garden:['#7fd0ff','#e9f9ff'],desert:['#ffb36b','#fff0c9'],pond:['#7fd0ff','#e9f9ff'],sea:['#1f7fc4','#8adaf7'],ice:['#9fd6ff','#f4fcff']}[hab];
   const ground={waterfall:'#2f5a6e',volcano:'#5b3a2e',garden:'#5cb83c',desert:'#eec57e',pond:'#62c0e8',sea:'#e3cf94',ice:'#f6fcff'}[hab];
   const first=mode==='solo'?lastStars>0:place===1,champ=mode==='solo'&&first&&raceLv===NLV;
@@ -1361,7 +1365,7 @@ function resultCard(){
         ctx.fillStyle='rgba(255,255,255,.28)';rr(30,by-2,Wc-60,22,11);ctx.fill();ctx.fillStyle='rgba(122,60,255,.25)';rr(30,by+20,Wc-60,10,5);ctx.fill();
         list.forEach((k,i)=>{const sh=animalShot(k,'clap',r*7+i);if(!sh)return;const cw=(Wc-80)/list.length,cx=40+cw*(i+.5),k2=Math.min((cw-14)/sh.width,(r?118:104)/sh.height),dw=sh.width*k2,dh=sh.height*k2;ctx.drawImage(sh,cx-dw/2,by-dh+4,dw,dh)})});
     }
-    const main=animalShot(c.char,first?(champ?'champ':'trophy'):'medal',0,place);
+    const main=animalShot(c.char,first?(champ?'champ':'trophy'):mode==='solo'?'lose':'medal',0,place);
     if(main){const k=Math.min((champ?760:840)/main.width,(champ?330:600)/main.height,1.6),dw=main.width*k,dh=main.height*k;
       ctx.fillStyle='rgba(20,48,31,.18)';ctx.beginPath();ctx.ellipse(Wc/2,1018,dw*.42,22,0,0,7);ctx.fill();
       ctx.drawImage(main,(Wc-dw)/2,1020-dh,dw,dh)}
