@@ -33,7 +33,7 @@ const L={
   boardEmpty:'No times yet. Be the first!',boardErr:'Couldn\'t load the leaderboard. Check your internet.',boardSaving:'Saving to leaderboard…',
   boardRank:'Leaderboard: you\'re #{r} of {n} in the last 24 hours',boardNoNick:'Add a nickname before the race to join the leaderboard.',boardFail:'Couldn\'t save to the leaderboard.',loading:'Loading…',boardNote:'Your best time counts once per period.',
   character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',cpuN:'🤖 Computer {n}',addBot:'＋ Add computer',botNote:'Computers race at about your group\'s level and are always ready. If a friend joins a full room, a computer makes room.',lvLost:'LEVEL {n} · SO CLOSE!',nextUp:'Next: Lv {n}',nextAnimal:'Clear Lv {n} → {a}',cpuRpm:'Computer ≈ {r} RPM',back2:'Back',lvOf:'{n} / 30 cleared',nameShown:'Shown on the leaderboard.',changeAnimal:'Change animal',close:'Close',ch_dragon:'Golden Dragon',ch_king:'Dragon King',letsRace:"Let's race!",changeBtn:'✏️ Change',theAnimal:'the {a}',cpuTile:'vs Computer',cpuTileSub:'30 levels · unlock animals',onLv:"⭐ You're on Lv {n}",allDone:'⭐ All 30 levels cleared!',anyTile:'Race anyone',anyTileSub:'Jump into a race online',racingNow:'{n} racing now',friendsTile:'Race friends',friendsSub:'Private race with a code',sameTile:'Same phone',sameSub:'2 players, 1 phone',meTitle:'Animal & name',yourName:'Your name',newName:'🎲 New fun name',typeName:'Or type your own name (optional)',saveName:'Save name',useAuto:'Use my fun name',badName:'Please pick a different name.',nameSaved:'Name saved.',lockLv:'Lv {n}',lockedMsg:'Clear level {n} to unlock the {a}.',doneBtn:'Done',
- finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyRule:'Starts right away with 8 racers, or 15 s after a 2nd racer joins.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
+ finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyRule:'Starts right away with 8 racers, otherwise in a few seconds.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
  nextLevel:'Next level →',tryAgain:'Try again',levelsBtn:'📋 Levels',levels:'Pick a level',levelN:'Level {n}',cpuAbout:'Computer: about {r} RPM',levelCleared:'LEVEL {n} CLEARED!',newAnimal:'🎉 New animal!',newAnimals:'🎉 {n} new animals!',legendary:'🐉 LEGENDARY unlock!',raceAs:'Race as {a} now',seePic:'See my race picture',lvJump:'Level jump! You skipped to level {n}.',allCleared:'You beat all 30 levels!',bestLv:'Your best on level {n}: {t}',newBestLv:'New best on level {n}!',
  lvCol:'Level',lvShort:'Lv {n}',onlineLv:'Online',waitingForYou:'Everyone is waiting for you!',leaveQ:'Leave the race?',stay:'Stay',leaveYes:'Leave',invitedT:"You're invited!",joinAs:'You will race as:',friendsTitle:'Race friends',p2Title:"Player 2's animal",paceLbl:'PACE',raceLbl:'race',
  line_cat:'Wiggles one bump at a time.',line_inch:'Loops up and stretches out.',line_snail:'Slow and steady… or is it?',line_turtle:'Paddles through the sea.',line_centi:'One hundred tiny feet!',line_crab:'Swims sideways super fast.',line_garter:'Slithers in S-curves.',line_basil:'Runs on water!',line_puffer:'Puffs up when it goes fast.',line_shrimp:'SNAP! The loudest little shrimp.',line_peng:'Slides on its belly.',line_frill:'Pops its frill and sprints.',line_dragon:'Breathes a fire trail at 300+ RPM!',
@@ -97,7 +97,7 @@ function setup(ids){
   else{
     const mem=net?net.members():[];
     const list=ids||mem.map(p=>p.id);
-    racers=list.map((id,i)=>{const p=mem.find(x=>x.id===id)||(net&&net.peers.get(id)),cc=id===myId?myChar:(p&&p.ch),isBot=!!(p&&p.bot),mine=isBot&&p.owner===myId;const c=mk({...(SIG[cc]||SIG.cat),pc:SK[i%8].body},id===myId?(net?net.me.name:myName()):(p?p.name:'Racer'),id===myId?'human':mine?'bot':'remote',id,id===myId?myChar:(p&&p.ch));if(isBot){c.owner=p.owner;c.isCpu=true;if(mine)c.bw=LV[Math.max(1,Math.min(NLV,p.lv||1))-1]*2*Math.PI/60}return c});
+    racers=list.map((id,i)=>{const p=mem.find(x=>x.id===id)||(net&&net.peers.get(id))||raceBots.find(x=>x.id===id),cc=id===myId?myChar:(p&&p.ch),isBot=!!(p&&p.bot),mine=isBot&&p.owner===myId;const c=mk({...(SIG[cc]||SIG.cat),pc:SK[i%8].body},id===myId?(net?net.me.name:myName()):(p?p.name:'Racer'),id===myId?'human':mine?'bot':'remote',id,id===myId?myChar:(p&&p.ch));if(isBot){c.owner=p.owner;c.isCpu=true;if(mine)c.bw=LV[Math.max(1,Math.min(NLV,p.lv||1))-1]*2*Math.PI/60}return c});
     if(!racers.length)racers=[mk(SK[0],myName(),'human',myId,myChar)];
     me=racers.find(r=>r.id===myId)||null;
   }
@@ -846,7 +846,7 @@ function joinRoom(code,capSet){
       if(state==='lobby'||state==='done'){maybeStart();refreshPanel()}
       return}
     if(m.t==='bye'){peers.delete(m.id);if(p)onLeave(p);return}
-    if(m.t==='go'){if(Array.isArray(m.ids)&&m.ids.includes(myId)&&(!n.any||(state==='match'&&mode==='online'))){if(m.rid!==curRid)startRace(m.delay||3000,m.ids,m.rid)}else refreshPanel(true);return}
+    if(m.t==='go'){if(Array.isArray(m.ids)&&m.ids.includes(myId)&&(!n.any||(state==='match'&&mode==='online'))){if(m.rid!==curRid){raceBots=(Array.isArray(m.bots)?m.bots:[]).slice(0,MAXP).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,name:cleanName(b.name)||'Racer',ch:b.ch,bot:true,owner:m.id}));startRace(m.delay||3000,m.ids,m.rid)}}else refreshPanel(true);return}
     if(m.t==='st'&&state==='race'&&Array.isArray(m.bs))m.bs.forEach(a=>{const q=racers.find(x=>x.id===a[0]&&x.owner===m.id&&x.kind==='remote');if(q&&q.done==null){q.tphi=+a[1]||0;q.tw=+a[2]||0;q.spin=+a[3]||0;q.top=+a[4]||0;q.rt=performance.now()}});
     if(m.t==='fin'&&m.b){const q=racers.find(x=>x.id===m.b&&x.owner===m.id&&x.kind==='remote');if(q&&q.done==null&&(state==='race'||state==='count')){q.done=+m.time;q.spin=+m.spin||0;q.top=+m.top||0;q.phi=Math.max(q.phi,phiForFinish(q.char));q.w=0;q.tw=0;if(!firstDone)firstDone=performance.now()}return}
     if(m.t==='st'&&m.self===0)return;
@@ -1260,7 +1260,7 @@ function startLocal(){
 function leaveRoom(){closeNet();clearRoomParam();invite=false;onTab='create';state='menu';home()}
 // ---------- Race anyone: one shared room where whoever is waiting gets matched ----------
 const ANYROOM='ANY';
-let anyCount=0,anyPeekAt=0,pairAt=0,aloneSince=0,aloneWait=10000,switchOffer=false;
+const ANYMIN=4,ANYALONE=10000;let raceBots=[],anyCount=0,anyPeekAt=0,pairAt=0,aloneSince=0,aloneWait=10000,switchOffer=false;
 function anyPeek(){
   // listen to the shared room for a few seconds (without joining) to count who is racing there
   if(Date.now()-anyPeekAt<20000)return;anyPeekAt=Date.now();
@@ -1273,7 +1273,7 @@ function startAnyone(){
   closeNet();clearRoomParam();invite=false;anyone=true;mode='online';
   joinRoom(ANYROOM,MAXP);enterMatch();
 }
-function enterMatch(){anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
+function enterMatch(){raceBots=[];anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
 function matchTick(){
   if(!anyone||!net)return;
   const others=[...net.peers.values()].filter(p=>p.ph==='match');
@@ -1285,15 +1285,19 @@ function matchTick(){
   const pl=pool();
   if(pl.length>=2){if(!pairAt)pairAt=Date.now()}else pairAt=0;
   if(pl.length>=2)aloneSince=Date.now();
-  if(pl[0]&&pl[0].id===myId&&pl.length>=2&&(pl.length>=MAXP||Date.now()-pairAt>=15000)){
-    const ids=pl.slice(0,MAXP).map(p=>p.id),rid=Math.random().toString(36).slice(2,8);net.send({t:'go',delay:3000,ids,rid});startRace(3000,ids,rid);return}
-  if(panel==='match'||panel==='alone'){
-    if(pl.length<2&&Date.now()-aloneSince>aloneWait){if(panel!=='alone')aloneScreen()}
-    else matchScreen();
-  }
+  const due=pl.length>=MAXP||(pl.length>=2&&Date.now()-pairAt>=15000)||(pl.length===1&&Date.now()-aloneSince>=ANYALONE);
+  if(pl[0]&&pl[0].id===myId&&due){
+    // computers with ordinary fun names fill the race up to 4 racers (their level stays hidden)
+    const ids=pl.slice(0,MAXP).map(p=>p.id),rid=Math.random().toString(36).slice(2,8);
+    const avg=Math.round(pl.reduce((a,p)=>a+(p.id===myId?progLv():(p.lv||1)),0)/pl.length),used=new Set(pl.map(p=>p.id===myId?myChar:p.ch));
+    raceBots=[];for(let k=ids.length;k<ANYMIN;k++){const pool2=CHARS.filter(c=>c!=='dragon'&&!used.has(c)),ch=pool2[Math.floor(Math.random()*pool2.length)]||'cat';used.add(ch);
+      raceBots.push({id:'b'+Math.random().toString(36).slice(2,10),name:makeAutoName(),ch,bot:true,owner:myId,lv:Math.max(1,Math.min(NLV,avg+Math.floor(Math.random()*7)-3))})}
+    ids.push(...raceBots.map(b=>b.id));
+    net.send({t:'go',delay:3000,ids,rid,bots:raceBots.map(b=>({id:b.id,name:b.name,ch:b.ch}))});startRace(3000,ids,rid);return}
+  if(panel==='match'||panel==='alone')matchScreen();
 }
 function matchScreen(){
-  panel='match';const pl=pool(),n=pl.length,left=pairAt?Math.max(0,Math.ceil((15000-(Date.now()-pairAt))/1000)):null;
+  panel='match';const pl=pool(),n=pl.length,left=pairAt?Math.max(0,Math.ceil((15000-(Date.now()-pairAt))/1000)):Math.max(0,Math.ceil((ANYALONE-(Date.now()-aloneSince))/1000));
   const s2=n+'|'+pl.map(p=>p.id+p.ch).join(',')+'|'+left;if(s2===sig&&ov.querySelector('.match'))return;sig=s2;
   const deg=Math.round(360*Math.min(1,n/MAXP));
   ov.innerHTML=`<div class="panel match">${homeBtn()}<h2>${t('finding')}</h2>
