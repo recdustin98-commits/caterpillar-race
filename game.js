@@ -997,7 +997,7 @@ function readyArea(){
   const others=mem.filter(p=>p.id!==myId),waitMe=others.length>0&&others.every(p=>p.ready);
   if(!net.me.ready)h+=`${waitMe?`<p class="waitu">${t('waitingForYou')}</p>`:''}<button class="go pulse" data-act="ready">👉 ${panel==='results'?t('rematch'):t('readyBtn')}</button>`;
   else h+=`<p class="small">${allIn?t('waitReady'):t('waitJoin',{k:c-mem.length})}</p>`;
-  if(net.host()&&mem.length>=2&&!(allIn&&allReady))h+=`<button class="go alt" data-act="startnow">${t('startNow',{k:mem.length})}</button>`;
+  if(net.me.ready&&net.host()&&mem.length>=2&&!(allIn&&allReady))h+=`<button class="go alt" data-act="startnow">${t('startNow',{k:mem.length})}</button>`;
   h+=`<p class="small">${t('autoStart',{m:c})}${mem.length>=2?' '+t('hostCan'):''}</p>`;
   return h;
 }
