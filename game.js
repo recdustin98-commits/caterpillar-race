@@ -7,6 +7,8 @@ const qs=new URLSearchParams(location.search);
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 // one-time reset (Nov 26, 2026): phones that climbed levels with the multi-finger bug go back to Level 1
 (()=>{const d=store.get('cr-dev')||'';if(!store.get('cr-reset1')&&['d7161w6w','dngwzax5','d765plmb'].some(x=>d.startsWith(x))){try{Object.keys(localStorage).filter(k=>k.startsWith('cr3-best-')).forEach(k=>localStorage.removeItem(k))}catch(e){}['cr-clear','cr-lv','cr-char','cr-char2','cr-mstars'].forEach(k=>store.set(k,''));store.set('cr-reset1','1')}})();
+// one-time reset of every player's mission progress (Dustin, Nov 26): stars, unlocks, ski best, ending, best times; names, settings and leaderboards stay
+(()=>{if(store.get('cr-reset2'))return;try{Object.keys(localStorage).filter(k=>k.startsWith('cr3-best-')).forEach(k=>localStorage.removeItem(k))}catch(e){}['cr-clear','cr-lv','cr-char','cr-char2','cr-mstars','cr-ski','cr-end'].forEach(k=>store.set(k,''));store.set('cr-reset2','1')})();
 
 // ---------- language ----------
 const L={
