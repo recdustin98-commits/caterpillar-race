@@ -6,12 +6,12 @@ const MAXP=8;
 const qs=new URLSearchParams(location.search);
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 // one-time reset (Nov 26, 2026): phones that climbed levels with the multi-finger bug go back to Level 1
-(()=>{const d=store.get('cr-dev')||'';if(!store.get('cr-reset1')&&['d7161w6w','dngwzax5','d765plmb'].some(x=>d.startsWith(x))){try{Object.keys(localStorage).filter(k=>k.startsWith('cr3-best-')).forEach(k=>localStorage.removeItem(k))}catch(e){}['cr-clear','cr-lv','cr-char','cr-char2'].forEach(k=>store.set(k,''));store.set('cr-reset1','1')}})();
+(()=>{const d=store.get('cr-dev')||'';if(!store.get('cr-reset1')&&['d7161w6w','dngwzax5','d765plmb'].some(x=>d.startsWith(x))){try{Object.keys(localStorage).filter(k=>k.startsWith('cr3-best-')).forEach(k=>localStorage.removeItem(k))}catch(e){}['cr-clear','cr-lv','cr-char','cr-char2','cr-mstars'].forEach(k=>store.set(k,''));store.set('cr-reset1','1')}})();
 
 // ---------- language ----------
 const L={
  en:{title:'Caterpillar Race',intro:'Draw <b>circles</b> on the screen, like turning a wheel. Spin faster to crawl faster. Stop and your caterpillar stops.',
-  foot:'Beat 30 computer levels to unlock new animals, race anyone online, race up to 8 friends with a code, or race on the same phone. On a computer: draw circles with the mouse.',
+  foot:'Play 30 missions in 6 worlds to earn stars and unlock new animals, race anyone online, race up to 8 friends with a code, or race on the same phone. On a computer: draw circles with the mouse.',
   ready:'Ready to race?',vsCpu:'Computer',duo:'Same phone',online:'Online (2–8)',easy:'Easy',normal:'Normal',hard:'Hard',
   play:'Play',best:'Your best on {d}: {t}',nobest:'No best time yet on {d}.',duoHint:'Player 1 draws on the top half, player 2 on the bottom half.',
   nick:'Your nickname',create:'Create a race',joinT:'Join the race',join:'Join',joining:'Joining…',
@@ -32,10 +32,17 @@ const L={
   board:'Leaderboard',boardTitle:'Fastest caterpillars',p24:'24 hours',p7:'7 days',pAll:'All time',nickOpt:'Nickname (for the leaderboard)',
   boardEmpty:'No times yet. Be the first!',boardErr:'Couldn\'t load the leaderboard. Check your internet.',boardSaving:'Saving to leaderboard…',
   boardRank:'Leaderboard: you\'re #{r} of {n} in the last 24 hours',boardNoNick:'Add a nickname before the race to join the leaderboard.',boardFail:'Couldn\'t save to the leaderboard.',loading:'Loading…',boardNote:'Your best time counts once per period.',
-  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',cpuN:'🤖 Computer {n}',addBot:'＋ Add computer',botNote:'Computers race at about your group\'s level and are always ready. If a friend joins a full room, a computer makes room.',lvLost:'LEVEL {n} · SO CLOSE!',nextUp:'Next: Lv {n}',nextAnimal:'Clear Lv {n} → {a}',cpuRpm:'Computer ≈ {r} RPM',back2:'Back',lvOf:'{n} / 30 cleared',nameShown:'Shown on the leaderboard.',changeAnimal:'Change animal',close:'Close',ch_dragon:'Golden Dragon',ch_king:'Dragon King',letsRace:"Let's race!",changeBtn:'✏️ Change',theAnimal:'the {a}',cpuTile:'vs Computer',cpuTileSub:'30 levels · unlock animals',onLv:"⭐ You're on Lv {n}",allDone:'⭐ All 30 levels cleared!',anyTile:'Race anyone',anyTileSub:'Jump into a race online',racingNow:'{n} racing now',friendsTile:'Race friends',friendsSub:'Private race with a code',sameTile:'Same phone',sameSub:'2 players, 1 phone',meTitle:'Animal & name',yourName:'Your name',newName:'🎲 New fun name',typeName:'Or type your own name (optional)',saveName:'Save name',useAuto:'Use my fun name',badName:'Please pick a different name.',nameSaved:'Name saved.',lockLv:'Lv {n}',lockedMsg:'Clear level {n} to unlock the {a}.',doneBtn:'Done',
+  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',ch_imugi:'Imugi',line_imugi:'The legendary serpent who chases the magic pearl.',
+ misTile:'Mission',misTileSub:'6 worlds · 30 missions · unlock animals',starsOf:'⭐ {n} / 90 stars',notBoard:'Not on leaderboard',
+ mapTitle:'Mission map',dragonAt:'Golden Dragon at {n} ⭐',startHere:'START · You start with these 4',unlockTag:'UNLOCK',unlockedTag:'UNLOCKED',worldN:'World {w} · {name}',missionN:'Mission {n}',misShort:'M{n}',
+ goal_beat:'Beat the {a}!',goal_boss:'BOSS: beat the {a}!',goal_time:'Finish in under {t} s',goal_zone:'Keep your speed between {lo} and {hi} RPM',goal_sprint:'Reach {r} RPM and finish',
+ star_win:'Win',star_under:'Under {t} s',star_zone:'{p}% in the zone',star_top:'Top {r} RPM',startMission:'▶ Start mission',
+ misDone:'MISSION {n} COMPLETE!',misFail:'MISSION {n} · TRY AGAIN',nextMission:'Next mission →',retryMission:'Try again',mapBtn:'🗺️ Map',
+ imugiLore:'A giant serpent from Korean legend. It waits 1,000 years in deep water, hoping to catch the magic pearl (yeouiju) and rise into the sky as a dragon. Beat it before it becomes a dragon!',
+ zoneNow:'Zone {p}%',topNow:'Top {r} / {g}',goalT:'Goal {t}s',dragonStars:'Collect {n} ⭐ to unlock the Golden Dragon.',quitSent:'You left this race.',cpuN:'🤖 Computer {n}',addBot:'＋ Add computer',botNote:'Computers race at about your group\'s level and are always ready. If a friend joins a full room, a computer makes room.',lvLost:'LEVEL {n} · SO CLOSE!',nextUp:'Next: Lv {n}',nextAnimal:'Clear Lv {n} → {a}',cpuRpm:'Computer ≈ {r} RPM',back2:'Back',lvOf:'{n} / 30 cleared',nameShown:'Shown on the leaderboard.',changeAnimal:'Change animal',close:'Close',ch_dragon:'Golden Dragon',ch_king:'Dragon King',letsRace:"Let's race!",changeBtn:'✏️ Change',theAnimal:'the {a}',cpuTile:'vs Computer',cpuTileSub:'30 levels · unlock animals',onLv:"⭐ You're on Lv {n}",allDone:'⭐ All 30 levels cleared!',anyTile:'Play anyone',anyTileSub:'Race online',racingNow:'{n} racing now',friendsTile:'Play friends',friendsSub:'Private race with a code',sameTile:'Same phone',sameSub:'2 players, 1 phone',meTitle:'Animal & name',yourName:'Your name',newName:'🎲 New fun name',typeName:'Or type your own name (optional)',saveName:'Save name',useAuto:'Use my fun name',badName:'Please pick a different name.',nameSaved:'Name saved.',lockLv:'M{n}',lockedMsg:'Pass mission {n} to unlock the {a}.',doneBtn:'Done',
  finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyRule:'Starts right away with 8 racers, otherwise in a few seconds.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
  nextLevel:'Next level →',tryAgain:'Try again',levelsBtn:'📋 Levels',levels:'Pick a level',levelN:'Level {n}',cpuAbout:'Computer: about {r} RPM',levelCleared:'LEVEL {n} CLEARED!',newAnimal:'🎉 New animal!',newAnimals:'🎉 {n} new animals!',legendary:'🐉 LEGENDARY unlock!',raceAs:'Race as {a} now',seePic:'See my race picture',lvJump:'Level jump! You skipped to level {n}.',allCleared:'You beat all 30 levels!',bestLv:'Your best on level {n}: {t}',newBestLv:'New best on level {n}!',
- lvCol:'Level',lvShort:'Lv {n}',onlineLv:'Online',waitingForYou:'Everyone is waiting for you!',leaveQ:'Leave the race?',stay:'Stay',leaveYes:'Leave',invitedT:"You're invited!",joinAs:'You will race as:',friendsTitle:'Race friends',p2Title:"Player 2's animal",paceLbl:'PACE',raceLbl:'race',
+ lvCol:'Level',lvShort:'M{n}',onlineLv:'Online',waitingForYou:'Everyone is waiting for you!',leaveQ:'Leave the race?',stay:'Stay',leaveYes:'Leave',invitedT:"You're invited!",joinAs:'You will race as:',friendsTitle:'Play friends',p2Title:"Player 2's animal",paceLbl:'PACE',raceLbl:'race',
  line_cat:'Wiggles one bump at a time.',line_inch:'Loops up and stretches out.',line_snail:'Slow and steady… or is it?',line_turtle:'Paddles through the sea.',line_centi:'One hundred tiny feet!',line_crab:'Swims sideways super fast.',line_garter:'Slithers in S-curves.',line_basil:'Runs on water!',line_puffer:'Puffs up when it goes fast.',line_shrimp:'SNAP! The loudest little shrimp.',line_peng:'Slides on its belly.',line_frill:'Pops its frill and sprints.',line_dragon:'Breathes a fire trail at 300+ RPM!',
  snap:'Snap!',huff:'Huff!',phew:'Phew~',yay:'Yay!'},
 };
@@ -59,10 +66,10 @@ const KMH=100/(STEP*GAIN*CAP/(2*Math.PI)),MAXKMH=100;
 const g=p=>(p-Math.sin(p))/(2*Math.PI);
 const headOff=phi=>(N-1)*SP+STEP*g(phi-(N-1)*DELTA);
 const X0=START+120-headOff(0),S0=START+120;
-const CHARS=['cat','inch','snail','turtle','centi','crab','garter','basil','puffer','shrimp','peng','frill','dragon'];
+const CHARS=['cat','inch','snail','turtle','centi','garter','basil','crab','puffer','shrimp','frill','peng','imugi','dragon'];
 const ALLC=[...CHARS,'king']; // 'king' is the level-30 boss, never playable
-const HAB={cat:'garden',inch:'garden',centi:'garden',snail:'garden',garter:'garden',frill:'desert',basil:'pond',turtle:'sea',puffer:'sea',shrimp:'sea',crab:'sea',peng:'ice',dragon:'volcano',king:'volcano'};
-const SIG={cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86a',dark:'#3f8a24',spot:'#fff6a8'},centi:{body:'#c9b3ff',dark:'#5b3fb0',spot:'#ff4f97'},turtle:{body:'#5fc79a',dark:'#2e7d5b',spot:'#ffe27a'},snail:{body:'#f1d2b0',dark:'#a5784e',spot:'#f0a35e'},garter:{body:'#5cbf6a',dark:'#2f7d4a',spot:'#ffe27a'},frill:{body:'#e3ad66',dark:'#8a5a2b',spot:'#ff8a5c'},basil:{body:'#6fd14a',dark:'#2f7d1f',spot:'#c9f59a'},puffer:{body:'#ffd84a',dark:'#b8860b',spot:'#fff4c8'},shrimp:{body:'#ff9a76',dark:'#c2482a',spot:'#ffd1c2'},crab:{body:'#ff7a5c',dark:'#b23a22',spot:'#ffd0c0'},peng:{body:'#2b2f36',dark:'#0f1115',spot:'#ffffff',gauge:'#6cc4ff'},dragon:{body:'#ffcf3f',dark:'#b77800',spot:'#ff8a3c'},king:{body:'#d8283c',dark:'#4a0710',spot:'#2b2b2b'}};
+const HAB={cat:'garden',inch:'garden',centi:'garden',snail:'garden',garter:'garden',frill:'desert',basil:'pond',turtle:'sea',puffer:'sea',shrimp:'sea',crab:'sea',peng:'ice',dragon:'volcano',king:'volcano',imugi:'waterfall'};
+const SIG={cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86a',dark:'#3f8a24',spot:'#fff6a8'},centi:{body:'#c9b3ff',dark:'#5b3fb0',spot:'#ff4f97'},turtle:{body:'#5fc79a',dark:'#2e7d5b',spot:'#ffe27a'},snail:{body:'#f1d2b0',dark:'#a5784e',spot:'#f0a35e'},garter:{body:'#5cbf6a',dark:'#2f7d4a',spot:'#ffe27a'},frill:{body:'#e3ad66',dark:'#8a5a2b',spot:'#ff8a5c'},basil:{body:'#6fd14a',dark:'#2f7d1f',spot:'#c9f59a'},puffer:{body:'#ffd84a',dark:'#b8860b',spot:'#fff4c8'},shrimp:{body:'#ff9a76',dark:'#c2482a',spot:'#ffd1c2'},crab:{body:'#ff7a5c',dark:'#b23a22',spot:'#ffd0c0'},peng:{body:'#2b2f36',dark:'#0f1115',spot:'#ffffff',gauge:'#6cc4ff'},dragon:{body:'#ffcf3f',dark:'#b77800',spot:'#ff8a3c'},imugi:{body:'#3fa58f',dark:'#1f5f5b',spot:'#bfe8c8'},king:{body:'#d8283c',dark:'#4a0710',spot:'#2b2b2b'}};
 // Every character moves the same average distance per turn (fair races); only the look differs.
 function headPos(ch,phi){
   if(ch==='inch')return S0+2*STEP*g(phi/2);
@@ -75,10 +82,30 @@ const prog=c=>Math.max(0,Math.min(1,(headX(c)-S0)/(TRACK-S0)));
 const LV=[80,89,98,107,116,124,133,142,151,160,169,178,187,196,205,214,223,232,241,250,266,282,298,314,330,364,398,432,466,500];
 const BOT_T=[35.72,32.1,29.26,26.83,24.74,23.21,21.66,20.3,19.14,18.08,17.13,16.31,15.55,14.84,14.18,13.63,13.05,12.61,12.12,11.73,11.04,10.46,9.87,9.43,9.0,8.21,7.5,6.94,6.53,6.26];
 const NLV=LV.length;
-// animals open as you clear levels (the first four are open from the start)
-const UNLOCK={centi:3,crab:6,garter:9,basil:12,puffer:15,shrimp:18,peng:21,frill:24,dragon:29};
-const cleared=()=>Math.max(0,Math.min(NLV,+store.get('cr-clear')||0));
-const isOpen=k=>CHARS.includes(k)&&(!(k in UNLOCK)||cleared()>=UNLOCK[k]);
+// ---------- Mission mode: 6 worlds x 5 missions, up to 3 stars each ----------
+const WORLDS=['Garden','Pond','Sea','Desert','Ice','Waterfall'];
+const MOPP=[['inch','centi','garter'],['snail','turtle','basil'],['turtle','crab','puffer'],['garter','basil','frill'],['crab','puffer','peng'],['frill','peng','imugi']];
+const r1=x=>Math.round(x*10)/10;
+// missions 1..30: m1 beat, m2 time, m3 beat, m4 zone (worlds 1,3,5) or sprint (2,4,6), m5 boss
+const MIS=Array.from({length:30},(_,i)=>{
+  const w=Math.floor(i/5),k=i%5,n=i+1,rpm=LV[i],bt=BOT_T[i];
+  const type=['beat','time','beat',w%2===0?'zone':'sprint','boss'][k];
+  const m={n,w,k,type,rpm,opp:type==='beat'||type==='boss'?MOPP[w][k===0?0:k===2?1:2]:null};
+  if(type==='beat'||type==='boss'){const g3=Math.max(5.9,r1(bt*.82));m.g=[0,Math.max(r1(g3+.3),r1(bt*.92)),g3]}
+  if(type==='time'){const g3=Math.max(5.9,r1(bt*.8));m.g=[r1(bt),Math.max(r1(g3+.3),r1(bt*.9)),g3]}
+  if(type==='zone'){m.lo=Math.round(rpm*.85/5)*5;m.hi=Math.round(rpm*1.15/5)*5;m.g=[50,70,85]}
+  if(type==='sprint')m.g=[Math.min(480,Math.round(rpm*1.15)),Math.min(490,Math.round(rpm*1.3)),Math.min(495,Math.round(rpm*1.45))];
+  return m});
+const getStars=()=>{let a;try{a=JSON.parse(store.get('cr-mstars')||'null')}catch(e){a=null}
+  if(!Array.isArray(a)){a=Array(30).fill(0);const old=Math.max(0,Math.min(30,+store.get('cr-clear')||0));for(let i=0;i<old;i++)a[i]=1;store.set('cr-mstars',JSON.stringify(a))}
+  return Array.from({length:30},(_,i)=>Math.max(0,Math.min(3,+a[i]||0)))};
+const setStars=a=>store.set('cr-mstars',JSON.stringify(a));
+const totalStars=()=>getStars().reduce((x,y)=>x+y,0);
+const DRAGON_STARS=75;
+// animals open when you pass a mission (the boss you beat joins you); the Golden Dragon needs 75 stars
+const UNLOCK={centi:3,garter:5,basil:10,crab:13,puffer:15,shrimp:15,frill:20,peng:25,imugi:30};
+const cleared=()=>{const a=getStars();let c=0;while(c<30&&a[c]>0)c++;return c};
+const isOpen=k=>CHARS.includes(k)&&(k==='dragon'?totalStars()>=DRAGON_STARS:!(k in UNLOCK)||getStars()[UNLOCK[k]-1]>0);
 const firstOpen=k=>isOpen(k)?k:'cat';
 let lvl=Math.max(1,Math.min(NLV,+store.get('cr-lv')||cleared()+1,cleared()+1));
 const botW=()=>LV[lvl-1]*2*Math.PI/60;
@@ -91,7 +118,7 @@ const rpmOf=w=>Math.max(0,w)*60/(2*Math.PI);
 
 const mk=(sk,name,kind,id,ch)=>({...sk,id,name,char:ALLC.includes(ch)?ch:'cat',kind:kind||'human',phi:0,acc:0,w:0,spin:0,top:0,done:null,left:false,ph:Math.random()*6,pv:0,disp:0,bt:0,btw:0,tphi:0,tw:0,rt:0,ang:0,px:null,vs:0,kmh:0,hold:0,bestHold:0,goalDone:false});
 function setup(ids){
-  if(mode==='solo'){const bc=botChar||(botChar=lvl===NLV?'king':(l=>l[Math.floor(Math.random()*l.length)])(CHARS.filter(k=>k!==myChar&&k!=='dragon')));racers=[mk(SIG[bc],(lvl===NLV?t('ch_king'):t('cpu'))+' · '+t('lvShort',{n:lvl}),'bot',null,bc),mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[1]}
+  if(mode==='solo'){const ms=MIS[lvl-1];if(ms.opp){const bc=ms.opp===myChar&&ms.type!=='boss'?(CHARS.find(k=>k!==myChar&&k!=='dragon'&&k!=='imugi')):ms.opp;racers=[mk(SIG[bc],t('ch_'+bc),'bot',null,bc),mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[1]}else{racers=[mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[0]}}
   else if(mode==='practice'){racers=[mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[0]}
   else if(mode==='duo'){racers=[mk(SIG[myChar],t('p1'),'human',null,myChar),mk(p2Char===myChar?SK[1]:SIG[p2Char],t('p2'),'human',null,p2Char)];me=null}
   else{
@@ -122,6 +149,7 @@ function upd(c,now,dt){
   const sp=Math.min(CAP,Math.max(0,c.w));
   c.disp+=(rpmOf(sp)-c.disp)*Math.min(1,dt/90);
   if(c.kind!=='human')c.ang+=sp*dt/1000;
+  if(state==='race'&&c.done==null&&c.kind==='human'&&mode==='solo'){const ms=MIS[raceLv-1];if(ms&&ms.type==='zone'){c.zall=(c.zall||0)+dt;if(c.disp>=ms.lo&&c.disp<=ms.hi)c.zin=(c.zin||0)+dt}}
   if(state==='race'&&c.done==null&&c.kind!=='remote'){
     c.phi+=sp*GAIN*dt/1000;c.spin+=sp*dt/1000;c.top=Math.max(c.top,sp/(2*Math.PI));
     if(mode!=='practice'&&headX(c)>=TRACK){c.done=now-startT;if(!firstDone)firstDone=now;if(c.kind==='human'){sfx.ding();buzz(120)}if(mode==='online'&&c===me&&net)net.send({t:'fin',time:c.done,spin:c.spin,top:c.top});if(mode==='online'&&c.kind==='bot'&&net)net.send({t:'fin',b:c.id,time:c.done,spin:c.spin,top:c.top})}
@@ -336,6 +364,23 @@ function drawPeng(c,now){
   ball(gx,gy,11,headFill(c),c.dark,2);
   return {x:gx,y:gy,r:11};
 }
+// ---------- Imugi (이무기): Korean legendary serpent; final boss of Mission, playable after beating it ----------
+function drawImugi(c,now){
+  const base=178,hx=headX(c),hy=base-24,fast=c.disp>=REDRPM||exprOf(c)==='win';shadow(hx-70,78);
+  const pts=snakePts(c,hx,150,u=>base-14-Math.max(0,Math.sin(u*7-c.phi*1.2))*10*Math.min(1,u*2)+u*4);
+  tube(pts,20,c.dark,c.body);
+  ctx.strokeStyle=c.spot;ctx.lineWidth=5;ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y+5):ctx.moveTo(x,y+5));ctx.stroke();
+  ctx.fillStyle=c.dark;for(let i=3;i<pts.length;i+=3){const [x,y]=pts[i];ctx.beginPath();ctx.moveTo(x-4,y-9);ctx.lineTo(x,y-15);ctx.lineTo(x+4,y-9);ctx.fill()}
+  // head: wide snout, small horn nubs, whiskers
+  oval(hx+3,hy,20,15,0,headFill(c),c.dark,2.4);oval(hx+20,hy+5,12,8,0,headFill(c),c.dark,2.2);
+  ctx.fillStyle='#e8f6ef';ctx.strokeStyle=c.dark;ctx.lineWidth=1.6;[[-8,0],[3,2]].forEach(([dx,dy])=>{ctx.beginPath();ctx.moveTo(hx+dx-3,hy-12+dy);ctx.lineTo(hx+dx-7,hy-22+dy);ctx.lineTo(hx+dx+3,hy-13+dy);ctx.closePath();ctx.fill();ctx.stroke()});
+  const wv=RM?0:Math.sin(now/280+c.ph)*3;ctx.strokeStyle=c.dark;ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(hx+24,hy+3);ctx.bezierCurveTo(36,hy-4+wv,42,hy+8,50,hy+2-wv);ctx.moveTo(hx+24,hy+8);ctx.bezierCurveTo(34,hy+16,42,hy+18+wv,50,hy+24);ctx.stroke();
+  // the magic pearl (yeouiju) it is chasing; glows brighter when racing fast
+  const px=hx+40,py=hy-22+(RM?0:Math.sin(now/300)*3),pr=fast?8:6;
+  if(!noShadow){const g=ctx.createRadialGradient(px,py,1,px,py,pr*3);g.addColorStop(0,'rgba(255,240,150,.9)');g.addColorStop(1,'rgba(255,240,150,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(px,py,pr*3,0,7);ctx.fill()}
+  ctx.fillStyle='#ffe27a';ctx.strokeStyle='#e0a000';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(px,py,pr,0,7);ctx.fill();ctx.stroke();ctx.fillStyle='#fffbe0';ctx.beginPath();ctx.arc(px-2,py-2,pr*.35,0,7);ctx.fill();
+  return {x:hx,y:hy-1,r:14};
+}
 // ---------- Golden Dragon (unlocks after level 29) and the level-30 boss, the Dragon King ----------
 function flame(x,y,s,rot,cols,now,k){ctx.save();ctx.translate(x,y);ctx.rotate(rot);const fl=RM?1:1+.12*Math.sin(now/70+(k||0)*1.7);ctx.scale(s,s*fl);
   cols.forEach((col,i)=>{const q=1-i*.28;ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(-9*q,-6*q,-6*q,-20*q,0,-30*q);ctx.bezierCurveTo(6*q,-20*q,9*q,-6*q,0,0);ctx.fill()});ctx.restore()}
@@ -385,7 +430,7 @@ function mixHex(a,b,t){ // blend by hue (green -> yellow -> orange -> red) so th
 }
 function drop(x,y,s,a){ctx.save();ctx.globalAlpha*=a;ctx.translate(x,y);ctx.scale(s,s);ctx.fillStyle='#6cc4ff';ctx.strokeStyle='#2a8fd0';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,-6);ctx.quadraticCurveTo(4.5,0,0,4);ctx.quadraticCurveTo(-4.5,0,0,-6);ctx.fill();ctx.stroke();ctx.restore()}
 // ---------- faces: one set of moods, a different face for each animal ----------
-const FST={dragon:{eyes:'slit',mouth:'fangs'},king:{eyes:'slit',mouth:'fangs'},cat:{},inch:{},centi:{mouth:'fangs'},turtle:{mouth:'beak',beak:'#eadba8'},snail:{eyes:'stalk'},garter:{eyes:'slit',mouth:'tongue'},frill:{},basil:{eyes:'slit'},puffer:{mouth:'pucker'},shrimp:{eyes:'stalk2',mouth:'mini'},crab:{eyes:'stalk',mouth:'mini'},peng:{eyes:'peng',mouth:'beak',beak:'#ff8a2a'}};
+const FST={imugi:{eyes:'slit'},dragon:{eyes:'slit',mouth:'fangs'},king:{eyes:'slit',mouth:'fangs'},cat:{},inch:{},centi:{mouth:'fangs'},turtle:{mouth:'beak',beak:'#eadba8'},snail:{eyes:'stalk'},garter:{eyes:'slit',mouth:'tongue'},frill:{},basil:{eyes:'slit'},puffer:{mouth:'pucker'},shrimp:{eyes:'stalk2',mouth:'mini'},crab:{eyes:'stalk',mouth:'mini'},peng:{eyes:'peng',mouth:'beak',beak:'#ff8a2a'}};
 const EYEPOS={normal:[[0,-5,6.5],[11,-4,5.5]],slit:[[0,-5,6.2],[11,-4,5.3]],spider:[[-1,-3,6],[12,-3,5.6]],big:[[-3,-4,8],[13,-4,7]],stalk:[[-4,-27,6.2],[10,-28,5.6]],stalk2:[[4,-16,4.8],[13,-15,4.3]],peng:[[0,-5,5.4],[11,-4,4.9]]};
 function eye(kind,x,y,s,m,c,now){
   const ink='#14301f';ctx.lineCap='round';
@@ -451,7 +496,7 @@ function confetti(x,y,now){
   if(RM)return;const cols=['#ff6b9a','#4fb3ff','#ffd23f','#b38bff','#ff8a2a','#3fd6c6'];
   for(let k=0;k<14;k++){const tt=((now/1800)+hash(k)*1)%1,px=x+(hash(k+7)-.5)*130,py=y-70+tt*110;ctx.save();ctx.globalAlpha*=1-tt*.6;ctx.translate(px+Math.sin(now/200+k)*6,py);ctx.rotate(now/300+k);ctx.fillStyle=cols[k%6];ctx.fillRect(-3,-1.5,6,3);ctx.restore()}
 }
-const DRAW={cat:drawCat,inch:drawInch,centi:drawCenti,turtle:drawTurtle,snail:drawSnail,garter:drawGarter,frill:drawFrill,basil:drawBasil,puffer:drawPuffer,shrimp:drawShrimp,crab:drawCrab,peng:drawPeng,dragon:drawDragon,king:drawDragon};
+const DRAW={cat:drawCat,inch:drawInch,centi:drawCenti,turtle:drawTurtle,snail:drawSnail,garter:drawGarter,frill:drawFrill,basil:drawBasil,puffer:drawPuffer,shrimp:drawShrimp,crab:drawCrab,peng:drawPeng,dragon:drawDragon,king:drawDragon,imugi:drawImugi};
 function drawRacer(c,now,ghost){
   const ex=exprOf(c);ctx.save();
   if(ex==='win'&&!RM)ctx.translate(0,-Math.abs(Math.sin(now/170))*16);
@@ -501,16 +546,20 @@ function drawLane(c,ghosts,y0,lh,now,withLabel){
   ctx.save();ctx.beginPath();ctx.rect(0,y0,W,lh);ctx.clip();ctx.translate(0,y0);ctx.scale(s,s);
   const hab=HAB[c.char]||'garden',sea=hab==='sea';
   // sky top, sky bottom, far hills, near hills, ground, path, path edge
-  const P={garden:['#86cfff','#e6f7ff','#acdf8e','#86cc66','#5cb83c','#dcb57d','#c39459'],sea:['#1f7fc4','#7fd3f5','#3e98b8','#5ab3bd','#e3cf94','#f0dfab','#d2bb7a'],desert:['#ffb878','#ffeec4','#f5cf8c','#ebb66a','#eec57e','#f6dba6','#d6a45e'],pond:['#86cfff','#e6f7ff','#a6dc8e','#7cc866','#5cb83c','#62c0e8','#3b9ccc'],ice:['#9fd6ff','#f2fbff','#e4f4ff','#c9e7fa','#f6fcff','#d3ecfb','#a7d1ec'],volcano:c.char==='king'?['#1b0b2e','#7a1a2a','#2a0f1a','#3a1420','#3a1a1a','#2a1010','#ff7a1a']:['#3b1d6e','#d2508a','#4a1f3a','#5e2a40','#5b3a2e','#4a2c22','#ff7a1a']}[hab];
+  const P={garden:['#86cfff','#e6f7ff','#acdf8e','#86cc66','#5cb83c','#dcb57d','#c39459'],sea:['#1f7fc4','#7fd3f5','#3e98b8','#5ab3bd','#e3cf94','#f0dfab','#d2bb7a'],desert:['#ffb878','#ffeec4','#f5cf8c','#ebb66a','#eec57e','#f6dba6','#d6a45e'],pond:['#86cfff','#e6f7ff','#a6dc8e','#7cc866','#5cb83c','#62c0e8','#3b9ccc'],ice:['#9fd6ff','#f2fbff','#e4f4ff','#c9e7fa','#f6fcff','#d3ecfb','#a7d1ec'],waterfall:['#14203d','#3b5a8a','#2c3e66','#33466e','#2f5a6e','#4a7fa0','#9fd6ff'],volcano:c.char==='king'?['#1b0b2e','#7a1a2a','#2a0f1a','#3a1420','#3a1a1a','#2a1010','#ff7a1a']:['#3b1d6e','#d2508a','#4a1f3a','#5e2a40','#5b3a2e','#4a2c22','#ff7a1a']}[hab];
   const gr=ctx.createLinearGradient(0,0,0,150);gr.addColorStop(0,P[0]);gr.addColorStop(1,P[1]);ctx.fillStyle=gr;ctx.fillRect(0,0,vw+2,222);
   if(sea){ctx.fillStyle='rgba(255,255,255,.08)';for(let k=0;k<4;k++){const x=((k*170-cam*.08)%(vw+200)+vw+200)%(vw+200)-100;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+40,0);ctx.lineTo(x+90,150);ctx.lineTo(x+20,150);ctx.fill()}
     for(let k=0;k<10;k++){const span=vw+40,x=((hash(k)*span-cam*.2)%span+span)%span,y=150-((now/40*(0.5+hash(k+3))+hash(k+5)*150)%150);ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(x,y,2+hash(k+9)*3,0,7);ctx.stroke()}}
   else{
-    if(hab==='volcano'){ctx.fillStyle='rgba(255,255,255,.8)';for(let k=0;k<26;k++){const span=vw+40,x=((hash(k)*span-cam*.05)%span+span)%span,y=hash(k+11)*90,tw=RM?1:.55+.45*Math.sin(now/400+k);ctx.globalAlpha=tw;ctx.beginPath();ctx.arc(x,y,.8+hash(k+4)*1.2,0,7);ctx.fill()}ctx.globalAlpha=1;
+    if(hab==='waterfall'){ctx.fillStyle='rgba(255,255,255,.85)';for(let k=0;k<22;k++){const span=vw+40,x=((hash(k)*span-cam*.05)%span+span)%span,y=hash(k+11)*80;ctx.globalAlpha=RM?1:.5+.5*Math.sin(now/500+k);ctx.beginPath();ctx.arc(x,y,.8+hash(k+4),0,7);ctx.fill()}ctx.globalAlpha=1;
+      ctx.fillStyle='#fffbe0';ctx.beginPath();ctx.arc(((vw*.8-cam*.03)%(vw+80)+vw+80)%(vw+80)-40,30,13,0,7);ctx.fill();
+      const span=vw+420;for(let k=0;k<2;k++){const fx=((k*span/2+160-cam*.12)%span+span)%span-210;ctx.fillStyle=P[2];ctx.fillRect(fx-70,40,50,120);ctx.fillRect(fx+40,30,60,130);ctx.fillStyle='rgba(190,230,255,.75)';ctx.fillRect(fx-20,40,60,120);
+        ctx.fillStyle='rgba(255,255,255,.7)';for(let j=0;j<5;j++){const yy=RM?j*24:((now/6+j*24)%120);ctx.fillRect(fx-16+j*11,40+yy,3,16)}ctx.fillStyle='rgba(230,245,255,.8)';ctx.beginPath();ctx.ellipse(fx+10,158,46,7,0,0,7);ctx.fill()}}
+    else if(hab==='volcano'){ctx.fillStyle='rgba(255,255,255,.8)';for(let k=0;k<26;k++){const span=vw+40,x=((hash(k)*span-cam*.05)%span+span)%span,y=hash(k+11)*90,tw=RM?1:.55+.45*Math.sin(now/400+k);ctx.globalAlpha=tw;ctx.beginPath();ctx.arc(x,y,.8+hash(k+4)*1.2,0,7);ctx.fill()}ctx.globalAlpha=1;
       const span=vw+500;for(let k=0;k<2;k++){const vx=((k*span/2+200-cam*.1)%span+span)%span-250;ctx.fillStyle=P[2];ctx.beginPath();ctx.moveTo(vx-90,130);ctx.lineTo(vx-18,52);ctx.lineTo(vx+18,52);ctx.lineTo(vx+90,130);ctx.fill();ctx.fillStyle='#ff6a1a';ctx.beginPath();ctx.ellipse(vx,53,17,4,0,0,7);ctx.fill();
         for(let i=0;i<5;i++){const tt=RM?i/5:((now/1800)+i/5)%1;ctx.fillStyle=`rgba(${i%2?'255,150,60':'120,90,110'},${.6*(1-tt)})`;ctx.beginPath();ctx.arc(vx+Math.sin(tt*5+k)*6,48-tt*46,5+tt*9,0,7);ctx.fill()}}}
     else if(hab==='desert'){ctx.fillStyle='rgba(255,240,170,.55)';ctx.beginPath();ctx.arc(vw*.82,42,34,0,7);ctx.fill();ctx.fillStyle='#fff2a8';ctx.beginPath();ctx.arc(vw*.82,42,22,0,7);ctx.fill()}
-    const nc=hab==='volcano'?0:hab==='desert'?2:4;for(let k=0;k<nc;k++){const span=vw+320,cx=((k*span/nc+60-cam*.12)%span+span)%span-160,cy=26+hash(k)*40;ctx.fillStyle=hab==='desert'?'rgba(255,255,255,.7)':'rgba(255,255,255,.92)';ctx.beginPath();ctx.arc(cx,cy,15,0,7);ctx.arc(cx+18,cy-8,19,0,7);ctx.arc(cx+38,cy,14,0,7);ctx.fill()}
+    const nc=hab==='volcano'||hab==='waterfall'?0:hab==='desert'?2:4;for(let k=0;k<nc;k++){const span=vw+320,cx=((k*span/nc+60-cam*.12)%span+span)%span-160,cy=26+hash(k)*40;ctx.fillStyle=hab==='desert'?'rgba(255,255,255,.7)':'rgba(255,255,255,.92)';ctx.beginPath();ctx.arc(cx,cy,15,0,7);ctx.arc(cx+18,cy-8,19,0,7);ctx.arc(cx+38,cy,14,0,7);ctx.fill()}
     if(hab==='ice'){ctx.fillStyle='#ffffff';ctx.strokeStyle='#a7d1ec';ctx.lineWidth=1.5;for(let k=0;k<3;k++){const span=vw+300,x=((k*span/3+120-cam*.3)%span+span)%span-150;ctx.beginPath();ctx.moveTo(x,140);ctx.lineTo(x+18,96+hash(k)*14);ctx.lineTo(x+34,108);ctx.lineTo(x+52,84+hash(k+2)*16);ctx.lineTo(x+80,140);ctx.closePath();ctx.fill();ctx.stroke()}}
   }
   hills(vw,cam*.25,116,P[2],90,16);hills(vw,cam*.45,134,P[3],60,11);
@@ -518,6 +567,7 @@ function drawLane(c,ghosts,y0,lh,now,withLabel){
   ctx.translate(-cam,0);
   ctx.fillStyle=P[4];ctx.fillRect(cam,148,vw+2,74);ctx.fillStyle=P[5];ctx.fillRect(cam,160,vw+2,34);ctx.fillStyle=P[6];ctx.fillRect(cam,192,vw+2,3);
   if(hab==='pond'){ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1.5;ctx.lineCap='round';for(let k=Math.floor(cam/40)-1;k<(cam+vw)/40+1;k++){const x=k*40+hash(k)*20+(RM?0:Math.sin(now/700+k)*4),y=165+hash(k+4)*24;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+6,y-3,x+12,y);ctx.stroke()}}
+  else if(hab==='waterfall'){ctx.strokeStyle='rgba(200,235,255,.7)';ctx.lineWidth=1.5;for(let k=Math.floor(cam/60)-1;k<(cam+vw)/60+1;k++){const a=k*60+hash(k)*24,y=170+hash(k+3)*20,ph=RM?0:Math.sin(now/400+k)*3;ctx.beginPath();ctx.ellipse(a,y,10+ph,2.5,0,0,7);ctx.stroke()}}
   else if(hab==='volcano'){ctx.strokeStyle='#ff7a1a';ctx.lineWidth=2;ctx.lineJoin='round';for(let k=Math.floor(cam/68)-1;k<(cam+vw)/68+1;k++){const a=k*68+hash(k)*20,y=172+hash(k+3)*16,gl=RM?1:.6+.4*Math.sin(now/300+k);ctx.globalAlpha=gl;ctx.beginPath();ctx.moveTo(a,y+4);ctx.lineTo(a+14,y-3);ctx.lineTo(a+22,y+8);ctx.lineTo(a+34,y);ctx.stroke()}ctx.globalAlpha=1}
   else if(hab==='ice'){ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=1.2;for(let k=Math.floor(cam/60)-1;k<(cam+vw)/60+1;k++){const x=k*60+hash(k)*30,y=166+hash(k+2)*20;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+14,y+3);ctx.lineTo(x+20,y-2);ctx.stroke()}}
   else for(let k=Math.floor(cam/55);k<(cam+vw)/55+1;k++){const q=hash(k);if(q<.5){ctx.fillStyle=hab==='desert'?'#c4914e':'#b9894f';ctx.beginPath();ctx.ellipse(k*55+q*40,166+hash(k+9)*22,3+q*3,2+q*2,0,0,7);ctx.fill()}}
@@ -621,7 +671,7 @@ function hud(now){
   if(mode==='practice'){ctx.textAlign='right';ctx.fillStyle='#cfe3d6';ctx.fillText(t('practice'),W-12,HUD/2+1);return}
   if(!split()){if(net){ctx.textAlign='right';ctx.fillStyle='#cfe3d6';ctx.fillText(anyone?t('anyTile'):t('room')+' '+net.code,W-12,HUD/2+1)}return}
   let x0=84;const x1=W-30;
-  if(mode==='solo'){const lt=t('lvShort',{n:raceLv});ctx.font='800 13px "Baloo 2",sans-serif';const lw=ctx.measureText(lt).width+16;rr(66,HUD/2-10,lw,20,10);ctx.fillStyle='#ffd23f';ctx.fill();ctx.fillStyle='#5a3a00';ctx.textAlign='center';ctx.fillText(lt,66+lw/2,HUD/2+1);x0=66+lw+22}
+  if(mode==='solo'){const lt=t('misShort',{n:raceLv});ctx.font='800 13px "Baloo 2",sans-serif';const lw=ctx.measureText(lt).width+16;rr(66,HUD/2-10,lw,20,10);ctx.fillStyle='#ffd23f';ctx.fill();ctx.fillStyle='#5a3a00';ctx.textAlign='center';ctx.fillText(lt,66+lw/2,HUD/2+1);x0=66+lw+22}
   ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x0,HUD/2);ctx.lineTo(x1,HUD/2);ctx.stroke();
   for(let yy=0;yy<3;yy++)for(let xx=0;xx<2;xx++){ctx.fillStyle=(xx+yy)%2?'#14301f':'#fff';ctx.fillRect(x1+6+xx*5,HUD/2-7.5+yy*5,5,5)}
   racers.forEach(c=>marker(c,x0+(x1-x0)*prog(c),HUD/2,30,true));
@@ -634,6 +684,8 @@ function draw(now){
   let mid;
   if(mode==='practice'){
     const c=racers[0];drawLane(c,[],HUD,H-HUD,now,false);if(state==='race')practiceInfo(c,HUD,H-HUD,now);mid=HUD+(H-HUD)/2;
+  }else if(mode==='solo'&&racers.length===1){
+    const c=racers[0];drawLane(c,[],HUD,H-HUD,now,false);mid=HUD+(H-HUD)/2;
   }else if(!split()){
     const sh=stripH(),c=me||racers[0];strip(HUD,sh);
     drawLane(c,nearby(c),HUD+sh,H-HUD-sh,now,false);mid=HUD+sh+(H-HUD-sh)/2;
@@ -643,16 +695,49 @@ function draw(now){
     ctx.fillStyle='#14301f';ctx.fillRect(0,HUD+lh-1.5,W,3);mid=HUD+lh;
   }
   hud(now);
+  if(mode==='solo'&&MIS[raceLv-1]&&(state==='race'||state==='done'||state==='count'))goalChip(now);
   if(state==='count'||(state==='race'&&now-startT<600)){
     const tx=state==='count'?String(Math.max(1,Math.ceil((startT-now)/1000))):t('go');
     if(mode==='solo'&&state==='count'){const m=Math.min(W,H),ly=mid-m*.17;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
-      ctx.font='800 '+Math.round(m*.085)+'px "Baloo 2",sans-serif';ctx.lineWidth=8;ctx.strokeStyle='#14301f';ctx.fillStyle='#ffd23f';const lt=t('levelN',{n:raceLv}).toUpperCase()+(raceLv===NLV?' 👑':'');ctx.strokeText(lt,W/2,ly);ctx.fillText(lt,W/2,ly);
-      ctx.font='700 '+Math.round(m*.042)+'px "Baloo 2",sans-serif';ctx.lineWidth=5;ctx.fillStyle='#fff';const st=t('cpuRpm',{r:LV[raceLv-1]});ctx.strokeText(st,W/2,ly+m*.075);ctx.fillText(st,W/2,ly+m*.075)}
+      ctx.font='800 '+Math.round(m*.085)+'px "Baloo 2",sans-serif';ctx.lineWidth=8;ctx.strokeStyle='#14301f';ctx.fillStyle='#ffd23f';const lt=t('missionN',{n:raceLv}).toUpperCase()+(MIS[raceLv-1].type==='boss'?' 👑':'');ctx.strokeText(lt,W/2,ly);ctx.fillText(lt,W/2,ly);
+      ctx.font='700 '+Math.round(m*.042)+'px "Baloo 2",sans-serif';ctx.lineWidth=5;ctx.fillStyle='#fff';const st=goalText(MIS[raceLv-1]);ctx.font='700 '+Math.round(Math.min(m*.042,W*.9/Math.max(10,st.length)*1.8))+'px "Baloo 2",sans-serif';ctx.strokeText(st,W/2,ly+m*.075);ctx.fillText(st,W/2,ly+m*.075)}
     ctx.font='800 '+Math.round(Math.min(W,H)*.18)+'px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';ctx.lineWidth=10;ctx.strokeStyle='#14301f';ctx.fillStyle=state==='count'?'#fff':'#ffd23f';
     ctx.strokeText(tx,W/2,mid);ctx.fillText(tx,W/2,mid);
   }
 }
 
+// ---------- mission goals ----------
+function goalText(m){
+  if(!m)return'';
+  if(m.type==='beat')return t('goal_beat',{a:t('ch_'+m.opp)});
+  if(m.type==='boss')return t('goal_boss',{a:t('ch_'+m.opp)});
+  if(m.type==='time')return t('goal_time',{t:m.g[0]});
+  if(m.type==='zone')return t('goal_zone',{lo:m.lo,hi:m.hi});
+  return t('goal_sprint',{r:m.g[0]});
+}
+function starGoals(m){
+  if(m.type==='beat'||m.type==='boss')return[t('star_win'),t('star_under',{t:m.g[1]}),t('star_under',{t:m.g[2]})];
+  if(m.type==='time')return m.g.map(x=>t('star_under',{t:x}));
+  if(m.type==='zone')return m.g.map(x=>t('star_zone',{p:x}));
+  return m.g.map(x=>t('star_top',{r:x}));
+}
+// stars earned in a finished mission race (0 = not passed)
+function missionStars(m,c,won){
+  if(!c||c.done==null)return 0;const T=c.done/1000,top=Math.round(c.top*60);
+  if(m.type==='beat'||m.type==='boss')return !won?0:T<=m.g[2]?3:T<=m.g[1]?2:1;
+  if(m.type==='time')return T<=m.g[2]?3:T<=m.g[1]?2:T<=m.g[0]?1:0;
+  if(m.type==='zone'){const p=c.zall?100*c.zin/c.zall:0;return p>=m.g[2]?3:p>=m.g[1]?2:p>=m.g[0]?1:0}
+  return top>=m.g[2]?3:top>=m.g[1]?2:top>=m.g[0]?1:0;
+}
+function goalChip(now){
+  const m=MIS[raceLv-1],c=me;if(!m||!c||m.type==='beat'||m.type==='boss')return;
+  let tx,ok=false;
+  if(m.type==='time'){tx=t('goalT',{t:m.g[0]});ok=state==='race'?(now-startT)/1000<=m.g[0]:c.done!=null&&c.done/1000<=m.g[0]}
+  else if(m.type==='zone'){const p=c.zall?Math.round(100*c.zin/c.zall):0;tx=t('zoneNow',{p})+' · '+m.lo+'–'+m.hi;ok=c.disp>=m.lo&&c.disp<=m.hi}
+  else{const top=Math.round(c.top*60);tx=t('topNow',{r:top,g:m.g[0]});ok=top>=m.g[0]}
+  ctx.save();ctx.font='800 14px "Baloo 2",sans-serif';const w=ctx.measureText(tx).width+24;rr(10,HUD+10,w,26,13);ctx.fillStyle=ok?'rgba(47,158,58,.92)':'rgba(20,48,31,.82)';ctx.fill();
+  ctx.fillStyle='#fff';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(tx,22,HUD+23.5);ctx.restore();
+}
 // ---------- sound: everything is synthesised in the browser (no audio files) ----------
 const SND={sfx:store.get('cr-sfx')!=='0',music:store.get('cr-music')!=='0'};
 let AC=null,master=null,musicBus=null,sfxBus=null,noiseBuf=null,eng=null,mStep=0,mNext=0,huffAt=0;
@@ -822,7 +907,7 @@ function joinRoom(code,capSet){
   let status='connecting',hb=0,lastHi=0;
   const n={code,me:me0,peers,status:()=>status,
     send:m=>{m.id=myId;tr.send(m)},
-    hello:()=>{lastHi=Date.now();const h={t:'hi',name:me0.name,ready:me0.ready,joined:me0.joined,ph:anyone&&mode==='solo'?'cpu':state,ch:myChar,cap:me0.cap,ws:me0.ws,lv:progLv(),bots:me0.bots.map(b=>({id:b.id,ch:b.ch,n:b.n}))};if(state==='count'&&curIds){h.rid=curRid;h.ids=curIds;h.left=Math.max(0,startT-performance.now())}n.send(h)},
+    hello:()=>{lastHi=Date.now();const h={t:'hi',name:me0.name,ready:me0.ready,joined:me0.joined,ph:anyone&&mode==='solo'?'cpu':state,ch:myChar,cap:me0.cap,ws:me0.ws,lv:progLv(),bots:me0.bots.map(b=>({id:b.id,ch:b.ch,n:b.n})),mb:anyone&&state==='match'?visBots().map(b=>({id:b.id,name:b.name,ch:b.ch})):[]};if(state==='count'&&curIds){h.rid=curRid;h.ids=curIds;h.left=Math.max(0,startT-performance.now())}n.send(h)},
     all:()=>[me0,...[...peers.values()]].sort((a,b)=>a.joined-b.joined||(a.id<b.id?-1:1)),
     cap:()=>{if(n.any)return MAXP;const a=n.all(),f=a.find(p=>p.cap);return Math.min(MAXP,Math.max(2,(a[0]&&a[0].cap)||(f&&f.cap)||MAXP))},
     humans:()=>n.any?n.all():n.all().slice(0,n.cap()),
@@ -847,7 +932,7 @@ function joinRoom(code,capSet){
     const p=peers.get(m.id);if(p)p.seen=Date.now();
     if(m.t==='who'){n.hello();return}
     if(m.t==='hi'){
-      peers.set(m.id,{id:m.id,name:cleanName(m.name)||'Racer',ready:!!m.ready,joined:+m.joined||Date.now(),ph:m.ph,ch:CHARS.includes(m.ch)?m.ch:'cat',ws:+m.ws||0,lv:Math.max(1,Math.min(NLV,+m.lv||1)),bots:(Array.isArray(m.bots)?m.bots:[]).slice(0,MAXP).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,ch:b.ch,n:Math.max(1,Math.min(9,+b.n||1))})),cap:(+m.cap>=2&&+m.cap<=MAXP)?+m.cap:null,seen:Date.now()});
+      peers.set(m.id,{id:m.id,name:cleanName(m.name)||'Racer',ready:!!m.ready,joined:+m.joined||Date.now(),ph:m.ph,ch:CHARS.includes(m.ch)?m.ch:'cat',ws:+m.ws||0,lv:Math.max(1,Math.min(NLV,+m.lv||1)),mb:(Array.isArray(m.mb)?m.mb:[]).slice(0,3).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,name:cleanName(b.name)||'Racer',ch:b.ch})),bots:(Array.isArray(m.bots)?m.bots:[]).slice(0,MAXP).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,ch:b.ch,n:Math.max(1,Math.min(9,+b.n||1))})),cap:(+m.cap>=2&&+m.cap<=MAXP)?+m.cap:null,seen:Date.now()});
       if(!me0.cap){const c0=n.cap();if(c0<MAXP||m.cap)me0.cap=c0}
       if(status==='noroom'){status='ok';refreshPanel(true)}
       if(!p)n.hello();
@@ -857,6 +942,7 @@ function joinRoom(code,capSet){
       if(state==='lobby'||state==='done'){maybeStart();refreshPanel()}
       return}
     if(m.t==='bye'){peers.delete(m.id);if(p)onLeave(p);return}
+    if(m.t==='quit'){const q=racers.find(x=>x.id===m.id);if(q&&(state==='race'||state==='count'))q.left=true;return}
     if(m.t==='go'){if(Array.isArray(m.ids)&&m.ids.includes(myId)&&(!n.any||(state==='match'&&mode==='online'))){if(m.rid!==curRid){raceBots=(Array.isArray(m.bots)?m.bots:[]).slice(0,MAXP).filter(b=>b&&/^b[a-z0-9]{4,14}$/.test(b.id)&&CHARS.includes(b.ch)).map(b=>({id:b.id,name:cleanName(b.name)||'Racer',ch:b.ch,bot:true,owner:m.id}));startRace(m.delay||3000,m.ids,m.rid)}}else refreshPanel(true);return}
     if(m.t==='st'&&state==='race'&&Array.isArray(m.bs))m.bs.forEach(a=>{const q=racers.find(x=>x.id===a[0]&&x.owner===m.id&&x.kind==='remote');if(q&&q.done==null){q.tphi=+a[1]||0;q.tw=+a[2]||0;q.spin=+a[3]||0;q.top=+a[4]||0;q.rt=performance.now()}});
     if(m.t==='fin'&&m.b){const q=racers.find(x=>x.id===m.b&&x.owner===m.id&&x.kind==='remote');if(q&&q.done==null&&(state==='race'||state==='count')){q.done=+m.time;q.spin=+m.spin||0;q.top=+m.top||0;q.phi=Math.max(q.phi,phiForFinish(q.char));q.w=0;q.tw=0;if(!firstDone)firstDone=performance.now()}return}
@@ -938,7 +1024,7 @@ function lvStrip(){
   <p class="small" style="margin:2px 0 0">${c>=NLV?t('allCleared'):t('nextUp',{n:nx})+(na?' · '+t('nextAnimal',{n:UNLOCK[na],a:t('ch_'+na)}):'')}</p></div>`;
 }
 const lockLvl=k=>UNLOCK[k];
-function animalGrid(sel,g,skip){return `<div class="chars" data-g="${g}">${CHARS.map(k=>{const op=isOpen(k),dis=skip===k;return `<button data-v="${k}" class="${k===sel?'on':''}${op?'':' lk'}${k==='dragon'?' gold':''}" aria-pressed="${k===sel}" ${dis?'disabled':''}>${icImg(k)}<span>${op?t('ch_'+k):'🔒 '+t('lockLv',{n:lockLvl(k)})}</span></button>`}).join('')}</div>`}
+function animalGrid(sel,g,skip){return `<div class="chars" data-g="${g}">${CHARS.map(k=>{const op=isOpen(k),dis=skip===k;return `<button data-v="${k}" class="${k===sel?'on':''}${op?'':' lk'}${k==='dragon'?' gold':''}" aria-pressed="${k===sel}" ${dis?'disabled':''}>${icImg(k)}<span>${op?t('ch_'+k):'🔒 '+(k==='dragon'?DRAGON_STARS+' ⭐':t('lockLv',{n:lockLvl(k)}))}</span></button>`}).join('')}</div>`}
 function meCard(){return `<div class="me"><button class="ic2" data-act="me" aria-label="${t('changeAnimal')}">${icImg(myChar)}</button><span class="mt"><button class="nmb" data-act="name" aria-label="${t('editName')}"><b>${esc(myName())}</b> <span aria-hidden="true">✏️</span></button><span class="sub"><small>${t('theAnimal',{a:t('ch_'+myChar)})}</small><button class="ed" data-act="me">${t('changeAnimal')}</button></span></span></div>`}
 function nameBox(){
   nameBack=panel;panel='namebox';
@@ -949,19 +1035,77 @@ function nameBox(){
 }
 function backFromName(){const b=nameBack;if(b==='invite')inviteScreen();else if(b==='friends')friends();else home()}
 const progLv=()=>Math.min(NLV,cleared()+1);
+
+// ---------- Mission map (scrolls from START at the bottom up to the Imugi) ----------
+const MAP_BAND=330,MAP_TOP=96;
+const MAP_REWARD={2:['centi'],4:['garter'],9:['basil'],12:['crab'],14:['puffer','shrimp'],19:['frill'],24:['peng'],29:['imugi']};
+function mapPoints(){const xs=[95,265,110,250,180],yo=[295,235,175,115,50],p=[];
+  for(let w=0;w<6;w++)for(let i=0;i<5;i++)p.push([w%2===0?xs[i]:360-xs[i],MAP_TOP+MAP_BAND*(5-w)+yo[i]]);return p}
+function mapScreen(){
+  panel='map';state='menu';closeNet();mode='solo';
+  const st=getStars(),cur=progLv(),tot=st.reduce((a,b)=>a+b,0),H=MAP_TOP+MAP_BAND*6+80,P=mapPoints(),s=[];
+  const by=w=>MAP_TOP+MAP_BAND*(5-w),B=MAP_BAND;
+  const bg=[['#8fdc6a','#5cb83c'],['#9fd8ff','#4fa3e0'],['#5cc4dd','#2f8fb8'],['#f5d79a','#e3ad66'],['#e4f4ff','#a7d1ec'],['#4a5f8a','#2c3e66']];
+  for(let w=0;w<6;w++){const y=by(w),[c1,c2]=bg[w];s.push(`<rect x="0" y="${y}" width="360" height="${B}" fill="${c1}"/>`);
+    if(w===0){s.push(`<path d="M0 ${y+B-60} Q90 ${y+B-100} 180 ${y+B-70} T360 ${y+B-80} V${y+B} H0Z" fill="${c2}"/>`);for(let k=0;k<10;k++)s.push(`<circle cx="${20+k*35}" cy="${y+40+(k*53)%200}" r="4" fill="#ff6b9a"/><circle cx="${20+k*35}" cy="${y+40+(k*53)%200}" r="1.8" fill="#ffd23f"/>`)}
+    if(w===1){s.push(`<ellipse cx="180" cy="${y+170}" rx="170" ry="120" fill="${c2}" opacity=".55"/>`);[[60,80],[300,120],[70,250],[290,270],[200,60]].forEach(([lx,ly])=>s.push(`<path d="M${lx} ${y+ly} m-12 0 a12 8 0 1 0 24 0 l-12 0z" fill="#3f9e3a"/>`));for(let k=0;k<6;k++)s.push(`<rect x="${10+k*62}" y="${y+5}" width="3" height="40" fill="#7a5a2b"/><ellipse cx="${11+k*62}" cy="${y+8}" rx="4" ry="9" fill="#8a5a2b"/>`)}
+    if(w===2){for(let k=0;k<5;k++)s.push(`<path d="M0 ${y+20+k*62} q22 -10 45 0 t45 0 t45 0 t45 0 t45 0 t45 0 t45 0 t45 0" fill="none" stroke="#bff0ff" stroke-width="2" opacity=".6"/>`);for(let k=0;k<12;k++)s.push(`<circle cx="${(k*67)%340+10}" cy="${y+30+(k*41)%280}" r="${2+k%3}" fill="none" stroke="#e8fbff" stroke-width="1.2"/>`)}
+    if(w===3){s.push(`<path d="M0 ${y+B-40} Q100 ${y+B-110} 200 ${y+B-50} T360 ${y+B-70} V${y+B} H0Z" fill="${c2}"/><circle cx="320" cy="${y+46}" r="18" fill="#ffd23f" opacity=".8"/>`);[[40,120],[320,200],[290,70]].forEach(([cx,cy])=>s.push(`<rect x="${cx-5}" y="${y+cy}" width="10" height="40" rx="5" fill="#3f9e5a"/><rect x="${cx-15}" y="${y+cy+12}" width="8" height="16" rx="4" fill="#3f9e5a"/><rect x="${cx+7}" y="${y+cy+6}" width="8" height="16" rx="4" fill="#3f9e5a"/>`))}
+    if(w===4){s.push(`<path d="M0 ${y+120} L60 ${y+50} L110 ${y+120}Z M240 ${y+130} L310 ${y+40} L360 ${y+110} V${y+130}Z" fill="#c9e7fa"/>`);for(let k=0;k<14;k++)s.push(`<circle cx="${(k*53)%340+10}" cy="${y+20+(k*37)%290}" r="2.2" fill="#fff"/>`)}
+    if(w===5){s.push(`<path d="M0 ${y+B} V${y+60} Q60 ${y+20} 120 ${y+60} V${y+B}Z M240 ${y+B} V${y+70} Q300 ${y+20} 360 ${y+60} V${y+B}Z" fill="#33466e"/><rect x="125" y="${y}" width="110" height="${B-40}" fill="#9fd6ff" opacity=".55"/>`);for(let k=0;k<8;k++)s.push(`<rect x="${130+k*13}" y="${y}" width="4" height="${B-50}" fill="#e8f6ff" opacity=".6"/>`);s.push(`<ellipse cx="180" cy="${y+B-30}" rx="120" ry="26" fill="#6fb8e8"/>`);for(let k=0;k<18;k++)s.push(`<circle cx="${(k*71)%350+5}" cy="${y+8+(k*29)%120}" r="1.3" fill="#fff"/>`)}
+    const lb=t('worldN',{w:w+1,name:WORLDS[w]}),lw=lb.length*7.6+20;s.push(`<rect x="${352-lw}" y="${y+6}" rx="10" width="${lw}" height="22" fill="rgba(0,0,0,.45)"/><text x="${342}" y="${y+22}" text-anchor="end" font-size="13" font-weight="800" fill="#fff">${esc(lb)}</text>`)}
+  const d='M'+P.map(([x,y])=>x+' '+y).join(' L');
+  s.push(`<path d="${d}" fill="none" stroke="#fff6dc" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/><path d="${d}" fill="none" stroke="#d9b36a" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>`);
+  const im=(k,x,y,w)=>`<image href="${iconURL(k)}" x="${x-w/2}" y="${y-w*.3}" width="${w}" height="${w*.6}"/>`;
+  // reward bubbles
+  Object.entries(MAP_REWARD).forEach(([i,ks])=>{i=+i;const [x,y]=P[i],bw=26+ks.length*44,bx=x<180?x+30:x-30-bw,got=st[i]>0;
+    s.push(`<rect x="${bx}" y="${y-24}" width="${bw}" height="48" rx="12" fill="${got?'#e8f8e4':'#fff'}" stroke="${got?'#2f9e3a':'#7a3cff'}" stroke-width="2"/><text x="${bx+bw/2}" y="${y-13}" text-anchor="middle" font-size="9" font-weight="800" fill="${got?'#2f7d1f':'#5b2fd0'}">${got?t('unlockedTag'):t('unlockTag')}</text>`);
+    ks.forEach((k,j)=>s.push(im(k,bx+35+j*44,y+6,40)))});
+  // mission circles
+  P.forEach(([x,y],i)=>{const n=i+1,boss=i%5===4,r=boss?22:17,ok=st[i]>0,c=n===cur&&!ok,lock=n>cur;
+    s.push(`<g ${lock?'':`data-m="${n}" class="mnode" role="button" tabindex="0" aria-label="${esc(t('missionN',{n}))}"`}>`);
+    if(c)s.push(`<circle cx="${x}" cy="${y}" r="${r+8}" fill="#ff8a2a" opacity=".3"/>`);
+    s.push(`<circle cx="${x}" cy="${y+3}" r="${r}" fill="rgba(0,0,0,.25)"/><circle cx="${x}" cy="${y}" r="${r}" fill="${lock?'#e8eef2':'#fff'}" stroke="${ok?'#2f9e3a':c?'#ff8a2a':'#9aa8b2'}" stroke-width="4"/>`);
+    s.push(`<text x="${x}" y="${y+6}" text-anchor="middle" font-size="${boss?18:16}" font-weight="800" fill="${lock?'#7a8a94':'#14301f'}">${lock?'🔒':boss?'👑':n}</text>`);
+    if(ok)s.push(`<text x="${x}" y="${y+r+14}" text-anchor="middle" font-size="12" fill="#ffd23f" stroke="#7a5a00" stroke-width=".5">${'★'.repeat(st[i])}${'☆'.repeat(3-st[i])}</text>`);
+    s.push('</g>');if(c||(n===cur&&ok&&n===30))s.push(im(myChar,x,y-40,46))});
+  // Imugi waiting at the top
+  {const [x,y]=P[29];s.push(`<g transform="translate(205,${y+130}) scale(.6)"><path d="M10 95 C40 60 70 110 100 80 S150 50 170 70" fill="none" stroke="#1f5f5b" stroke-width="22" stroke-linecap="round"/><path d="M10 95 C40 60 70 110 100 80 S150 50 170 70" fill="none" stroke="#3fa58f" stroke-width="16" stroke-linecap="round"/><ellipse cx="185" cy="62" rx="26" ry="20" fill="#3fa58f" stroke="#1f5f5b" stroke-width="3"/><circle cx="186" cy="54" r="8" fill="#fff"/><ellipse cx="188" cy="54" rx="2.5" ry="6" fill="#222"/><circle cx="222" cy="40" r="12" fill="#ffe27a" stroke="#e0a000" stroke-width="2"/></g>`)}
+  // header + start
+  s.push(`<rect x="0" y="0" width="360" height="${MAP_TOP}" fill="#1b2a4a"/><text x="180" y="40" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">${t('mapTitle')}</text><text x="180" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#ffd23f">${t('starsOf',{n:tot})}</text>`);
+  s.push(`<rect x="60" y="70" width="240" height="18" rx="9" fill="#33466e"/><rect x="60" y="70" width="${Math.min(240,240*tot/DRAGON_STARS)}" height="18" rx="9" fill="#ffd23f"/>${im('dragon',48,79,40)}<text x="186" y="83" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">${t('dragonAt',{n:DRAGON_STARS})}</text>`);
+  s.push(`<rect x="0" y="${MAP_TOP+MAP_BAND*6}" width="360" height="80" fill="#fff"/><text x="180" y="${H-12}" text-anchor="middle" font-size="12" font-weight="800" fill="#2f5a1f">${t('startHere')}</text>`);
+  ['cat','inch','snail','turtle'].forEach((k,j)=>s.push(im(k,72+j*72,H-44,50)));
+  ov.innerHTML=`<div class="panel mappanel">${homeBtn()}<svg class="mapsvg" viewBox="0 0 360 ${H}" width="100%" font-family="'Baloo 2',sans-serif" role="img" aria-label="${t('mapTitle')}">${s.join('')}</svg></div>`;
+  const pn=ov.querySelector('.mappanel'),sv=ov.querySelector('.mapsvg');
+  requestAnimationFrame(()=>{if(!pn||!sv)return;const k=sv.getBoundingClientRect().width/360,[,yy]=P[Math.min(29,cur-1)];pn.scrollTop=Math.max(0,yy*k-pn.clientHeight/2)});
+}
+function missionStart(n){
+  n=Math.max(1,Math.min(NLV,Math.min(n,progLv())));lvl=n;store.set('cr-lv',String(n));
+  panel='mstart';state='menu';closeNet();mode='solo';botChar=null;setup();
+  const m=MIS[n-1],best=getStars()[n-1],g=starGoals(m),boss=m.type==='boss';
+  const vs=m.opp?`<div class="vs"><div>${icImg(myChar,'big')}<small>${esc(myName())}</small></div><b>VS</b><div>${icImg(m.opp,'big')}<small>${esc(t('ch_'+m.opp))}</small></div></div>`:`<div class="vs"><div>${icImg(myChar,'big')}<small>${esc(myName())}</small></div></div>`;
+  ov.innerHTML=`<div class="panel mstart">${homeBtn(false,'map')}<h2>${esc(t('worldN',{w:m.w+1,name:WORLDS[m.w]}))}</h2>
+  <p class="lvc">${t('missionN',{n}).toUpperCase()}${boss?' 👑':''}</p>${vs}
+  <p class="goal">${esc(goalText(m))}</p>
+  ${m.opp==='imugi'?`<p class="lore">🐍 <b>${t('ch_imugi')} 이무기.</b> ${esc(t('imugiLore'))}</p>`:''}
+  <div class="stars3">${g.map((x,i)=>`<div class="${i<best?'got':''}"><b>${'⭐'.repeat(i+1)}</b>${esc(x)}</div>`).join('')}</div>
+  <button class="go" data-act="mgo">${t('startMission')}</button><p class="small" id="msg" aria-live="polite"></p></div>`;
+}
 function closeNet(){if(net){net.send({t:'bye'});net.close()}anyone=false}
 function menu(){if(invite){inviteScreen();return}home()}
 function home(){
   panel='home';state='menu';finishId++;closeNet();mode='solo';raceLv=lvl=progLv();botChar=null;setup();
-  const badge=cleared()>=NLV?t('allDone'):t('onLv',{n:progLv()});
+  const tot=totalStars();
   ov.innerHTML=`<div class="panel home">${meCard()}<h2>${t('letsRace')}</h2>
   <div class="tiles">
-   <button class="tile c1" data-act="cpu"><span class="e">🤖</span><b>${t('cpuTile')}</b><small>${t('cpuTileSub')}</small><span class="live">${badge}</span><span class="minibar" aria-hidden="true"><i style="width:${Math.round(cleared()/NLV*100)}%"></i></span></button>
+   <button class="tile c1 wide" data-act="mission"><span class="e">🗺️</span><b>${t('misTile')}</b><small>${t('misTileSub')}</small><span class="live">${t('starsOf',{n:tot})}</span><span class="minibar" aria-hidden="true"><i style="width:${Math.round(tot/90*100)}%"></i></span></button>
    <button class="tile c2" data-act="any"><span class="e">🌍</span><b>${t('anyTile')}</b><small>${t('anyTileSub')}</small><span class="live" id="anyLive"${anyCount>0?'':' hidden'}><i></i>${t('racingNow',{n:anyCount})}</span></button>
    <button class="tile c3" data-act="friends"><span class="e">👫</span><b>${t('friendsTile')}</b><small>${t('friendsSub')}</small></button>
-   <button class="tile c4" data-act="duo"><span class="e">📱</span><b>${t('sameTile')}</b><small>${t('sameSub')}</small></button>
+   <button class="tile c5 small" data-act="practice"><span class="e">🏁</span><b>${t('practice')}</b><small>${t('notBoard')}</small></button>
+   <button class="tile c4 small" data-act="duo"><span class="e">📱</span><b>${t('sameTile')}</b><small>${t('notBoard')}</small></button>
   </div>
-  <div class="row"><button class="sec" data-act="practice">🏁 ${t('practice')}</button><button class="sec" data-act="board">🏆 ${t('board')}</button></div>
+  <div class="row"><button class="sec" data-act="board">🏆 ${t('board')}</button></div>
   <p class="small" id="msg" aria-live="polite"></p></div>`;
   anyPeek();
 }
@@ -998,7 +1142,7 @@ function roomLink(code){return location.origin+location.pathname+'?room='+code+(
 function playerList(){
   const mem=net.members(),c=net.cap(),empty=Math.max(0,c-mem.length);
   const iHost=net.host();
-  return `<ul class="players">${mem.map((p,i)=>p.bot?`<li class="botli"><span class="dot" style="background:${SK[i%8].body}"></span><span class="ic">${icImg(p.ch||'cat')}</span><b>${esc(p.name)}</b><span class="st ok">${t('isReady')}</span>${iHost?`<button class="rmb" data-act="rmbot" data-v="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>`:''}</li>`:`<li><span class="dot" style="background:${SK[i%8].body}"></span><span class="ic">${icImg(p.id===myId?myChar:(p.ch||'cat'))}</span>${esc(p.name)}${p.id===myId?' ('+t('you')+')':''}${i===0?` <span class="st" style="margin-left:4px">· ${t('host')}</span>`:''}<span class="st ${p.ready?'ok':''}">${p.ready?t('isReady'):t('notReady')}</span></li>`).join('')}${`<li class="empty">${t('emptySlot')}</li>`.repeat(empty)}</ul>${iHost&&empty>0&&panel==='lobby'?`<button class="addb" data-act="addbot">${t('addBot')}</button>`:''}${mem.some(p=>p.bot)||(iHost&&empty>0&&panel==='lobby')?`<p class="small">${t('botNote')}</p>`:''}`;
+  return `<ul class="players">${mem.map((p,i)=>p.bot?`<li class="botli"><span class="dot" style="background:${SK[i%8].body}"></span><span class="ic">${icImg(p.ch||'cat')}</span><b>${esc(p.name)}</b><span class="st ok">${t('isReady')}</span>${iHost?`<button class="rmb" data-act="rmbot" data-v="${p.id}" aria-label="Remove ${esc(p.name)}">✕</button>`:''}</li>`:`<li><span class="dot" style="background:${SK[i%8].body}"></span><span class="ic">${icImg(p.id===myId?myChar:(p.ch||'cat'))}</span>${esc(p.name)}${p.id===myId?' ('+t('you')+')':''}${i===0?` <span class="st" style="margin-left:4px">· ${t('host')}</span>`:''}<span class="st ${p.ready?'ok':''}">${p.ready?t('isReady'):t('notReady')}</span></li>`).join('')}${`<li class="empty">${t('emptySlot')}</li>`.repeat(empty)}</ul>`;
 }
 function readyArea(){
   const mem=net.members(),ids=readyIds(),c=net.cap(),allIn=mem.length>=c,allReady=ids.length===mem.length;
@@ -1049,14 +1193,14 @@ function board(){
   else if(!lbData)body=`<p class="small">${t('loading')}</p>`;
   else if(!lbData.top.length)body=`<p class="small">${t('boardEmpty')}</p>`;
   else{
-    const row=(r,mine)=>`<tr${mine?' style="font-weight:800;background:color-mix(in srgb,var(--on) 14%,transparent)"':''}><td>${r.rk}</td><td><span class="ic">${icImg(r.animal)}</span>${esc(r.nick)}${mine?' ('+t('you')+')':''}</td><td>${fmt(r.best)}</td><td>${lvLabel(r)}</td></tr>`;
+    const row=(r,mine)=>`<tr${mine?' style="font-weight:800;background:color-mix(in srgb,var(--on) 14%,transparent)"':''}><td>${r.rk}</td><td><span class="ic">${icImg(r.animal)}</span>${esc(r.nick)}${mine?' ('+t('you')+')':''}</td><td>${fmt(r.best)}</td></tr>`;
     const meIn=lbData.top.some(r=>r.me);
-    body=`<table class="rk"><thead><tr><th>${t('rank')}</th><th>${t('racer')}</th><th>${t('time')}</th><th>${t('lvCol')}</th></tr></thead><tbody>${lbData.top.map(r=>row(r,r.me)).join('')}${!meIn&&lbData.me?`<tr><td colspan="4" style="text-align:center">…</td></tr>`+row(lbData.me,true):''}</tbody></table><p class="small">${t('boardNote')}</p>`;
+    body=`<table class="rk"><thead><tr><th>${t('rank')}</th><th>${t('racer')}</th><th>${t('time')}</th></tr></thead><tbody>${lbData.top.map(r=>row(r,r.me)).join('')}${!meIn&&lbData.me?`<tr><td colspan="4" style="text-align:center">…</td></tr>`+row(lbData.me,true):''}</tbody></table><p class="small">${t('boardNote')}</p>`;
   }
   ov.innerHTML=`<div class="panel">${homeBtn()}<h2>${t('boardTitle')}</h2><div class="seg" data-g="period">${tabs.map(([k,l])=>`<button data-v="${k}" class="${k===lbPeriod?'on':''}">${t(l)}</button>`).join('')}</div>${body}</div>`;
 }
 async function loadBoard(){lbData=null;lbErr=false;board();try{lbData=await fetchBoard(lbPeriod)}catch(e){lbErr=true}if(panel==='board')board()}
-let shareText='',finishId=0,raceLv=1,lvJump=0,newUnlocks=[],wonLv=false;
+let shareText='',finishId=0,raceLv=1,lvJump=0,newUnlocks=[],wonLv=false,lastStars=0;
 function finish(){
   if(state==='done')return;
   state='done';endEl=performance.now()-startT;ov.innerHTML='';
@@ -1064,20 +1208,15 @@ function finish(){
   winner=order[0]&&(order[0].done!=null||mode==='online')?order[0]:null;
   lvJump=0;newUnlocks=[];wonLv=false;
   if(mode==='solo'){
-    const L=raceLv,k='cr3-best-'+L,b=+store.get(k)||0;
+    // mission: stars for this run; keep the best per mission; new animals when their mission is first passed
+    const L=raceLv,m=MIS[L-1],won=!m.opp||winner===me,st=missionStars(m,me,won),a=getStars(),openBefore=CHARS.filter(isOpen);
+    lastStars=st;wonLv=st>0;
+    const k='cr3-best-'+L,b=+store.get(k)||0;
     if(me.done!=null){if(!b||me.done<b){store.set(k,String(me.done));endNote=b?t('newBestLv',{n:L}):''}else endNote=t('bestLv',{n:L,t:fmt(b)})}
-    if(winner===me&&me.done!=null){
-      wonLv=true;
-      // big win: jump to the highest level (up to +5) your time would still beat with a 5% margin
-      let to=L+1;for(let q=Math.min(NLV,L+5);q>L+1;q--){if(me.done/1000<=BOT_T[q-1]*.95){to=q;break}}
-      const before=cleared(),now2=Math.max(before,Math.min(NLV,to-1));
-      newUnlocks=CHARS.filter(c2=>c2 in UNLOCK&&UNLOCK[c2]>before&&UNLOCK[c2]<=now2);
-      store.set('cr-clear',String(now2));
-      if(to-L>1&&L<NLV){lvJump=to-L;endNote=(endNote?endNote+' ':'')+t('lvJump',{n:Math.min(NLV,to)})}
-      if(L===NLV)endNote=(endNote?endNote+' ':'')+t('allCleared');
-      lvl=Math.min(NLV,to);store.set('cr-lv',String(lvl));
-    }
-    shareText=t('shareSolo',{d:t('levelN',{n:L}),r:winner===me?t('won'):t('lost'),t:me.done!=null?' · '+fmt(me.done):'',rpm:Math.round(me.top*60)});
+    if(st>a[L-1]){a[L-1]=st;setStars(a)}
+    newUnlocks=CHARS.filter(c2=>isOpen(c2)&&!openBefore.includes(c2));
+    if(st>0){lvl=Math.min(NLV,L+1);store.set('cr-lv',String(lvl))}else lvl=L;
+    shareText=t('shareSolo',{d:t('missionN',{n:L}),r:st>0?'★'.repeat(st):t('lost'),t:me.done!=null?' · '+fmt(me.done):'',rpm:Math.round(me.top*60)});
   }
   else if(mode==='online'&&me){const p=order.indexOf(me)+1;shareText=t('shareOnline',{p:ord(p),n:racers.length,t:me.done!=null?' · '+fmt(me.done):'',u:anyone?gameURL():net?roomLink(net.code):location.origin})}
   else if(winner)shareText=t('wins',{n:winner.name})+(winner.done!=null?' '+fmt(winner.done):'');
@@ -1085,37 +1224,44 @@ function finish(){
   if((mode==='solo'||mode==='online')&&me&&me.done!=null)submitScore(me.done,me.top*60,mode,raceLv);
   sig='';const fid=++finishId;setTimeout(()=>{if(state==='done'&&fid===finishId)results(true)},1900);
 }
+function starBox(){
+  const m=MIS[raceLv-1],g=starGoals(m),best=getStars()[raceLv-1];
+  return `<p class="bigstars" aria-label="${lastStars} of 3 stars">${'★'.repeat(lastStars)}<span>${'★'.repeat(3-lastStars)}</span></p>
+  <div class="stars3">${g.map((x,i)=>`<div class="${i<lastStars?'got':''}"><b>${'⭐'.repeat(i+1)}</b>${esc(x)}</div>`).join('')}</div>
+  <p class="small" style="margin:4px 0 0">${esc(t('worldN',{w:m.w+1,name:WORLDS[m.w]}))} · ${'★'.repeat(best)}${'☆'.repeat(3-best)}</p>`;
+}
 function unlockScreen(){
   panel='unlock';const list=newUnlocks,leg=list.includes('dragon'),one=list.length===1;
   const pics=list.map(k=>{const sh=animalShot(k,'clap',3);return `<figure class="ul${k==='dragon'?' gold':''}"><img src="${sh?sh.toDataURL():iconURL(k)}" alt=""><figcaption><b>${t('ch_'+k)}</b>${one?`<small>${t('line_'+k)}</small>`:''}</figcaption></figure>`}).join('');
-  ov.innerHTML=`<div class="panel unlock${leg?' legend':''}"><p class="lvc">${t('levelCleared',{n:raceLv})}</p><h2>${leg?t('legendary'):one?t('newAnimal'):t('newAnimals',{n:list.length})}</h2><div class="uls">${pics}</div>
+  ov.innerHTML=`<div class="panel unlock${leg?' legend':''}"><p class="lvc">${t('misDone',{n:raceLv})}</p><h2>${leg?t('legendary'):one?t('newAnimal'):t('newAnimals',{n:list.length})}</h2><div class="uls">${pics}</div>
   ${list.map(k=>`<button class="go${k==='dragon'?' goldb':''}" data-act="raceas" data-v="${k}">${t('raceAs',{a:t('ch_'+k)})}</button>`).join('')}
-  ${raceLv<NLV?`<button class="go alt" data-act="start">${t('nextLevel')}</button>`:''}
+  ${raceLv<NLV?`<button class="go alt" data-act="mnext">${t('nextMission')}</button>`:''}
   <div class="row"><button class="sec" data-act="backres">${t('seePic')}</button></div></div>`;
 }
 function results(fresh){
-  if(fresh){const won=mode==='duo'||winner===me;if(won&&mode==='solo'&&raceLv===NLV)sfx.champion();else if(won&&newUnlocks.includes('dragon'))sfx.champion();else if(won)sfx.winBig();else sfx.sad()}
+  if(fresh){const won=mode==='duo'||(mode==='solo'?lastStars>0:winner===me);if(won&&mode==='solo'&&raceLv===NLV)sfx.champion();else if(won&&newUnlocks.includes('dragon'))sfx.champion();else if(won)sfx.winBig();else sfx.sad()}
   if(fresh&&mode==='solo'&&newUnlocks.length){unlockScreen();return}
   panel='results';
   const order=standings();
   let title;
-  if(mode==='solo')title=winner===me?(raceLv===NLV?t('allCleared'):t('levelCleared',{n:raceLv})):t('lvLost',{n:raceLv});
+  if(mode==='solo')title=lastStars>0?t('misDone',{n:raceLv}):t('misFail',{n:raceLv});
   else if(mode==='online'&&me){const p=order.indexOf(me)+1;title=p===1?t('youWin'):t('place',{p:ord(p),n:racers.length})}
   else title=winner?t('wins',{n:winner.name}):'—';
   const rows=order.map((c,i)=>`<tr${c===me&&mode==='online'?' style="font-weight:800"':''}><td>${i+1}</td><td><span class="dot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.pc||c.body};margin-right:4px"></span><span class="ic">${icImg(c.char)}</span>${esc(c.name)}</td><td>${c.left?t('leftTag'):c.done!=null?fmt(c.done):t('dnf')}</td><td>${Math.round(c.top*60)}</td></tr>`).join('');
   let again;
-  if(mode==='online')again=anyone?`<button class="go" data-act="anyagain">${t('rematch')}</button>`:(net&&net.status()==='ok'?readyArea():'');
-  else if(mode==='solo')again=`<button class="go" data-act="start">${wonLv?(raceLv===NLV?t('rematch'):t('nextLevel')):t('tryAgain')}</button>`+(anyone?`<button class="go alt" data-act="anyback">🌍 ${t('anyTile')}</button>`:'');
+  if(mode==='online')again=anyone?`<button class="go" data-act="anyagain">${t('rematch')}</button>`:(net&&net.status()==='ok'?`<button class="go" data-act="tolobby">${t('rematch')}</button>`:'');
+  else if(mode==='solo')again=(lastStars>0&&raceLv<NLV?`<button class="go" data-act="mnext">${t('nextMission')}</button><button class="go alt" data-act="mretry">${t('retryMission')}</button>`:`<button class="go" data-act="mretry">${t('retryMission')}</button>`);
+  else if(mode==='duo')again=`<button class="go" data-act="duo">${t('rematch')}</button>`;
   else again=`<button class="go" data-act="start">${t('rematch')}</button>`;
   const pic=ensureCard(),canShare=!!navigator.share;
-  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net)}<h2>${esc(title)}</h2>${mode==='solo'?lvStrip():''}
+  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net)}<h2>${esc(title)}</h2>${mode==='solo'?starBox():''}
   <button class="cardbtn" data-act="card" aria-label="${esc(t('picAlt'))}"><img class="card mini" src="${pic}" alt="${esc(t('picAlt'))}"></button>
   ${again}
   <div class="row">${canShare?`<button class="sec" data-act="sharepic">📤 ${t('sharePic')}</button>`:''}<button class="sec" data-act="savepic">⬇️ ${t('savePic')}</button></div>
   <table class="rk"><thead><tr><th>${t('rank')}</th><th>${t('racer')}</th><th>${t('time')}</th><th>${t('topRpm')}</th></tr></thead><tbody>${rows}</tbody></table>
   ${endNote?`<p class="small">${esc(endNote)}</p>`:''}
   ${boardNote?`<p class="small">${esc(boardNote)}</p>`:''}
-  <div class="row">${mode==='solo'?`<button class="sec" data-act="levels">${t('levelsBtn')}</button>`:''}<button class="sec" data-act="copy">${t('copyText')}</button></div>
+  <div class="row">${mode==='solo'?`<button class="sec" data-act="map">${t('mapBtn')}</button>`:''}<button class="sec" data-act="copy">${t('copyText')}</button></div>
   <p class="small" id="msg" aria-live="polite"></p></div>`;
 }
 // ---------- result picture: your animal celebrating with its trophy ----------
@@ -1192,9 +1338,9 @@ function animalShot(ch,what,seed,place){
 function resultCard(){
   const {c,place,n}=cardStats(),Wc=1080,Hc=1350,cv2=document.createElement('canvas');cv2.width=Wc;cv2.height=Hc;
   const saved=ctx,savedWin=winner,hab=HAB[c.char]||'garden';
-  const sky={volcano:['#3b1d6e','#ff9a3c'],garden:['#7fd0ff','#e9f9ff'],desert:['#ffb36b','#fff0c9'],pond:['#7fd0ff','#e9f9ff'],sea:['#1f7fc4','#8adaf7'],ice:['#9fd6ff','#f4fcff']}[hab];
-  const ground={volcano:'#5b3a2e',garden:'#5cb83c',desert:'#eec57e',pond:'#62c0e8',sea:'#e3cf94',ice:'#f6fcff'}[hab];
-  const first=place===1,champ=mode==='solo'&&first&&raceLv===NLV;
+  const sky={waterfall:['#14203d','#5b7ab8'],volcano:['#3b1d6e','#ff9a3c'],garden:['#7fd0ff','#e9f9ff'],desert:['#ffb36b','#fff0c9'],pond:['#7fd0ff','#e9f9ff'],sea:['#1f7fc4','#8adaf7'],ice:['#9fd6ff','#f4fcff']}[hab];
+  const ground={waterfall:'#2f5a6e',volcano:'#5b3a2e',garden:'#5cb83c',desert:'#eec57e',pond:'#62c0e8',sea:'#e3cf94',ice:'#f6fcff'}[hab];
+  const first=mode==='solo'?lastStars>0:place===1,champ=mode==='solo'&&first&&raceLv===NLV;
   try{
     ctx=cv2.getContext('2d');
     const g=ctx.createLinearGradient(0,0,0,Hc);if(champ){g.addColorStop(0,'#7a3cff');g.addColorStop(.45,'#ff9a3c');g.addColorStop(.75,'#ffe27a')}else{g.addColorStop(0,sky[0]);g.addColorStop(.75,sky[1])}ctx.fillStyle=g;ctx.fillRect(0,0,Wc,Hc);
@@ -1218,7 +1364,7 @@ function resultCard(){
     for(let i=0;i<70;i++){const x=hash(i*7.1)*Wc,y=hash(i*3.3)*900,col=['#ff6b8a','#ffd23f','#4fb3ff','#6fd14a','#c9b3ff','#ff9a3c'][i%6];ctx.save();ctx.translate(x,y);ctx.rotate(hash(i)*6);ctx.fillStyle=col;ctx.globalAlpha=.85;ctx.fillRect(-7,-3.5,14,7);ctx.restore()}
     // headline
     let head,sub;
-    if(mode==='solo'){head=first?winLine(raceLv):'SO CLOSE! REMATCH?';sub=t('cpuTile')+' · '+t('levelN',{n:raceLv})}
+    if(mode==='solo'){head=first?(raceLv===NLV?'I BEAT THE IMUGI!':lastStars===3?'PERFECT! ★★★':lastStars===2?'SUPER SPEEDY! ★★':'MISSION COMPLETE! ★'):'SO CLOSE! REMATCH?';sub=t('missionN',{n:raceLv})+' · '+WORLDS[MIS[raceLv-1].w]}
     else if(mode==='online'){head=first?'1ST PLACE!':ord(place).toUpperCase()+' PLACE!';sub=(anyone?t('anyTile'):t('friendsTile'))+' · '+n+' '+t('players')}
     else{head=(c.name||'').toUpperCase()+' WINS!';sub=t('duo')}
     ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
@@ -1271,7 +1417,7 @@ function startLocal(){
 function leaveRoom(){closeNet();clearRoomParam();invite=false;onTab='create';state='menu';home()}
 // ---------- Race anyone: one shared room where whoever is waiting gets matched ----------
 const ANYROOM='ANY';
-const ANYMIN=4,ANYALONE=10000;let matchOk=false;let peekTr=null,peekTimer=0;const stopPeek=()=>{clearTimeout(peekTimer);if(peekTr){try{peekTr.close()}catch(e){}peekTr=null}};let raceBots=[],anyCount=0,anyPeekAt=0,pairAt=0,aloneSince=0,aloneWait=10000,switchOffer=false;
+const ANYMIN=4,ANYALONE=10000;let mBots=[],mPlanFor=0;let matchOk=false;let peekTr=null,peekTimer=0;const stopPeek=()=>{clearTimeout(peekTimer);if(peekTr){try{peekTr.close()}catch(e){}peekTr=null}};let raceBots=[],anyCount=0,anyPeekAt=0,pairAt=0,aloneSince=0,aloneWait=10000,switchOffer=false;
 function anyPeek(){
   // listen to the shared room for a few seconds (without joining) to count who is racing there
   if(Date.now()-anyPeekAt<20000)return;anyPeekAt=Date.now();
@@ -1284,64 +1430,71 @@ function startAnyone(){
   stopPeek();closeNet();clearRoomParam();invite=false;anyone=true;mode='online';
   joinRoom(ANYROOM,MAXP);enterMatch();
 }
-function enterMatch(){raceBots=[];matchOk=false;anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
+function enterMatch(){raceBots=[];mBots=[];mPlanFor=0;matchOk=false;anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
 function matchTick(){
   if(!anyone||!net)return;
   const others=[...net.peers.values()].filter(p=>p.ph==='match');
-  if(mode==='solo'){ // racing the computer while waiting: offer to switch when a real racer shows up
-    const want=others.length>0&&(state==='race'||state==='count'||state==='done');
-    if(want!==switchOffer){switchOffer=want;if(state==='race'||state==='count')raceOv();else if(panel==='results')results()}
-    return}
+  if(mode!=='online')return;
   if(state!=='match')return;
   if(net.status()!=='ok'){if(panel==='match'||panel==='alone')matchScreen();return}
   if(!matchOk){matchOk=true;aloneSince=Date.now()} // count the 10 s only once we're actually connected
   const pl=pool();
   if(pl.length>=2){if(!pairAt)pairAt=Date.now()}else pairAt=0;
   if(pl.length>=2)aloneSince=Date.now();
-  const due=pl.length>=MAXP||(pl.length>=2&&Date.now()-pairAt>=15000)||(pl.length===1&&Date.now()-aloneSince>=ANYALONE);
-  if(pl[0]&&pl[0].id===myId&&due){
-    // computers with ordinary fun names fill the race up to 4 racers (their level stays hidden)
-    const ids=pl.slice(0,MAXP).map(p=>p.id),rid=Math.random().toString(36).slice(2,8);
-    const avg=Math.round(pl.reduce((a,p)=>a+(p.id===myId?progLv():(p.lv||1)),0)/pl.length),used=new Set(pl.map(p=>p.id===myId?myChar:p.ch));
-    raceBots=[];for(let k=ids.length;k<ANYMIN;k++){const pool2=CHARS.filter(c=>c!=='dragon'&&!used.has(c)),ch=pool2[Math.floor(Math.random()*pool2.length)]||'cat';used.add(ch);
-      raceBots.push({id:'b'+Math.random().toString(36).slice(2,10),name:makeAutoName(),ch,bot:true,owner:myId,lv:Math.max(1,Math.min(NLV,avg+Math.floor(Math.random()*7)-3))})}
-    ids.push(...raceBots.map(b=>b.id));
-    net.send({t:'go',delay:3000,ids,rid,bots:raceBots.map(b=>({id:b.id,name:b.name,ch:b.ch}))});startRace(3000,ids,rid);return}
+  const deadline=pairAt?pairAt+15000:aloneSince+ANYALONE,due=pl.length>=MAXP||Date.now()>=deadline;
+  if(pl[0]&&pl[0].id===myId){
+    // computers with ordinary fun names join one by one at random moments before the start (up to 3, filling to 4 racers)
+    if(mPlanFor!==deadline){mPlanFor=deadline;const avg=Math.round(pl.reduce((a,p)=>a+(p.id===myId?progLv():(p.lv||1)),0)/pl.length),used=new Set(pl.map(p=>p.id===myId?myChar:p.ch));
+      mBots.forEach(b=>used.add(b.ch));const span=Math.max(1500,deadline-Date.now()-1500);
+      while(mBots.length<3){const pool2=CHARS.filter(c=>c!=='dragon'&&c!=='imugi'&&!used.has(c)),ch=pool2[Math.floor(Math.random()*pool2.length)]||'cat';used.add(ch);
+        mBots.push({id:'b'+Math.random().toString(36).slice(2,10),name:makeAutoName(),ch,bot:true,owner:myId,lv:Math.max(1,Math.min(NLV,avg+Math.floor(Math.random()*7)-3)),at:Date.now()+600+Math.random()*span})}
+      mBots.sort((a,b)=>a.at-b.at)}
+    const shown=visBots().length;if(shown!==mShown){mShown=shown;net.hello()}
+    if(due){
+      const ids=pl.slice(0,MAXP).map(p=>p.id),rid=Math.random().toString(36).slice(2,8);
+      raceBots=mBots.slice(0,Math.max(0,Math.min(3,ANYMIN-ids.length)));
+      ids.push(...raceBots.map(b=>b.id));
+      net.send({t:'go',delay:3000,ids,rid,bots:raceBots.map(b=>({id:b.id,name:b.name,ch:b.ch}))});startRace(3000,ids,rid);return}
+  }else{mBots=[];mPlanFor=0}
   if(panel==='match'||panel==='alone')matchScreen();
 }
+let mShown=0;
+// computers already "in the room": on the host, the ones whose time has come; elsewhere, what the host reports
+function visBots(){if(!net)return[];const pl=pool(),room=Math.max(0,Math.min(3,ANYMIN-pl.length));
+  if(pl[0]&&pl[0].id===myId)return mBots.filter(b=>b.at<=Date.now()).slice(0,room);
+  const h=pl[0]&&net.peers.get(pl[0].id);return h&&h.mb?h.mb.slice(0,room):[]}
 function matchScreen(){
-  panel='match';const conn=!net||net.status()!=='ok';const pl=pool(),n=pl.length,left=conn?null:pairAt?Math.max(0,Math.ceil((15000-(Date.now()-pairAt))/1000)):Math.max(0,Math.ceil((ANYALONE-(Date.now()-aloneSince))/1000));
+  panel='match';const conn=!net||net.status()!=='ok';const pl=[...pool(),...visBots()],n=pl.length,left=conn?null:pairAt?Math.max(0,Math.ceil((15000-(Date.now()-pairAt))/1000)):Math.max(0,Math.ceil((ANYALONE-(Date.now()-aloneSince))/1000));
   const s2=n+'|'+pl.map(p=>p.id+p.ch).join(',')+'|'+left+'|'+conn;if(s2===sig&&ov.querySelector('.match'))return;sig=s2;
   const deg=Math.round(360*Math.min(1,n/MAXP));
   ov.innerHTML=`<div class="panel match">${homeBtn()}<h2>${t('finding')}</h2>
   <div class="spin" style="--p:${deg}deg"><span>${n}/${MAXP}</span></div>
   <ul class="players">${pl.map(p=>`<li><span class="ic">${icImg(p.id===myId?myChar:(p.ch||'cat'))}</span>${esc(p.id===myId?autoName():p.name)}${p.id===myId?' ('+t('you')+')':''}</li>`).join('')}<li class="empty">${t('lookingMore',{k:MAXP-n})}</li></ul>
   ${conn?`<p class="small"><b>${net&&net.status()==='fail'?t('offline'):t('joining')}</b></p>`:left!=null?`<p class="small"><b>${t('startIn',{s:left})}</b></p>`:''}<p class="small">${t('anyRule')} ${t('funNames')}</p>
-  <div class="row"><button class="sec" data-act="home">${t('cancel')}</button><button class="sec" data-act="anycpu">${t('raceCpu')}</button></div></div>`;
-}
-function aloneScreen(){
-  panel='alone';sig='';
-  ov.innerHTML=`<div class="panel">${homeBtn()}<div class="big">😴</div><h2>${t('alone')}</h2><p class="small">${t('aloneQ')}</p>
-  <button class="go" data-act="anycpu">${t('raceCpu')}</button>
-  <div class="row"><button class="sec" data-act="keepwait">${t('keepWait')}</button><button class="sec" data-act="home">${t('cancel')}</button></div></div>`;
+  <div class="row"><button class="sec" data-act="home">${t('cancel')}</button></div></div>`;
 }
 function confirmBox(q,noAct,noLbl,yesAct,yesLbl){ov.innerHTML=`<div class="panel confirm" role="dialog" aria-label="${q}"><p><b>${q}</b></p><div class="row"><button class="sec" data-act="${noAct}">${noLbl}</button><button class="go small" data-act="${yesAct}">${yesLbl}</button></div></div>`}
 ov.addEventListener('click',e=>{
+  const mn=e.target.closest&&e.target.closest('[data-m]');if(mn){sfx.tap();missionStart(+mn.dataset.m);return}
   const b=e.target.closest('button');if(!b||b.disabled)return;const gp=b.parentElement.dataset.g,act=b.dataset.act;
   sfx.tap();
   if(act==='menu'&&mode==='practice'&&state==='race'){home();return}
   if(act==='quit'){confirmBox(t('quitQ'),'keep',t('keep'),'quityes',t('quitYes'));return}
   if(act==='keep'){if(state==='race'||state==='count')raceOv();return}
-  if(act==='quityes'){if(mode==='online'){leaveRoom();return}finishId++;if(anyone){enterMatch();return}home();return}
+  if(act==='quityes'){finishId++;
+    if(mode==='online'&&net){net.send({t:'quit'});if(anyone){enterMatch();return}state='lobby';panel='lobby';sig='';lobby();return}
+    if(mode==='online'){leaveRoom();return}
+    if(mode==='duo'){duoScreen();return}
+    if(mode==='solo'){missionStart(raceLv);return}
+    home();return}
   if(act==='homeask'){confirmBox(t('leaveQ'),'stay',t('stay'),'leaveyes',t('leaveYes'));return}
   if(act==='stay'){sig='';refreshPanel(true);return}
   if(act==='leaveyes'||act==='leave'){leaveRoom();return}
-  if(gp==='char'){const k=b.dataset.v;if(!isOpen(k)){say(t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)}));return}myChar=k;store.set('cr-char',myChar);botChar=null;meScreen();return}
-  if(gp==='char2'){const k=b.dataset.v;if(!isOpen(k)){say(t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)}));return}p2Char=k;store.set('cr-char2',p2Char);duoScreen();return}
+  if(gp==='char'){const k=b.dataset.v;if(!isOpen(k)){say(k==='dragon'?t('dragonStars',{n:DRAGON_STARS}):t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)}));return}myChar=k;store.set('cr-char',myChar);botChar=null;meScreen();return}
+  if(gp==='char2'){const k=b.dataset.v;if(!isOpen(k)){say(k==='dragon'?t('dragonStars',{n:DRAGON_STARS}):t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)}));return}p2Char=k;store.set('cr-char2',p2Char);duoScreen();return}
   if(gp==='otab'){saveForm();onTab=b.dataset.v;friends();return}
   if(gp==='cap'){cap=+b.dataset.v;store.set('cr-cap',String(cap));friends();return}
   if(gp==='period'){lbPeriod=b.dataset.v;loadBoard();return}
-  if(gp==='lvpick'){closeNet();lvl=+b.dataset.v;mode='solo';startLocal();return}
   if(act==='home'){home();return}
   if(act==='menu'){menu();return}
   if(act==='me'){meBack=panel;meScreen();return}
@@ -1352,15 +1505,18 @@ ov.addEventListener('click',e=>{
   if(act==='savename'){const i=document.getElementById('nick'),v=(i?i.value:'').trim().slice(0,NAMEMAX);if(v&&isBad(v)){say(t('badName'));if(i){i.focus();i.style.borderColor='#ff8a2a'}return}
     if(!v||v===autoName()){store.set('cr-nick','')}else if(/^(Zippy|Turbo|Rapid|Lucky|Super|Happy|Brave|Swift|Jolly|Sunny|Fizzy|Peppy|Mega|Comet|Rocket|Speedy|Dizzy|Bouncy|Sparky|Mighty) \w+ \d\d$/.test(v)){store.set('cr-auto',v);store.set('cr-nick','')}else store.set('cr-nick',v);
     backFromName();return}
-  if(act==='cpu'){mode='solo';anyone=false;lvl=progLv();startLocal();return}
+  if(act==='mission'||act==='map'){mapScreen();return}
+  if(act==='mgo'){mode='solo';anyone=false;startLocal();return}
+  if(act==='mnext'){missionStart(raceLv+1);return}
+  if(act==='mretry'){missionStart(raceLv);return}
   if(act==='practice'){mode='practice';startLocal();return}
   if(act==='duo'){duoScreen();return}
   if(act==='friends'){onTab='create';friends();return}
   if(act==='any'||act==='anyback'){if(act==='anyback'&&net){finishId++;enterMatch();return}startAnyone();return}
-  if(act==='anycpu'){mode='solo';lvl=progLv();startLocal();return}
   if(act==='keepwait'){aloneSince=Date.now();aloneWait=30000;sig='';matchScreen();return}
   if(act==='anyagain'||act==='switchany'){finishId++;enterMatch();return}
-  if(act==='levels'){levelsScreen();return}
+  if(act==='levels'){mapScreen();return}
+  if(act==='tolobby'&&net){state='lobby';panel='lobby';sig='';endNote='';lobby();return}
   if(act==='addbot'&&net&&net.host()){const mem=net.members();if(mem.length>=net.cap())return;const hu=net.humans(),avg=Math.round(hu.reduce((a,p)=>a+(p.id===myId?progLv():(p.lv||1)),0)/Math.max(1,hu.length)),lv=Math.max(1,Math.min(NLV,avg+Math.floor(Math.random()*7)-3));
     const used=new Set(mem.map(p=>p.id===myId?myChar:p.ch)),pool2=CHARS.filter(k=>k!=='dragon'&&!used.has(k)),ch=(pool2.length?pool2:CHARS.filter(k=>k!=='dragon'))[Math.floor(Math.random()*(pool2.length||12))];
     let nn=1;while(net.me.bots.some(b=>b.n===nn))nn++;
@@ -1370,7 +1526,7 @@ ov.addEventListener('click',e=>{
   if(act==='leavefr'){closeNet();clearRoomParam();invite=false;friends();return}
   if(act==='uninvite'){clearRoomParam();invite=false;home();return}
   if(act==='board'){loadBoard();return}
-  if(act==='raceas'){myChar=b.dataset.v;store.set('cr-char',myChar);mode='solo';startLocal();return}
+  if(act==='raceas'){myChar=b.dataset.v;store.set('cr-char',myChar);missionStart(Math.min(NLV,raceLv+(lastStars>0?1:0)));return}
   if(act==='start'){if(mode==='online'){menu();return}startLocal();return}
   if(act==='create'||act==='join'){
     saveForm();let code;
@@ -1388,7 +1544,7 @@ ov.addEventListener('click',e=>{
   if(act==='backres'){results();return}
   if(act==='copy'){copyText(shareMsg(),t('copyOk'))}
 });
-ov.addEventListener('keydown',e=>{if(e.key==='Enter'){if(e.target.id==='nick'){const b=ov.querySelector('[data-act=savename]');if(b)b.click()}else if(e.target.id==='code'){const b=ov.querySelector('[data-act=join]');if(b)b.click()}}});
+ov.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset&&e.target.dataset.m){e.preventDefault();missionStart(+e.target.dataset.m);return}if(e.key==='Enter'){if(e.target.id==='nick'){const b=ov.querySelector('[data-act=savename]');if(b)b.click()}else if(e.target.id==='code'){const b=ov.querySelector('[data-act=join]');if(b)b.click()}}});
 ov.addEventListener('input',e=>{if(e.target.id==='code'){const v=e.target.value.replace(/\D/g,'').slice(0,4);if(v!==e.target.value)e.target.value=v;codeDraft=v}});
 
 // ---------- input: draw circles ----------
@@ -1418,10 +1574,10 @@ addEventListener('keydown',e=>{
 // test hook for rendering sample pictures (only with ?cardtest=1)
 if(qs.get('cardtest')==='1')window.__card=o=>{
   mode=o.mode||'solo';raceLv=lvl=o.lv??1;lvJump=o.jump||0;myChar=o.ch||'cat';if(o.nick!=null)store.set('cr-nick',o.nick);botChar=null;setup();
-  const meR=mode==='solo'?racers[1]:racers[0];me=meR;
+  const meR=mode==='solo'?racers[racers.length-1]:racers[0];me=meR;lastStars=o.stars??(o.win?1:0);
   racers.forEach((r,i)=>{r.done=null;r.top=(o.other||200)/60});
   meR.top=o.rpm/60;meR.done=o.time;
-  if(mode==='solo'){const bot=racers[0];if(!o.win){bot.done=o.time-700}winner=o.win?meR:bot}
+  if(mode==='solo'&&racers.length>1){const bot=racers[0];if(!o.win){bot.done=o.time-700}winner=o.win?meR:bot}else if(mode==='solo')winner=meR;
   state='done';return resultCard().toDataURL('image/png');
 };
 if(qs.get('cardtest')==='1')window.__sound=async(name,dur)=>{
