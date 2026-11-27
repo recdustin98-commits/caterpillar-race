@@ -10,11 +10,12 @@ const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k
 const TAU=Math.PI*2,clamp=(v,a,b)=>v<a?a:v>b?b:v;
 // physics (feet, seconds of game time). Nov 27 (Dustin, round 4): in-run drop section 2.25x longer (540 ft, drop 450 ft), 120-ft take-off
 // ramp curving up to 20°, low friction (rolling 0.005 g, air drag 0.0006), spin boost 0.24 ft/s² per RPM. Landing hill shaped like a real
-// ski-jump hill: a knoll easing from 0.15 to a steep 0.6 slope (31°) by 150 ft, steep to 3,000 ft, then a 1,200-ft curve into a flat
+// ski-jump hill: a knoll easing from 0.15 to a steep 0.6 slope (31°) by 150 ft, steep to 5,000 ft (was 3,000: long flights landed on the flat), then a 1,200-ft curve into a flat
 // outrun; belly slide μ 0.2. SCORE = flight distance (lip → landing point), like real ski jumping; the slide is just for fun.
 // Game runs 2x faster on screen (TIME=2). Simulated flight (no flaps → flapping all the way):
-// 0 RPM ≈ 660–2,400 ft, 150 ≈ 1,830–4,710, 300 ≈ 2,600–5,540, 450 ≈ 3,180–6,140; ~2–3.5 s of spinning; ~20 s per jump incl. slide
-const TIME=2,F0=60,DL=540,RAMP=120,G=32,LIP=F0+DL+RAMP,DROP=450,KICK=20*Math.PI/180,S0=0.15,KNOLL=150,SL=0.6,LHILL=3000,LBEND=1200,MU=0.2,ROLL=0.005,DRAG=0.0006,KSPIN=0.24,FLAP=0.92,MINSINK=40,FLAPGAP=0.125,END=LIP+30000;
+// Flap effect halved Nov 27 (fall speed ×0.96 per flap, was ×0.92). Simulated flight, no flaps → ~7 taps/s → max-rate tapping:
+// 0 RPM ≈ 660 / 750 / 960 ft, 150 ≈ 1,830 / 2,210 / 3,230, 300 ≈ 2,600 / 3,160 / 4,570, 450 ≈ 3,180 / 3,870 / 5,450. Tap during the slide to skip it.
+const TIME=2,F0=60,DL=540,RAMP=120,G=32,LIP=F0+DL+RAMP,DROP=450,KICK=20*Math.PI/180,S0=0.15,KNOLL=150,SL=0.6,LHILL=5000,LBEND=1200,MU=0.2,ROLL=0.005,DRAG=0.0006,KSPIN=0.24,FLAP=0.96,MINSINK=40,FLAPGAP=0.125,END=LIP+30000;
 const RB=F0+DL,TK=Math.tan(KICK),LTOP=-DROP+TK*RAMP/2;
 const inrun=x=>x<=F0?0:x<=RB?-DROP*(1-Math.cos(Math.PI*(x-F0)/DL))/2:x<=LIP?-DROP+TK*(x-RB)*(x-RB)/(2*RAMP):LTOP;
 const lslope=d=>d<0?0:d<KNOLL?S0+(SL-S0)*(1-Math.cos(Math.PI*d/KNOLL))/2:d<LHILL?SL:d<LHILL+LBEND?SL*(1+Math.cos(Math.PI*(d-LHILL)/LBEND))/2:0;
@@ -55,7 +56,7 @@ function move(e){if(!fp||e.pointerId!==fp.id||!P)return;const evs=e.getCoalesced
   fp.cx+=(v.clientX-fp.cx)*0.07;fp.cy+=(v.clientY-fp.cy)*0.07;const dx=v.clientX-fp.cx,dy=v.clientY-fp.cy;if(dx*dx+dy*dy<144){fp.pa=null;continue}
   const a=Math.atan2(dy,dx);if(fp.pa!=null){let d=a-fp.pa;if(d>Math.PI)d-=TAU;if(d<-Math.PI)d+=TAU;if(Math.abs(d)<1.3)P.acc+=Math.abs(d)}fp.pa=a;P.fa=a}}
 function up(e){if(fp&&e.pointerId===fp.id)fp=null}
-function tap(){if(!P||scr!=='play')return;if(P.ph==='air'&&P.flapCd<=0){P.flapCd=FLAPGAP;P.flaps++;P.wing=1;if(P.vy<-MINSINK)P.vy=Math.min(P.vy*FLAP,-MINSINK);S('puff')}}
+function tap(){if(!P||scr!=='play')return;if(P.ph==='slide'&&P.t-P.landT>1.5){P.v=0;P.ph='stop';done();return}if(P.ph==='air'&&P.flapCd<=0){P.flapCd=FLAPGAP;P.flaps++;P.wing=1;if(P.vy<-MINSINK)P.vy=Math.min(P.vy*FLAP,-MINSINK);S('puff')}}
 // ---------- run ----------
 function start(){scr='play';U.innerHTML='';lines=[];snow=[];camZ=1;P={ph:'count',cnt:3,ct:0,x:0,y:0,v:15,vx:0,vy:0,acc:0,rpm:0,fa:-Math.PI/2,top:0,flaps:0,flapCd:0,wing:0,lipV:0,flightFt:0,t:0,trail:[]};S('beep')}
 // real-time part: finger RPM with the same 'Light' feel as every race (0.5 s up, 1.5 s down) and the 3-2-1 countdown
@@ -65,7 +66,7 @@ function stepP(dt){const p=P;p.t+=dt;p.flapCd-=dt;p.wing=Math.max(0,p.wing-dt*5)
   if(p.ph==='run'){const th=Math.atan(slope(inrun,p.x)),a=-G*Math.sin(th)+KSPIN*p.rpm-DRAG*p.v*p.v-ROLL*G;p.v=Math.max(2,p.v+a*dt);p.x+=p.v*Math.cos(th)*dt;p.y=inrun(p.x);p.top=Math.max(p.top,p.rpm);
     if(p.x>=LIP){p.ph='air';p.lipV=p.v;p.vx=p.v*Math.cos(KICK);p.vy=p.v*Math.sin(KICK);p.y=inrun(LIP);S('whoosh');vib(60)}}
   else if(p.ph==='air'){p.vy-=G*dt;p.vx-=DRAG*p.vx*p.vx*dt*0.5;p.x+=p.vx*dt;p.y+=p.vy*dt;p.trail.push([p.x,p.y]);if(p.trail.length>400)p.trail.shift();
-    if(p.y<=land(p.x)){p.ph='slide';p.flightFt=Math.round(p.x-LIP);const th=Math.atan(slope(land,p.x));p.v=Math.max(0,p.vx*Math.cos(th)+p.vy*Math.sin(th));p.y=land(p.x);S('puff');vib(90)}}
+    if(p.y<=land(p.x)){p.ph='slide';p.landT=p.t;p.flightFt=Math.round(p.x-LIP);const th=Math.atan(slope(land,p.x));p.v=Math.max(0,p.vx*Math.cos(th)+p.vy*Math.sin(th));p.y=land(p.x);S('puff');vib(90)}}
   else if(p.ph==='slide'){const th=Math.atan(slope(land,p.x)),a=-G*Math.sin(th)-MU*G*Math.cos(th)-DRAG*p.v*p.v;p.v+=a*dt;if(p.v<=0||p.x>END){p.v=0;p.ph='stop';done()}else{p.x+=p.v*Math.cos(th)*dt;p.y=land(p.x)}}}
 function dist(){return !P?0:P.ph==='slide'||P.ph==='stop'?P.flightFt:Math.max(0,Math.round(P.x-LIP))} // score = flight distance
 function done(){const ft=dist(),b=best(),nb=ft>b;if(nb)st.set('cr-ski',JSON.stringify({s:0,ft}));S(nb?'winBig':'win');
@@ -99,7 +100,7 @@ function draw(now){g.setTransform(dpr,0,0,dpr,0,0);const p=P,px=p?p.x:200,py=p?p
   g.fillStyle='#e0402f';g.fillRect(X(LIP)-3,Y(inrun(LIP))-26,6,26);g.font='800 13px "Baloo 2",system-ui';g.textAlign='center';g.fillText('TAKE OFF',X(LIP),Y(inrun(LIP))-32);
   g.fillStyle='#ff8a2a';g.fillRect(X(30)-2,Y(0)-30,4,30);g.beginPath();g.moveTo(X(30)+2,Y(0)-30);g.lineTo(X(30)+22,Y(0)-24);g.lineTo(X(30)+2,Y(0)-18);g.fill();
   // distance boards every 250 ft and the best flag
-  g.font='800 12px "Baloo 2",system-ui';for(let f=500;f<=8000;f+=500){const x=LIP+f;if(x<x0||x>x1)continue;const y=Y(land(x));g.fillStyle='#7a5530';g.fillRect(X(x)-1.5,y-24,3,24);g.fillStyle='#fff';g.strokeStyle='#14301f';g.lineWidth=1.5;rr(X(x)-30,y-42,60,18,5);g.fill();g.stroke();g.fillStyle='#14301f';g.fillText(f.toLocaleString('en-US')+' ft',X(x),y-29)}
+  g.font='800 12px "Baloo 2",system-ui';for(let f=500;f<=10000;f+=500){const x=LIP+f;if(x<x0||x>x1)continue;const y=Y(land(x));g.fillStyle='#7a5530';g.fillRect(X(x)-1.5,y-24,3,24);g.fillStyle='#fff';g.strokeStyle='#14301f';g.lineWidth=1.5;rr(X(x)-30,y-42,60,18,5);g.fill();g.stroke();g.fillStyle='#14301f';g.fillText(f.toLocaleString('en-US')+' ft',X(x),y-29)}
   const b=best();if(b){const x=LIP+b;if(x>x0&&x<x1){const y=Y(land(x));g.fillStyle='#7a3cff';g.fillRect(X(x)-1.5,y-50,3,50);g.beginPath();g.moveTo(X(x)+1.5,y-50);g.lineTo(X(x)+26,y-43);g.lineTo(X(x)+1.5,y-36);g.fill();g.textAlign='left';g.fillText('BEST',X(x)+4,y-54)}}
   if(p){g.strokeStyle='rgba(255,255,255,.8)';g.setLineDash([4,6]);g.lineWidth=2;g.beginPath();p.trail.forEach(([x,y],i)=>i?g.lineTo(X(x),Y(y)):g.moveTo(X(x),Y(y)));g.stroke();g.setLineDash([])}
   if(p&&FX>0)speedFx(p,spd,X(px),Y(py),now);
@@ -162,7 +163,7 @@ function hud(p,now){if(!p)return;g.textAlign='center';g.textBaseline='alphabetic
   dial(tx,cy,R,p.rpm/MAXRPM,REDRPM/MAXRPM,'#6cc4ff',String(Math.round(p.rpm)),'RPM',p.fa+Math.PI/2);
   g.textBaseline='alphabetic';
   if(p.ph==='air'||p.ph==='slide'||p.ph==='stop'){const by=cy+Ro+10;g.fillStyle='rgba(20,40,60,.8)';rr(W/2-90,by,180,44,14);g.fill();g.fillStyle='#fff';g.font='800 24px "Baloo 2",system-ui';g.fillText(`${dist().toLocaleString('en-US')} ft`,W/2,by+31)}
-  let msg='';if(p.ph==='count')msg=String(p.cnt);else if(p.ph==='run')msg='🌀 SPIN! SPIN! SPIN!';else if(p.ph==='air')msg='👆 TAP TAP TAP to flap!';else if(p.ph==='slide')msg='🐧 Wheee…';
+  let msg='';if(p.ph==='count')msg=String(p.cnt);else if(p.ph==='run')msg='🌀 SPIN! SPIN! SPIN!';else if(p.ph==='air')msg='👆 TAP TAP TAP to flap!';else if(p.ph==='slide')msg='🐧 Wheee… (tap to skip)';
   if(msg){g.textAlign='center';g.font=p.ph==='count'?'800 90px "Baloo 2",system-ui':'800 28px "Baloo 2",system-ui';g.lineWidth=6;g.strokeStyle='rgba(255,255,255,.9)';const yy=p.ph==='count'?H*0.42:H-60;g.strokeText(msg,W/2,yy);g.fillStyle=p.ph==='air'?'#1f5f9a':'#c8461e';g.fillText(msg,W/2,yy)}
   // quit
   g.textAlign='center';g.fillStyle='rgba(20,40,60,.6)';rr(8,y0,44,44,12);g.fill();g.fillStyle='#fff';g.font='22px system-ui';g.fillText('✕',30,y0+30)}

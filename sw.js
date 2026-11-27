@@ -1,5 +1,5 @@
 // Caterpillar Race offline support: try the network first (so new versions show up), fall back to the saved copy when offline.
-const C='cr-v7';
+const C='cr-v8';
 const CORE=['/','/index.html','/game.js','/adv.js','/penguin.js','/manifest.webmanifest','/icon-192.png','/icon-512.png','/apple-touch-icon.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js',
   ...'cat inch snail turtle centi garter crab basil puffer shrimp peng frill imugi dragon king'.split(' ').map(k=>'/img/'+k+'.webp')];
