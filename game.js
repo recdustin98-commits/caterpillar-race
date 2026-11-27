@@ -1121,14 +1121,16 @@ function strip(y0,h){
   });
   if(two){ctx.fillStyle='rgba(255,255,255,.18)';ctx.fillRect(W/2-.5,y0+4,1,h-8)}
 }
+let MCHIP=null;const openMapFromChip=()=>mapScreen();
 function hud(now){
+  MCHIP=null;
   ctx.fillStyle='#14301f';ctx.fillRect(0,0,W,HUD);
   const el=state==='race'?Math.max(0,now-startT):state==='done'?endEl:0;
   ctx.fillStyle='#fff';ctx.font='700 15px "Baloo 2",sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(fmt(el),12,HUD/2+1);
   if(mode==='practice'){ctx.textAlign='right';ctx.fillStyle='#cfe3d6';ctx.fillText(t('practice'),W-12,HUD/2+1);return}
   if(!split()){if(net){ctx.textAlign='right';ctx.fillStyle='#cfe3d6';ctx.fillText(anyone?t('anyTile'):t('room')+' '+net.code,W-12,HUD/2+1)}return}
   let x0=84;const x1=W-30;
-  if(mode==='solo'){const lt=raceLv===31?'🎿':t('misShort',{n:raceLv});ctx.font='800 13px "Baloo 2",sans-serif';const lw=ctx.measureText(lt).width+16;rr(66,HUD/2-10,lw,20,10);ctx.fillStyle='#ffd23f';ctx.fill();ctx.fillStyle='#5a3a00';ctx.textAlign='center';ctx.fillText(lt,66+lw/2,HUD/2+1);x0=66+lw+22}
+  if(mode==='solo'){const lt=raceLv===31?'🎿':t('misShort',{n:raceLv});ctx.font='800 13px "Baloo 2",sans-serif';const lw=ctx.measureText(lt).width+16;MCHIP={x:66,y:HUD/2-10,w:lw,h:20};rr(66,HUD/2-10,lw,20,10);ctx.fillStyle='#ffd23f';ctx.fill();ctx.fillStyle='#5a3a00';ctx.textAlign='center';ctx.fillText(lt,66+lw/2,HUD/2+1);x0=66+lw+22}
   ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x0,HUD/2);ctx.lineTo(x1,HUD/2);ctx.stroke();
   for(let yy=0;yy<3;yy++)for(let xx=0;xx<2;xx++){ctx.fillStyle=(xx+yy)%2?'#14301f':'#fff';ctx.fillRect(x1+6+xx*5,HUD/2-7.5+yy*5,5,5)}
   racers.forEach(c=>marker(c,x0+(x1-x0)*prog(c),HUD/2,30,true));
@@ -1538,26 +1540,27 @@ function refreshPanel(force){
 const ICONS={};
 function iconURL(ch){
   if(!CHARS.includes(ch))ch='cat';if(ICONS[ch])return ICONS[ch];
-  const big=document.createElement('canvas');big.width=400;big.height=240;
+  const big=document.createElement('canvas');big.width=1200;big.height=720;
   return ICONS[ch]=crop(big,ch);
 }
 function crop(big,ch){
   // redraw with face so the icon shows the animal's own face
-  const g=big.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,400,240);const saved=ctx;
-  try{noShadow=true;ctx=g;ctx.scale(1.25,1.25);ctx.translate(-10,-20);const f=mk(SIG[ch],'','human',null,ch);f.ph=1;const hd=(DRAW[ch]||drawCat)(f,1000,true);face(hd.x,hd.y,hd.r,'slow',1000,f)}finally{ctx=saved;noShadow=false}
-  const d=g.getImageData(0,0,400,240).data;let x0=400,y0=240,x1=0,y1=0;
-  for(let y=0;y<240;y++)for(let x=0;x<400;x++)if(d[(y*400+x)*4+3]>20){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+  const g=big.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,1200,720);const saved=ctx;
+  try{noShadow=true;ctx=g;ctx.scale(3.75,3.75);ctx.translate(-10,-20);const f=mk(SIG[ch],'','human',null,ch);f.ph=1;const hd=(DRAW[ch]||drawCat)(f,1000,true);face(hd.x,hd.y,hd.r,'slow',1000,f)}finally{ctx=saved;noShadow=false}
+  const d=g.getImageData(0,0,1200,720).data;let x0=1200,y0=720,x1=0,y1=0;
+  for(let y=0;y<720;y+=2)for(let x=0;x<1200;x+=2)if(d[(y*1200+x)*4+3]>20){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+  x0=Math.max(0,x0-2);y0=Math.max(0,y0-2);x1=Math.min(1199,x1+2);y1=Math.min(719,y1+2);
   if(x1<x0)return '';
-  const out=document.createElement('canvas');out.width=120;out.height=72;const o=out.getContext('2d');
-  const bw=x1-x0+1,bh=y1-y0+1,k=Math.min(112/bw,66/bh);
-  o.drawImage(big,x0,y0,bw,bh,(120-bw*k)/2,(72-bh*k)/2,bw*k,bh*k);
+  const out=document.createElement('canvas');out.width=360;out.height=216;const o=out.getContext('2d');o.imageSmoothingQuality='high';
+  const bw=x1-x0+1,bh=y1-y0+1,k=Math.min(336/bw,198/bh);
+  o.drawImage(big,x0,y0,bw,bh,(360-bw*k)/2,(216-bh*k)/2,bw*k,bh*k);
   return out.toDataURL();
 }
 const icImg=(ch,cls)=>`<img class="${cls||''}" src="${iconURL(ch)}" alt="">`;
 // ---------- screens: home -> one tap per mode ----------
 let nameBack='home',invite=!!qs.get('room'),onTab='create',cap=Math.min(8,Math.max(2,+store.get('cr-cap')||4)),codeDraft=(qs.get('room')||'').replace(/\D/g,'').slice(0,4),meBack='home';
 let p2Char=(k=>isOpen(k)&&k!==myChar?k:CHARS.find(x=>isOpen(x)&&x!==myChar))(store.get('cr-char2'));
-const homeBtn=(ask,back)=>`<button class="homeb" data-act="${ask?'homeask':'home'}" aria-label="${t('home')}" title="${t('home')}">🏠</button>${back?`<button class="homeb backb" data-act="${back}" aria-label="${t('back2')}" title="${t('back2')}">←</button>`:''}`;
+const homeBtn=(ask,back)=>`<button class="homeb" data-act="${ask?'homeask':'home'}" aria-label="${t('home')}" title="${t('home')}">🏠</button>${back?`<button class="homeb backb" data-act="${back}" aria-label="${t('back2')}" title="${t('back2')}"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:''}`;
 // where you are in the 30 levels: cleared = green, next = orange ring, 29 = dragon, 30 = crown
 function lvStrip(){
   const c=cleared(),nx=Math.min(NLV,c+1),na=CHARS.filter(k=>k in UNLOCK&&UNLOCK[k]>c).sort((a,b)=>UNLOCK[a]-UNLOCK[b])[0];
@@ -2139,7 +2142,7 @@ function who(y){if(mode!=='duo')return me;return y-cv.getBoundingClientRect().to
 // only ONE finger per racer drives it (extra fingers used to add speed: 3 fingers = 3x)
 const driver=new Map();
 const isDriver=(p,id)=>{if(!p.c)return false;const d=driver.get(p.c);if(d==null||!ptr.has(d)){driver.set(p.c,id);return true}return d===id};
-cv.addEventListener('pointerdown',e=>{try{cv.setPointerCapture(e.pointerId)}catch(err){}const c=who(e.clientY);ptr.set(e.pointerId,{c,cx:e.clientX,cy:e.clientY,pa:null,sum:0});if(c&&!ptr.has(driver.get(c)))driver.set(c,e.pointerId)});
+cv.addEventListener('pointerdown',e=>{if(MCHIP&&mode==='solo'&&state!=='race'&&state!=='count'&&!VID){const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;if(x>=MCHIP.x-6&&x<=MCHIP.x+MCHIP.w+6&&y>=MCHIP.y-10&&y<=MCHIP.y+MCHIP.h+10){openMapFromChip();return}}try{cv.setPointerCapture(e.pointerId)}catch(err){}const c=who(e.clientY);ptr.set(e.pointerId,{c,cx:e.clientX,cy:e.clientY,pa:null,sum:0});if(c&&!ptr.has(driver.get(c)))driver.set(c,e.pointerId)});
 function moveP(p,x,y,id){
   p.cx+=(x-p.cx)*.07;p.cy+=(y-p.cy)*.07;
   const dx=x-p.cx,dy=y-p.cy;if(dx*dx+dy*dy<144){p.pa=null;return}
