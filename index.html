@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Caterpillar Race</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#14301f">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Caterpillar">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Draw circles to race your caterpillar. Challenge a friend with a link, no download.">
 <meta property="og:title" content="Caterpillar Race">
 <meta property="og:description" content="Draw circles to race. Challenge a friend with one link.">
@@ -62,10 +70,12 @@ tbody tr+tr td{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent
 .players li.empty{background:transparent;border:2px dashed color-mix(in srgb,var(--ink) 20%,transparent);color:var(--muted);justify-content:center;font-weight:600}
 .go.alt{background:var(--on);color:#fff;box-shadow:0 4px 0 #1f6e28;font-size:19px}
 .go.small{font-size:18px;min-height:46px;margin-top:0}.row>button.go{width:auto;flex:2;margin-top:0}.row>button.sec{flex:1}
+.sec.getapp{background:light-dark(#fff3c4,#3a3110);color:light-dark(#633806,#fac775)}ol.steps{display:block;text-align:left;margin:6px 0 4px;padding-left:22px;font-size:16px}ol.steps li{display:list-item;margin:6px 0}
+.sec.skib{background:light-dark(#dff1ff,#123a55);color:light-dark(#0c447c,#b5d4f4);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;padding:6px}.sec.skib small{font-weight:600;font-size:12px;opacity:.85}
 .quit{position:absolute;right:10px;bottom:10px;pointer-events:auto;min-height:40px;padding:0 14px;border:0;border-radius:12px;background:rgba(255,255,255,.88);color:#14301f;font:800 15px "Baloo 2",system-ui,sans-serif;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.2)}
 .panel img.card{display:block;width:100%;max-width:330px;margin:6px auto;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.2)}.panel img.card.mini{max-width:210px;margin:2px auto 4px}.cardbtn{display:block;margin:0 auto;padding:0;border:0;background:none;cursor:zoom-in;border-radius:14px}
 .panel.confirm{width:min(320px,100%)}.panel.confirm .row button{flex:1;width:auto;min-height:46px;margin-top:0}.panel.confirm p{margin:0 0 4px;font-size:18px}
-.done{position:absolute;left:12px;bottom:12px;pointer-events:auto;min-height:44px;padding:0 20px;border:0;border-radius:12px;background:#fff;color:#14301f;font:800 17px "Baloo 2",system-ui,sans-serif;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.done{position:absolute;left:12px;bottom:12px;pointer-events:auto;min-height:44px;padding:0 20px;border:0;border-radius:12px;background:#fff;color:#14301f;font:800 17px "Baloo 2",system-ui,sans-serif;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.2)}.done.cpub{left:auto;right:12px;background:#ff8a2a;color:#2a1200}
 .snd{float:right;display:flex;gap:4px}.snd button{border:0;background:var(--seg);border-radius:10px;color:var(--ink);font:700 13px "Baloo 2",sans-serif;min-height:40px;padding:0 10px;cursor:pointer}.snd button[aria-pressed=false]{opacity:.6}
 .panel{position:relative}
 .homeb{position:absolute;left:8px;top:8px;width:40px;height:40px;border:0;border-radius:12px;background:var(--seg);font-size:20px;line-height:1;cursor:pointer;z-index:2}

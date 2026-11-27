@@ -35,7 +35,7 @@ const L={
   boardEmpty:'No times yet. Be the first!',boardErr:'Couldn\'t load the leaderboard. Check your internet.',boardSaving:'Saving to leaderboard…',
   boardRank:'Leaderboard: you\'re #{r} of {n} in the last 24 hours',boardNoNick:'Add a nickname before the race to join the leaderboard.',boardFail:'Couldn\'t save to the leaderboard.',loading:'Loading…',boardNote:'Your best time counts once per period.',
   character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',ch_imugi:'Imugi',line_imugi:'The legendary serpent who chases the magic pearl.',
- misTile:'Mission',misTileSub:'6 worlds · 30 missions · unlock animals',starsOf:'⭐ {n} / 93 stars',notBoard:'Not on leaderboard',
+ misTile:'Mission',misTileSub:'6 worlds · 30 missions · unlock animals',starsOf:'⭐ {n} / 90 stars',notBoard:'Not on leaderboard',
  mapTitle:'Mission map',dragonAt:'Golden Dragon at {n} ⭐',startHere:'START · You start with these 4',unlockTag:'UNLOCK',unlockedTag:'UNLOCKED',worldN:'World {w} · {name}',missionN:'Mission {n}',misShort:'M{n}',
  goal_beat:'Beat the {a}!',goal_boss:'BOSS: beat the {a}!',goal_time:'Finish in under {t} s',goal_obst:'Obstacle course! Finish in under {t} s',goal_ski:'Bonus: ski jump as far as you can!',how_ski:'🐧 Spin hard up the hill. Your speed at the TAKE OFF sign is all that matters — then sit back and slide as far as you can go!',star_ft:'{f} ft',
  skiName:'Bonus · Ski jump',skiTitle:'🎿 {f} FT!',skiBest:'Best: {f} ft',skiNewBest:'New best: {f} ft!',skiAgain:'🎿 Jump again',shareSki:'🎿 I ski-jumped {f} ft {r} at {rpm} RPM in Caterpillar Race!',
@@ -59,10 +59,10 @@ const L={
  how_red:'{e} Spin while the {w} sleeps. When you hear the rising sound and the screen glows yellow, it is waking up — slow down. When it turns red, STOP right away or you get caught.',how_catch:'{e} Be under each spot when the {i} land. Speed up or slow down to get there on time. Catch 3 of 5 to pass.',how_egg:'{e} Stay under {l} RPM or the {i} cracks. 3 cracks and it breaks!',how_chase:'{e} The {f} is right behind you and sometimes speeds up. Don\'t let it catch your tail!',how_gates2:'Falling rocks block the path — wait for them to stop.',how_runner:'{e} The {f} runs ahead. Catch it before it reaches the finish!',how_duck:'{e} The {f} follow you. Keep a steady speed between {lo} and {hi} RPM or one gets lost. Bring 2 home to pass.',how_gates:'{e} The {g} open and close. Arrive while they are open — the dot turns green.',how_water:'💧 Stay above {w} RPM or you start to sink.',how_heat:'🔥 Spinning over {h} RPM heats you up. Too hot and you must stop to cool down.',how_slide:'⛰️ Push hard up the hills, then zoom down the other side. Reach each jump with {j}+ RPM or you splash into the icy water!',how_tide:'🌊 Tide waves cover the path. Wait for the water to go out — your rival has to wait too.',
  star_finish:'Finish',star_m1:'Under {t} s, max 1 {e}',star_m0:'Under {t} s, no {e}',star_w1:'Win, max 1 {e}',star_w0:'Win, no {e}',star_catch:'Catch {n}',star_catchAll:'Catch all 5',star_duck:'{n} home',star_duckAll:'All 4 home',star_run:'Catch it',star_runBy:'Catch it before {p}%',star_obst1:'Under {t} s, max 1 bump',star_obst0:'Under {t} s, no bumps',goal_zone:'Keep your speed between {lo} and {hi} RPM',goal_sprint:'Reach {r} RPM and finish',
  star_win:'Win',star_under:'Under {t} s',star_zone:'{p}% in the zone',star_top:'Top {r} RPM',startMission:'▶ Start mission',
- misDone:'MISSION {n} COMPLETE!',misFail:'MISSION {n} · TRY AGAIN',nextMission:'Next mission →',retryMission:'🔁 Try again',mapBtn:'🗺️ Map',backMap:'🗺️ Back to mission map',backMapS:'🗺️ Missions',
+ misDone:'MISSION {n} COMPLETE!',misFail:'MISSION {n} · TRY AGAIN',nextMission:'Next mission →',retryMission:'🔁 Try again',mapBtn:'🗺️ Map',backMap:'🗺️ Back to mission map',backMapS:'🗺️ Missions',homeS:'🏠 Home',skiTile:'Penguin jump',getApp:'Get the app',appWhy:'Put Caterpillar Race on your home screen. It opens full screen, and Missions, Practice and racing the computer work with no internet.',ios1:'Tap the Share button (the square with an arrow ⬆️).',ios2:'Scroll down and tap “Add to Home Screen”.',ios3:'Tap “Add”. Look for the caterpillar on your home screen!',and1:'Open your browser menu (⋮).',and2:'Tap “Install app” or “Add to Home screen”.',gotIt:'Got it',skiBestS:'Best {f} ft',
  imugiLore:'A giant serpent from Korean legend. It waits 1,000 years in deep water, hoping to catch the magic pearl (yeouiju) and rise into the sky as a dragon. Beat it before it becomes a dragon!',
  zoneNow:'Zone {p}%',topNow:'Top {r} / {g}',goalT:'Goal {t}s',dragonStars:'Collect {n} ⭐ to unlock the Golden Dragon.',quitSent:'You left this race.',cpuN:'🤖 Computer {n}',addBot:'＋ Add computer',botNote:'Computers race at about your group\'s level and are always ready. If a friend joins a full room, a computer makes room.',lvLost:'LEVEL {n} · SO CLOSE!',nextUp:'Next: Lv {n}',nextAnimal:'Clear Lv {n} → {a}',cpuRpm:'Computer ≈ {r} RPM',back2:'Back',lvOf:'{n} / 30 cleared',nameShown:'Shown on the leaderboard.',changeAnimal:'Change animal',close:'Close',ch_dragon:'Golden Dragon',ch_king:'Dragon King',letsRace:"Let's race!",changeBtn:'✏️ Change',theAnimal:'the {a}',cpuTile:'vs Computer',cpuTileSub:'30 levels · unlock animals',onLv:"⭐ You're on Lv {n}",allDone:'⭐ All 30 levels cleared!',anyTile:'Play anyone',anyTileSub:'Race online',racingNow:'{n} racing now',friendsTile:'Play friends',friendsSub:'Private race with a code',sameTile:'Same phone',sameSub:'2 players, 1 phone',meTitle:'Animal & name',yourName:'Your name',newName:'🎲 New fun name',typeName:'Or type your own name (optional)',saveName:'Save name',useAuto:'Use my fun name',badName:'Please pick a different name.',nameSaved:'Name saved.',lockLv:'M{n}',lockedMsg:'Pass mission {n} to unlock the {a}.',doneBtn:'Done',
- finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyStart:'▶ Start now ({k} racers)',waitCreator:'Waiting for {n} to start…',anyRule:'Starts by itself when all 8 places are full. The first racer in the room can start sooner.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
+ finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyStart:'▶ Start now ({k} racers)',anyStartBored:'▶ Start now — racers are getting bored!',botLeft:'left',waitCreator:'Waiting for {n} to start…',anyRule:'Starts by itself when all 8 places are full. The first racer in the room can start sooner.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
  nextLevel:'Next level →',tryAgain:'Try again',levelsBtn:'📋 Levels',levels:'Pick a level',levelN:'Level {n}',cpuAbout:'Computer: about {r} RPM',levelCleared:'LEVEL {n} CLEARED!',newAnimal:'🎉 Congratulations!',gotOne:'You got a new animal!',gotMany:'You got {n} new animals!',newAnimals:'🎉 Congratulations!',legendary:'🐉 LEGENDARY unlock!',raceAs:'Race as {a} now',watchVidOf:'▶ Watch {a} video',seePic:'See my race picture',lvJump:'Level jump! You skipped to level {n}.',allCleared:'You beat all 30 levels!',bestLv:'Your best on level {n}: {t}',newBestLv:'New best on level {n}!',
  lvCol:'Level',lvShort:'M{n}',onlineLv:'Online',waitingForYou:'Everyone is waiting for you!',leaveQ:'Leave the race?',stay:'Stay',leaveYes:'Leave',invitedT:"You're invited!",joinAs:'You will race as:',friendsTitle:'Play friends',p2Title:"Player 2's animal",paceLbl:'PACE',raceLbl:'race',
  line_cat:'Wiggles one bump at a time.',line_inch:'Loops up and stretches out.',line_snail:'Slow and steady… or is it?',line_turtle:'Paddles through the sea.',line_centi:'One hundred tiny feet!',line_crab:'Swims sideways super fast.',line_garter:'Slithers in S-curves.',line_basil:'Runs on water!',line_puffer:'Puffs up when it goes fast.',line_shrimp:'SNAP! The loudest little shrimp.',line_peng:'Slides on its belly.',line_frill:'Pops its frill and sprints.',line_dragon:'Breathes a fire trail at 300+ RPM!',
@@ -143,12 +143,13 @@ const getStars=()=>{let a;try{a=JSON.parse(store.get('cr-mstars')||'null')}catch
   if(!Array.isArray(a)){a=Array(30).fill(0);const old=Math.max(0,Math.min(30,+store.get('cr-clear')||0));for(let i=0;i<old;i++)a[i]=1;store.set('cr-mstars',JSON.stringify(a))}
   return Array.from({length:30},(_,i)=>Math.max(0,Math.min(3,+a[i]||0)))};
 const setStars=a=>store.set('cr-mstars',JSON.stringify(a));
-const totalStars=()=>getStars().reduce((x,y)=>x+y,0)+skiData().s;
-const STAR_MAX=93,DRAGON_STARS=75;
+const totalStars=()=>getStars().reduce((x,y)=>x+y,0);
+const STAR_MAX=90,DRAGON_STARS=75;
 // animals open when you pass a mission (the boss you beat joins you); the Golden Dragon needs 75 stars
 const UNLOCK={centi:3,garter:5,basil:10,puffer:13,crab:15,shrimp:15,frill:18,peng:23,imugi:30};
 const cleared=()=>{const a=getStars();let c=0;while(c<30&&a[c]>0)c++;return c};
-const isOpen=k=>CHARS.includes(k)&&(k==='dragon'?totalStars()>=DRAGON_STARS:!(k in UNLOCK)||getStars()[UNLOCK[k]-1]>0);
+const dragonKept=()=>{if(store.get('cr-dragon')==='1')return true;let old=0;try{old=+JSON.parse(store.get('cr-ski')||'{}').s||0}catch(e){}if(totalStars()+old>=DRAGON_STARS){store.set('cr-dragon','1');return true}return false};
+const isOpen=k=>CHARS.includes(k)&&(k==='dragon'?totalStars()>=DRAGON_STARS||dragonKept():!(k in UNLOCK)||getStars()[UNLOCK[k]-1]>0);
 const firstOpen=k=>isOpen(k)?k:'cat';
 let lvl=Math.max(1,Math.min(NLV,+store.get('cr-lv')||cleared()+1,cleared()+1));
 const botW=()=>LV[lvl-1]*2*Math.PI/60;
@@ -166,8 +167,11 @@ const rpmOf=w=>Math.max(0,w)*60/(2*Math.PI);
 const mk=(sk,name,kind,id,ch)=>({...sk,id,name,char:ALLC.includes(ch)?ch:'cat',kind:kind||'human',phi:0,acc:0,w:0,spin:0,top:0,done:null,left:false,ph:Math.random()*6,pv:0,disp:0,bt:0,btw:0,tphi:0,tw:0,rt:0,ang:0,px:null,vs:0,kmh:0,hold:0,bestHold:0,goalDone:false});
 function setup(ids){
   MX=null;
-  if(mode==='solo'){const ms=MIS[lvl-1],pc=ms.as&&isOpen(ms.as)?ms.as:myChar;MX=initMX(ms);if(ms.opp){const bc=ms.opp===pc&&!ms.boss?(CHARS.find(k=>k!==pc&&k!=='dragon'&&k!=='imugi')):ms.opp;racers=[mk(SIG[bc],t('ch_'+bc),'bot',null,bc),mk(SIG[pc],myName(),'human',null,pc)];me=racers[1]}else{racers=[mk(SIG[pc],myName(),'human',null,pc)];me=racers[0]}}
+  if(mode==='solo'){const ms=MIS[lvl-1],pc=ms.as&&(isOpen(ms.as)||ms.type==='ski')?ms.as:myChar;MX=initMX(ms);if(ms.opp){const bc=ms.opp===pc&&!ms.boss?(CHARS.find(k=>k!==pc&&k!=='dragon'&&k!=='imugi')):ms.opp;racers=[mk(SIG[bc],t('ch_'+bc),'bot',null,bc),mk(SIG[pc],myName(),'human',null,pc)];me=racers[1]}else{racers=[mk(SIG[pc],myName(),'human',null,pc)];me=racers[0]}}
   else if(mode==='practice'){racers=[mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[0]}
+  else if(mode==='cpu'){const pool2=CHARS.filter(k=>k!==myChar&&k!=='dragon'&&k!=='imugi'&&k!=='king'),bc=pool2[Math.floor(Math.random()*pool2.length)]||'inch';
+    const b=mk(SIG[bc],makeAutoName(),'bot',null,bc);b.isCpu=true;const r=Math.max(40,Math.min(500,Math.round(mySpd()*(.5+Math.random()*.7))));b.bw=r*2*Math.PI/60;
+    racers=[b,mk(SIG[myChar],myName(),'human',null,myChar)];me=racers[1]}
   else if(mode==='duo'){racers=[mk(SIG[myChar],t('p1'),'human',null,myChar),mk(p2Char===myChar?SK[1]:SIG[p2Char],t('p2'),'human',null,p2Char)];me=null}
   else{
     const mem=net?net.members():[];
@@ -336,7 +340,7 @@ function misWorld(now,dt){
     let v=r.v;if(r.x-hx<80)v=Math.max(v,UPS(R*.8));r.x+=v*dt/1000;
     if(hx>=r.x-8){c.caughtAt=prog(c);c.done=now-startT;if(!firstDone)firstDone=now;sfx.ding();say('🎉 Got it!',4000)}
     else if(r.x>=TRACK)misFail(c,now,(FOE[m.foe]||FOE.mouse)[0]+' It got away!')}
-  if(X.items)X.items.forEach(it=>{if(it.done||t<it.t)return;it.done=1;if(it.x<=hx+40&&it.x>=hx-150){it.got=1;X.got++;sfx.ding();say(ITEM[m.item][0]+' Got it! '+X.got+'/5',900)}else{it.miss=1;say('Missed!',700)}});
+  if(X.items)X.items.forEach(it=>{if(it.done||t<it.t)return;it.done=1;if(it.x<=hx+60&&it.x>=hx-250){it.got=1;X.got++;sfx.ding();say(ITEM[m.item][0]+' Got it! '+X.got+'/5',900)}else{it.miss=1;say('Missed!',700)}});
 }
 // what to do right now (top-left chip)
 function misHint(c,now){
@@ -545,7 +549,7 @@ function drawEnding(tt,now){
 // ---------- bonus: penguin ski jump (mission 31; the take-off speed is all that matters) ----------
 const SKI_XA=S0+350,SKI_XL=S0+850,SKI_HL=110,SKI_LAND=900,SKI_FT=.52;
 const skiData=()=>{try{const d=JSON.parse(store.get('cr-ski')||'{}');return{s:+d.s||0,ft:+d.ft||0}}catch(e){return{s:0,ft:0}}};
-const skiOpen=()=>getStars()[23]>0;
+const skiOpen=()=>true; // Penguin jump is open to everyone from the home screen (Nov 27)
 const skiRun=x=>x<SKI_XA?0:x<SKI_XL?SKI_HL*(1-Math.cos(Math.PI*(x-SKI_XA)/(SKI_XL-SKI_XA)))/2:0;
 const skiLand=x=>x<SKI_XL?0:x<SKI_XL+SKI_LAND?(SKI_HL-15)*(1-(1-Math.cos(Math.PI*(x-SKI_XL)/SKI_LAND))/2):0;
 const skiGround=x=>x<=SKI_XL?skiRun(x):skiLand(x);
@@ -1559,6 +1563,13 @@ function crop(big,ch){
   o.drawImage(big,x0,y0,bw,bh,(360-bw*k)/2,(216-bh*k)/2,bw*k,bh*k);
   return out.toDataURL();
 }
+let instEvt=null;const isApp=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,isIOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEvt=e});addEventListener('appinstalled',()=>{instEvt=null;if(panel==='home')home()});
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+function appGuide(){panel='appguide';const ios=isIOS();ov.innerHTML=`<div class="panel">${homeBtn()}<h2>📲 ${t('getApp')}</h2>
+  <p class="small">${t('appWhy')}</p>
+  <ol class="steps">${ios?`<li>${t('ios1')}</li><li>${t('ios2')}</li><li>${t('ios3')}</li>`:`<li>${t('and1')}</li><li>${t('and2')}</li>`}</ol>
+  <button class="go" data-act="home">${t('gotIt')}</button></div>`}
 const PHOTO=new Set('cat inch snail turtle centi garter crab basil puffer shrimp peng frill imugi dragon king'.split(' '));
 const phImg=(ch,cls)=>PHOTO.has(ch)?`<img class="ph ${cls||''}" src="img/${ch}.webp" alt="${esc(t('ch_'+ch))}" decoding="async">`:icImg(ch,cls);
 const icImg=(ch,cls)=>`<img class="${cls||''}" src="${iconURL(ch)}" alt="">`;
@@ -1619,11 +1630,6 @@ function mapScreen(){
     s.push(`<text x="${x}" y="${y+6}" text-anchor="middle" font-size="${boss?18:16}" font-weight="800" fill="${lock?'#7a8a94':'#14301f'}">${lock?'🔒':boss?'👑':n}</text>`);
     if(ok)s.push(`<text x="${x}" y="${y+r+14}" text-anchor="middle" font-size="12" fill="#ffd23f" stroke="#7a5a00" stroke-width=".5">${'★'.repeat(st[i])}${'☆'.repeat(3-st[i])}</text>`);
     s.push('</g>');if(c||(n===cur&&ok&&n===30))s.push(im(myChar,x,y-40,46))});
-  // bonus: penguin ski jump beside mission 24
-  {const [x,y]=P[23],bx=x<180?x+96:x-96,by=y-34,op=skiOpen(),sd=skiData();
-    s.push(`<path d="M${x} ${y} Q${(x+bx)/2} ${y-50} ${bx} ${by}" fill="none" stroke="#fff6dc" stroke-width="6" stroke-dasharray="3 7" stroke-linecap="round"/>`);
-    s.push(`<g ${op?'data-m="31" class="mnode" role="button" tabindex="0"':''} aria-label="${esc(t('skiName'))}"><rect x="${bx-38}" y="${by-22}" width="76" height="44" rx="14" fill="${op?'#fff3c4':'#e8eef2'}" stroke="${op?'#e0a000':'#9aa8b2'}" stroke-width="3"/><text x="${bx}" y="${by-3}" text-anchor="middle" font-size="16">${op?'🎿🐧':'🔒'}</text><text x="${bx}" y="${by+14}" text-anchor="middle" font-size="9" font-weight="800" fill="#7a5a00">${op?(sd.ft?sd.ft+' ft':'BONUS'):'PASS M24'}</text></g>`);
-    if(sd.s)s.push(`<text x="${bx}" y="${by+36}" text-anchor="middle" font-size="12" fill="#ffd23f" stroke="#7a5a00" stroke-width=".5">${'★'.repeat(sd.s)}${'☆'.repeat(3-sd.s)}</text>`)}
   // Imugi waiting at the top
   {const [x,y]=P[29];s.push(`<g transform="translate(205,${y+130}) scale(.6)"><path d="M10 95 C40 60 70 110 100 80 S150 50 170 70" fill="none" stroke="#1f5f5b" stroke-width="22" stroke-linecap="round"/><path d="M10 95 C40 60 70 110 100 80 S150 50 170 70" fill="none" stroke="#3fa58f" stroke-width="16" stroke-linecap="round"/><ellipse cx="185" cy="62" rx="26" ry="20" fill="#3fa58f" stroke="#1f5f5b" stroke-width="3"/><circle cx="186" cy="54" r="8" fill="#fff"/><ellipse cx="188" cy="54" rx="2.5" ry="6" fill="#222"/><circle cx="222" cy="40" r="12" fill="#ffe27a" stroke="#e0a000" stroke-width="2"/></g>`)}
   // header + start
@@ -1645,17 +1651,17 @@ function missionStart(n){
   if(n===31&&!skiOpen())n=progLv();
   if(n!==31)n=Math.max(1,Math.min(NLV,Math.min(n,progLv())));lvl=raceLv=n;store.set('cr-lv',String(n));
   panel='mstart';state='menu';closeNet();mode='solo';botChar=null;setup();
-  const m=MIS[n-1],best=n===31?skiData().s:getStars()[n-1],g=starGoals(m),boss=m.boss,pc=m.as&&isOpen(m.as)?m.as:myChar,foe=m.foe||m.watch,fe=m.foe&&FOE[m.foe]||m.watch&&WATCH[m.watch];
+  const m=MIS[n-1],best=n===31?skiData().s:getStars()[n-1],g=starGoals(m),boss=m.boss,pc=m.as&&(isOpen(m.as)||m.type==='ski')?m.as:myChar,foe=m.foe||m.watch,fe=m.foe&&FOE[m.foe]||m.watch&&WATCH[m.watch];
   const you=`<div>${icImg(pc,'big')}<small>${esc(myName())}${m.as&&pc===m.as?' · '+esc(t('ch_'+pc)):''}</small></div>`;
   const vs=m.opp?`<div class="vs">${you}<b>VS</b><div>${icImg(m.opp,'big')}<small>${esc(t('ch_'+m.opp))}</small></div></div>`:fe?`<div class="vs">${you}<b>VS</b><div>${ALLC.includes(foe)?icImg(foe,'big'):`<span class="bigemo">${fe[0]}</span>`}<small>${esc(fe[1])}</small></div></div>`:`<div class="vs">${you}</div>`;
   const how=misHow(m);
-  ov.innerHTML=`<div class="panel mstart">${homeBtn(false,'map')}<h2>${esc(t('worldN',{w:m.w+1,name:WORLDS[m.w]}))}</h2>
+  ov.innerHTML=`<div class="panel mstart">${homeBtn(false,n===31?null:'map')}<h2>${esc(t('worldN',{w:m.w+1,name:WORLDS[m.w]}))}</h2>
   <p class="lvc">${misName(n).toUpperCase()}${boss?' 👑':''}</p>${vs}${n===31&&skiData().ft?`<p class="small"><b>${t('skiBest',{f:skiData().ft})}</b></p>`:''}
   <p class="goal">${esc(goalText(m))}</p>
   ${m.type==='obst'?`<p class="lore">${obLayout(m).filter((x,i,a)=>a.findIndex(y=>y[0]===x[0])===i).map(([k])=>{const d=OBW[m.w][k];return `${d[1]} <b>${esc(d[2])}</b>: ${k==='push'?'keep spinning '+m.pmin+'+ RPM or you get stuck':k==='quiet'?'tiptoe under '+m.qmax+' RPM or it wakes up':'arrive at '+m.bmin+'+ RPM for a boost'}`}).join('<br>')}</p>`:''}
   ${how?`<p class="lore">${esc(how)}</p>`:''}
   ${m.foe==='imugi'?`<p class="lore">🐍 <b>${t('ch_imugi')} 이무기.</b> ${esc(t('imugiLore'))}</p>`:''}
-  <div class="stars3">${g.map((x,i)=>`<div class="${i<best?'got':''}"><b>${'⭐'.repeat(i+1)}</b>${esc(x)}</div>`).join('')}</div>
+  ${n===31?'':`<div class="stars3">${g.map((x,i)=>`<div class="${i<best?'got':''}"><b>${'⭐'.repeat(i+1)}</b>${esc(x)}</div>`).join('')}</div>`}
   <button class="go" data-act="mgo">${t('startMission')}</button><p class="small" id="msg" aria-live="polite"></p></div>`;
 }
 function closeNet(){if(net){net.send({t:'bye'});net.close()}anyone=false}
@@ -1671,7 +1677,8 @@ function home(){
    <button class="tile c5 small" data-act="practice"><span class="e">🏁</span><b>${t('practice')}</b><small>${t('notBoard')}</small></button>
    <button class="tile c4 small" data-act="duo"><span class="e">📱</span><b>${t('sameTile')}</b><small>${t('notBoard')}</small></button>
   </div>
-  <div class="row"><button class="sec" data-act="board">🏆 ${t('board')}</button></div>
+  <div class="row"><button class="sec skib" data-act="ski">🎿 ${t('skiTile')}${skiData().ft?`<small>${t('skiBestS',{f:skiData().ft})}</small>`:''}</button><button class="sec" data-act="board">🏆 ${t('board')}</button></div>
+  ${isApp()?'':`<div class="row"><button class="sec getapp" data-act="getapp">📲 ${t('getApp')}</button></div>`}
   <p class="small" id="msg" aria-live="polite"></p></div>`;
   anyPeek();
 }
@@ -1790,8 +1797,8 @@ function finish(){
     const L=raceLv,m=MIS[L-1],won=!m.opp||winner===me,st=missionStars(m,me,won),a=getStars(),openBefore=CHARS.filter(isOpen);
     lastStars=st;wonLv=st>0;
     if(L===31){const sd=skiData(),ft=MX&&MX.ski?MX.ski.ft:0,rp=MX&&MX.ski?MX.ski.rpm:0;endNote=ft>sd.ft&&sd.ft?t('skiNewBest',{f:ft}):sd.ft?t('skiBest',{f:Math.max(sd.ft,ft)}):'';
-      store.set('cr-ski',JSON.stringify({s:Math.max(sd.s,st),ft:Math.max(sd.ft,ft)}));newUnlocks=CHARS.filter(c2=>isOpen(c2)&&!openBefore.includes(c2));lvl=31;
-      shareText=t('shareSki',{f:ft,r:st>0?'★'.repeat(st):'',rpm:rp});if(ft>0)submitJump(ft,rp)}
+      store.set('cr-ski',JSON.stringify({s:0,ft:Math.max(sd.ft,ft)}));newUnlocks=CHARS.filter(c2=>isOpen(c2)&&!openBefore.includes(c2));lvl=31;
+      shareText=t('shareSki',{f:ft,r:'',rpm:rp});if(ft>0)submitJump(ft,rp)}
     else{
     const k='cr3-best-'+L,b=+store.get(k)||0;
     if(me.done!=null&&!me.failed){if(!b||me.done<b){store.set(k,String(me.done));endNote=b?t('newBestLv',{n:L}):''}else endNote=t('bestLv',{n:L,t:fmt(b)})}
@@ -1828,18 +1835,19 @@ function results(fresh){
   const order=standings();
   let title;
   if(mode==='solo')title=raceLv===31?t('skiTitle',{f:MX&&MX.ski?MX.ski.ft:0}):lastStars>0?t('misDone',{n:raceLv}):t('misFail',{n:raceLv});
-  else if(mode==='online'&&me){const p=order.indexOf(me)+1;title=p===1?t('youWin'):t('place',{p:ord(p),n:racers.length})}
+  else if((mode==='online'||mode==='cpu')&&me){const p=order.indexOf(me)+1;title=p===1?t('youWin'):t('place',{p:ord(p),n:racers.length})}
   else title=winner?t('wins',{n:winner.name}):'—';
   const rows=order.map((c,i)=>`<tr${c===me&&mode==='online'?' style="font-weight:800"':''}><td>${i+1}</td><td><span class="dot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.pc||c.body};margin-right:4px"></span><span class="ic">${icImg(c.char)}</span>${esc(c.name)}</td><td>${c.left?t('leftTag'):c.done!=null?fmt(c.done):t('dnf')}</td><td>${Math.round(c.top*60)}</td></tr>`).join('');
   let again;
   if(mode==='online')again=anyone?`<button class="go" data-act="anyagain">${t('rematch')}</button>`:(net&&net.status()==='ok'?`<button class="go" data-act="tolobby">${t('rematch')}</button>`:'');
   else if(mode==='solo'){const back=`<button class="go alt" data-act="map">${t('backMap')}</button>`;
-    const pair=`<div class="row two"><button class="go alt half" data-act="mretry">${raceLv===31?t('skiAgain'):t('retryMission')}</button><button class="go alt half" data-act="map">${t('backMapS')}</button></div>`;
+    const pair=`<div class="row two"><button class="go alt half" data-act="mretry">${raceLv===31?t('skiAgain'):t('retryMission')}</button>${raceLv===31?`<button class="go alt half" data-act="home">${t('homeS')}</button>`:`<button class="go alt half" data-act="map">${t('backMapS')}</button>`}</div>`;
     again=raceLv===31?pair:(lastStars>0&&raceLv<NLV?`<button class="go" data-act="mnext">${t('nextMission')}</button>${pair}`:pair)}
   else if(mode==='duo')again=`<button class="go" data-act="duo">${t('rematch')}</button>`;
+  else if(mode==='cpu')again=`<button class="go" data-act="cpurace">${t('rematch')}</button><div class="row"><button class="sec" data-act="practice">🏁 ${t('practice')}</button></div>`;
   else again=`<button class="go" data-act="start">${t('rematch')}</button>`;
   const pic=ensureCard(),canShare=!!navigator.share;
-  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net)}<h2>${esc(title)}</h2>${mode==='solo'?starBox()+again:''}
+  ov.innerHTML=`<div class="panel">${homeBtn(mode==='online'&&!!net)}<h2>${esc(title)}</h2>${mode==='solo'?(raceLv===31?'':starBox())+again:''}
   <button class="cardbtn" data-act="card" aria-label="${esc(t('picAlt'))}"><img class="card mini" src="${pic}" alt="${esc(t('picAlt'))}"></button>
   ${mode==='solo'?'':again}
   <div class="row">${canShare?`<button class="sec" data-act="sharepic">📤 ${t('sharePic')}</button>`:''}<button class="sec" data-act="savepic">⬇️ ${t('savePic')}</button></div>
@@ -1993,7 +2001,7 @@ function say(s){const m=document.getElementById('msg');if(m)m.textContent=s}
 function copyText(s,ok){try{navigator.clipboard.writeText(s).then(()=>say(ok),()=>say(s))}catch(e){say(s)}}
 function saveForm(){const c=document.getElementById('code');if(c)codeDraft=c.value.replace(/\D/g,'').slice(0,4)}
 function clearRoomParam(){qs.delete('room');history.replaceState(null,'',location.pathname+(qs.toString()?'?'+qs.toString():''))}
-function raceOv(){ov.innerHTML=mode==='practice'?`<button class="done" data-act="menu">${t('done')}</button>`:`<button class="quit" data-act="quit">✕ ${t('quit')}</button>${switchOffer?`<button class="switchb" data-act="switchany">🌍 ${t('switchQ')} <b>${t('switchYes')}</b></button>`:''}`}
+function raceOv(){ov.innerHTML=mode==='practice'?`<button class="done" data-act="menu">${t('done')}</button><button class="done cpub" data-act="cpurace">${t('raceCpu')}</button>`:`<button class="quit" data-act="quit">✕ ${t('quit')}</button>${switchOffer?`<button class="switchb" data-act="switchany">🌍 ${t('switchQ')} <b>${t('switchYes')}</b></button>`:''}`}
 function startLocal(){
   saveForm();botChar=null;finishId++;if(mode==='solo')raceLv=lvl;setup();firstDone=0;winner=null;endNote='';boardNote='';panel='race';lastCount=0;switchOffer=false;
   if(mode==='practice'){state='race';startT=performance.now();sfx.go()}
@@ -2016,7 +2024,7 @@ function startAnyone(){
   stopPeek();closeNet();clearRoomParam();invite=false;anyone=true;mode='online';
   joinRoom(ANYROOM,MAXP);enterMatch();
 }
-function enterMatch(){raceBots=[];mBots=[];mPlanFor=0;mShown=0;anyGo=false;matchOk=false;anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
+function enterMatch(){raceBots=[];mBots=[];mPlanFor=0;mHumans=0;mNextLeave=0;mLeftMsg=null;mShown=0;anyGo=false;matchOk=false;anyone=true;mode='online';state='match';panel='match';pairAt=0;aloneSince=Date.now();aloneWait=10000;switchOffer=false;if(net){net.me.ws=Date.now();net.me.ready=false;net.hello()}setup();matchScreen()}
 function matchTick(){
   if(!anyone||!net)return;
   const others=[...net.peers.values()].filter(p=>p.ph==='match');
@@ -2031,6 +2039,7 @@ function matchTick(){
       while(mBots.length<k){const pool2=CHARS.filter(c=>c!=='dragon'&&c!=='imugi'&&!used.has(c)),ch=pool2[Math.floor(Math.random()*pool2.length)]||'cat';used.add(ch);
         mBots.push({id:'b'+Math.random().toString(36).slice(2,10),name:makeAutoName(),ch,bot:true,owner:myId,lv:1,at:mPlanFor+5000+Math.random()*15000})}
       mBots.sort((a,b)=>a.at-b.at)}
+    botLeave(pl);
     const vb=visBots();if(vb.length!==mShown){mShown=vb.length;net.hello()}
     // the race starts by itself only when all 8 places are full; before that the creator taps Start
     if(pl.length+vb.length>=MAXP||anyGo){anyGo=false;
@@ -2041,22 +2050,31 @@ function matchTick(){
       raceBots.forEach(b=>{b.rpm=Math.max(40,Math.min(500,Math.round(best*(.5+Math.random()*.7))))});
       ids.push(...raceBots.map(b=>b.id));
       net.send({t:'go',delay:3000,ids,rid,bots:raceBots.map(b=>({id:b.id,name:b.name,ch:b.ch}))});startRace(3000,ids,rid);return}
-  }else{mBots=[];mPlanFor=0;anyGo=false}
+  }else{mBots=[];mPlanFor=0;anyGo=false;mHumans=0;mNextLeave=0}
   if(panel==='match'||panel==='alone')matchScreen();
 }
-let mShown=0,anyGo=false;
+let mShown=0,anyGo=false,mHumans=0,mNextLeave=0,mLeftMsg=null;
+// computers leave (Dustin, Nov 27) — only while the room has 5+ racers: one by one if the creator waits 30 s after the last computer joined (every 8–15 s),
+// and one right away each time a new real player joins. A computer that left never comes back.
+function botLeave(pl){const now=Date.now(),vis=mBots.filter(b=>b.at<=now&&!b.gone),tot=pl.length+vis.length;
+  const drop=()=>{const b=vis.pop();if(!b)return;b.gone=true;mLeftMsg={name:b.name,t:now};mBots.forEach(x=>{if(!x.gone&&x.at>now)x.gone=true})};
+  if(mHumans&&pl.length>mHumans&&tot>=5)drop();
+  mHumans=pl.length;
+  const last=Math.max(0,...mBots.filter(b=>b.at<=now).map(b=>b.at));
+  if(vis.length&&last&&now-last>30000&&pl.length+vis.length>=5){if(!mNextLeave)mNextLeave=now;if(now>=mNextLeave){drop();mNextLeave=now+8000+Math.random()*7000}}}
 // computers already "in the room": on the host, the ones whose time has come; elsewhere, what the host reports
 function visBots(){if(!net)return[];const pl=pool(),room=Math.max(0,Math.min(4,MAXP-pl.length));
-  if(pl[0]&&pl[0].id===myId)return mBots.filter(b=>b.at<=Date.now()).slice(0,room);
+  if(pl[0]&&pl[0].id===myId)return mBots.filter(b=>b.at<=Date.now()&&!b.gone).slice(0,room);
   const h=pl[0]&&net.peers.get(pl[0].id);return h&&h.mb?h.mb.slice(0,room):[]}
 function matchScreen(){
   panel='match';const conn=!net||net.status()!=='ok';const real=pool(),pl=[...real,...visBots()],n=pl.length,creator=!conn&&real[0]&&real[0].id===myId,left=creator?'c':real[0]?real[0].id:'';
-  const s2=n+'|'+pl.map(p=>p.id+p.ch).join(',')+'|'+left+'|'+conn;if(s2===sig&&ov.querySelector('.match'))return;sig=s2;
+  const lm=mLeftMsg&&Date.now()-mLeftMsg.t<5000?mLeftMsg:null,bored=creator&&mBots.some(b=>b.gone);
+  const s2=n+'|'+pl.map(p=>p.id+p.ch).join(',')+'|'+left+'|'+conn+'|'+(lm?lm.name:'')+bored;if(s2===sig&&ov.querySelector('.match'))return;sig=s2;
   const deg=Math.round(360*Math.min(1,n/MAXP));
   ov.innerHTML=`<div class="panel match">${homeBtn()}<h2>${t('finding')}</h2>
   <div class="spin" style="--p:${deg}deg"><span>${n}/${MAXP}</span></div>
-  <ul class="players">${pl.map(p=>`<li><span class="ic">${icImg(p.id===myId?myChar:(p.ch||'cat'))}</span>${esc(p.id===myId?autoName():p.name)}${p.id===myId?' ('+t('you')+')':''}</li>`).join('')}<li class="empty">${t('lookingMore',{k:MAXP-n})}</li></ul>
-  ${conn?`<p class="small"><b>${net&&net.status()==='fail'?t('offline'):t('joining')}</b></p>`:creator?(n>=2?`<button class="go" data-act="anystart">${t('anyStart',{k:n})}</button>`:''):real[0]?`<p class="small"><b>${t('waitCreator',{n:esc(real[0].id===myId?autoName():real[0].name)})}</b></p>`:''}<p class="small">${t('anyRule')} ${t('funNames')}</p>
+  <ul class="players">${pl.map(p=>`<li><span class="ic">${icImg(p.id===myId?myChar:(p.ch||'cat'))}</span>${esc(p.id===myId?autoName():p.name)}${p.id===myId?' ('+t('you')+')':''}</li>`).join('')}${lm?`<li class="empty">👋 ${esc(lm.name)} ${t('botLeft')}</li>`:''}<li class="empty">${t('lookingMore',{k:MAXP-n})}</li></ul>
+  ${conn?`<p class="small"><b>${net&&net.status()==='fail'?t('offline'):t('joining')}</b></p>`:creator?(n>=2?`<button class="go" data-act="anystart">${bored?t('anyStartBored'):t('anyStart',{k:n})}</button>`:''):real[0]?`<p class="small"><b>${t('waitCreator',{n:esc(real[0].id===myId?autoName():real[0].name)})}</b></p>`:''}<p class="small">${t('anyRule')} ${t('funNames')}</p>
   <div class="row"><button class="sec" data-act="home">${t('cancel')}</button></div></div>`;
 }
 function confirmBox(q,noAct,noLbl,yesAct,yesLbl){ov.innerHTML=`<div class="panel confirm" role="dialog" aria-label="${q}"><p><b>${q}</b></p><div class="row"><button class="sec" data-act="${noAct}">${noLbl}</button><button class="go small" data-act="${yesAct}">${yesLbl}</button></div></div>`}
@@ -2071,7 +2089,7 @@ ov.addEventListener('click',e=>{
   if(act==='quityes'){finishId++;
     // quit goes one step further back than "race again" (Dustin, Nov 27): anyone → home, friends → Play friends screen, same phone → home, mission → map
     if(mode==='online'){const wasAny=anyone;if(net)net.send({t:'quit'});leaveRoom();if(!wasAny){onTab='create';friends()}return}
-    if(mode==='solo'){mapScreen();return}
+    if(mode==='solo'&&raceLv!==31){mapScreen();return}
     home();return}
   if(act==='homeask'){confirmBox(t('leaveQ'),'stay',t('stay'),'leaveyes',t('leaveYes'));return}
   if(act==='stay'){sig='';refreshPanel(true);return}
@@ -2096,7 +2114,10 @@ ov.addEventListener('click',e=>{
   if(act==='mgo'){mode='solo';anyone=false;startLocal();return}
   if(act==='mnext'){missionStart(raceLv+1);return}
   if(act==='mretry'){missionStart(raceLv);return}
+  if(act==='ski'){missionStart(31);return}
+  if(act==='getapp'){if(instEvt){const e=instEvt;instEvt=null;e.prompt();e.userChoice.then(()=>home()).catch(()=>{})}else appGuide();return}
   if(act==='practice'){mode='practice';startLocal();return}
+  if(act==='cpurace'){mode='cpu';startLocal();return}
   if(act==='duo'){duoScreen();return}
   if(act==='friends'){onTab='create';friends();return}
   if(act==='any'||act==='anyback'){if(act==='anyback'&&net){finishId++;enterMatch();return}startAnyone();return}
