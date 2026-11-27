@@ -1171,7 +1171,9 @@ function draw(now){
   if(!racers.length)return;
   let mid;
   if(mode==='practice'){
-    const c=racers[0];drawLane(c,[],HUD,H-HUD,now,false);if(state==='race')practiceInfo(c,HUD,H-HUD,now);mid=HUD+(H-HUD)/2;
+    // Practice uses the same animal size as a 2-player race (Dustin, Nov 27): lane = bottom half, sky above
+    const c=racers[0],lh=(H-HUD)/2,sk=ctx.createLinearGradient(0,HUD,0,HUD+lh);sk.addColorStop(0,'#bfe6ff');sk.addColorStop(1,'#e4f5ff');ctx.fillStyle=sk;ctx.fillRect(0,HUD,W,lh);
+    drawLane(c,[],HUD+lh,lh,now,false);if(state==='race')practiceInfo(c,HUD,H-HUD,now);mid=HUD+lh;
   }else if(mode==='solo'&&racers.length===1){
     const c=racers[0];drawLane(c,[],HUD,H-HUD,now,false);mid=HUD+(H-HUD)/2;
   }else if(!split()){
