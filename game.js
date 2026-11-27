@@ -8,12 +8,13 @@ const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},se
 // one-time reset (Nov 26, 2026): phones that climbed levels with the multi-finger bug go back to Level 1
 (()=>{const d=store.get('cr-dev')||'';if(!store.get('cr-reset1')&&['d7161w6w','dngwzax5','d765plmb'].some(x=>d.startsWith(x))){try{Object.keys(localStorage).filter(k=>k.startsWith('cr3-best-')).forEach(k=>localStorage.removeItem(k))}catch(e){}['cr-clear','cr-lv','cr-char','cr-char2','cr-mstars'].forEach(k=>store.set(k,''));store.set('cr-reset1','1')}})();
 // one-time reset of every player's mission progress (Dustin, Nov 26): stars, unlocks, ski best, ending, best times; names, settings and leaderboards stay
+(()=>{if(store.get('cr-reset3'))return;try{Object.keys(localStorage).filter(k=>k.startsWith('cr3-best-')).forEach(k=>localStorage.removeItem(k))}catch(e){}['cr-clear','cr-lv','cr-char','cr-char2','cr-mstars','cr-end','cr-dragon','cr-adv1','cr-adv2','cr-adv3','cr-ski'].forEach(k=>store.set(k,''));store.set('cr-reset2','1');store.set('cr-reset3','1')})();
 (()=>{if(store.get('cr-reset2'))return;try{Object.keys(localStorage).filter(k=>k.startsWith('cr3-best-')).forEach(k=>localStorage.removeItem(k))}catch(e){}['cr-clear','cr-lv','cr-char','cr-char2','cr-mstars','cr-ski','cr-end'].forEach(k=>store.set(k,''));store.set('cr-reset2','1')})();
 
 // ---------- language ----------
 const L={
  en:{title:'Caterpillar Race',intro:'Draw <b>circles</b> on the screen, like turning a wheel. Spin faster to crawl faster. Stop and your caterpillar stops.',
-  foot:'Play 30 missions in 6 worlds to earn stars and unlock new animals, race anyone online, race up to 8 friends with a code, or race on the same phone. On a computer: draw circles with the mouse.',
+  foot:'Go on 3 adventures (30 missions) to earn stars and unlock new animals, race anyone online, race up to 8 friends with a code, or race on the same phone. On a computer: draw circles with the mouse.',
   ready:'Ready to race?',vsCpu:'Computer',duo:'Same phone',online:'Online (2–8)',easy:'Easy',normal:'Normal',hard:'Hard',
   play:'Play',best:'Your best on {d}: {t}',nobest:'No best time yet on {d}.',duoHint:'Player 1 draws on the top half, player 2 on the bottom half.',
   nick:'Your nickname',create:'Create a race',joinT:'Join the race',join:'Join',joining:'Joining…',
@@ -34,7 +35,7 @@ const L={
   board:'Leaderboard',boardTitle:'Fastest caterpillars',p24:'24 hours',p7:'7 days',pAll:'All time',nickOpt:'Nickname (for the leaderboard)',
   boardEmpty:'No times yet. Be the first!',boardErr:'Couldn\'t load the leaderboard. Check your internet.',boardSaving:'Saving to leaderboard…',
   boardRank:'Leaderboard: you\'re #{r} of {n} in the last 24 hours',boardNoNick:'Add a nickname before the race to join the leaderboard.',boardFail:'Couldn\'t save to the leaderboard.',loading:'Loading…',boardNote:'Your best time counts once per period.',
-  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',ch_imugi:'Imugi',line_imugi:'The legendary serpent who chases the magic pearl.',
+  character:'Character',modeQ:'How do you want to play?',practiceSub:'Learn the circles · nothing recorded',cpuSub:'Easy · Normal · Hard · Champion',champion:'Champion',champLocked:'🔒 Beat the computer on Hard to unlock Champion.',champUnlocked:'🏆 Champion level unlocked!',champHint:'Champion races at 330 RPM. Almost impossible!',yourPic:'Your race picture',picAlt:'Picture of your animal celebrating with its result',sharePic:'Share',savePic:'Save picture',copyText:'Copy text',picHint:'On a phone you can also press and hold the picture to save it.',picSaved:'Picture saved.',sharePicBtn:'🎉 Share picture',players:'players',duoSub:'Two players, one screen split in half',onlineSub:'2–8 friends, each on their own phone',next:'Next',pickAnimal:'Pick your animal',p1Animal:"Player 1's animal",p2Animal:"Player 2's animal",p1Is:'Player 1: {a}',selected:'Selected: {a}',cpuNote:'The computer picks a different animal.',nameDiff:'Name & level',difficulty:'Difficulty',nameRoom:'Name & race room',createTab:'Create a race',joinTab:'Join with code',howMany:'How many players?',capHint:'The race starts when all {n} players are in and ready.',codeLbl:'4-digit race code',joinBtn:'Join race',createBtn:'Create race',invited:"You're invited to race {c}!",notNow:'Play something else',stepOf:'Step {i} of {n}',roomCode:'Race code',joinedCount:'{n} / {m} players in',emptySlot:'Empty spot · waiting…',waitReady:'Waiting for everyone to be ready…',waitJoin:'Waiting for {k} more to join…',hostCan:'The host can start early with everyone here.',noRoom:'No race found with code {c}. Check the code and try again.',badCode:'Enter the 4-digit code.',quit:'Quit',quitQ:'Quit this race?',keep:'Keep racing',quitYes:'Quit',home:'Home',music:'Music',sound:'Sounds',on:'on',off:'off',ch_cat:'Caterpillar',ch_inch:'Inchworm',ch_centi:'Centipede',ch_turtle:'Green sea turtle',ch_snail:'Garden snail',ch_garter:'Garter snake',ch_frill:'Frilled lizard',ch_cham:'Chameleon',ch_basil:'Green basilisk',ch_puffer:'Pufferfish',ch_shrimp:'Pistol shrimp',ch_crab:'Swimming crab',ch_peng:'Gentoo penguin',editName:'Edit your name',ch_imugi:'Imugi',line_imugi:'The legendary serpent who chases the magic pearl.',
  misTile:'Mission',misTileSub:'6 worlds · 30 missions · unlock animals',starsOf:'⭐ {n} / 90 stars',notBoard:'Not on leaderboard',
  mapTitle:'Mission map',dragonAt:'Golden Dragon at {n} ⭐',startHere:'START · You start with these 4',unlockTag:'UNLOCK',unlockedTag:'UNLOCKED',worldN:'World {w} · {name}',missionN:'Mission {n}',misShort:'M{n}',
  goal_beat:'Beat the {a}!',goal_boss:'BOSS: beat the {a}!',goal_time:'Finish in under {t} s',goal_obst:'Obstacle course! Finish in under {t} s',goal_ski:'Bonus: ski jump as far as you can!',how_ski:'🐧 Spin hard up the hill. Your speed at the TAKE OFF sign is all that matters — then sit back and slide as far as you can go!',star_ft:'{f} ft',
@@ -52,7 +53,7 @@ const L={
  fact_crab:'Swimming crabs have back legs shaped like paddles, so they can zip through the water.',
  fact_puffer:'When danger is near, a pufferfish gulps water and puffs up into a big spiky ball.',
  fact_shrimp:'A pistol shrimp snaps its claw so fast it makes a bubble that pops louder than a gunshot!',
- fact_frill:'Frilled lizards pop open a big frill around their neck to look scary, then run away on two legs.',
+ fact_cham:'Chameleons can move each eye on its own, and they can shoot their sticky tongue out farther than their whole body is long!',fact_frill:'Frilled lizards pop open a big frill around their neck to look scary, then run away on two legs.',
  fact_peng:'Gentoo penguins are the fastest swimming birds in the world — up to 22 miles per hour!',
  fact_imugi:'In Korean legend, an Imugi waits 1,000 years to catch a magic pearl and become a dragon.',
  fact_dragon:'In Korean stories, dragons live in the water and the sky, bring the rain, and hold a magic pearl.',goal_red:'Move only while the {w} sleeps!',redWake:'👀 Waking up!',redStop:'🛑 STOP!',goal_catch:'Catch the falling {i}!',goal_egg:'Carry the {i} home safely!',goal_chase:'Escape the {f}!',goal_chaseB:'BOSS: escape the {f}!',goal_runner:'Catch the {f}!',goal_duck:'Lead the {f} home!',goal_gates:'Get through the {g}!',goal_water:'Run across the water!',goal_heat:'Dash across the hot sand!',goal_slide:'Slide and jump to the finish!',
@@ -65,7 +66,7 @@ const L={
  finding:'Finding racers…',lookingMore:'Looking for up to {k} more…',startIn:'Starting in {s} s',anyStart:'▶ Start now ({k} racers)',anyStartBored:'▶ Start now — racers are getting bored!',botLeft:'left',waitCreator:'Waiting for {n} to start…',anyRule:'Starts by itself when all 8 places are full. The first racer in the room can start sooner.',funNames:'Everyone races with a fun name. No chat.',alone:'No one else is here right now',aloneQ:'How do you want to race?',raceCpu:'🤖 Race the computer',keepWait:'⏳ Keep waiting',cancel:'✕ Cancel',switchQ:'A racer is here!',switchYes:'Race them',
  nextLevel:'Next level →',tryAgain:'Try again',levelsBtn:'📋 Levels',levels:'Pick a level',levelN:'Level {n}',cpuAbout:'Computer: about {r} RPM',levelCleared:'LEVEL {n} CLEARED!',newAnimal:'🎉 Congratulations!',gotOne:'You got a new animal!',gotMany:'You got {n} new animals!',newAnimals:'🎉 Congratulations!',legendary:'🐉 LEGENDARY unlock!',raceAs:'Race as {a} now',watchVidOf:'▶ Watch {a} video',seePic:'See my race picture',lvJump:'Level jump! You skipped to level {n}.',allCleared:'You beat all 30 levels!',bestLv:'Your best on level {n}: {t}',newBestLv:'New best on level {n}!',
  lvCol:'Level',lvShort:'M{n}',onlineLv:'Online',waitingForYou:'Everyone is waiting for you!',leaveQ:'Leave the race?',stay:'Stay',leaveYes:'Leave',invitedT:"You're invited!",joinAs:'You will race as:',friendsTitle:'Play friends',p2Title:"Player 2's animal",paceLbl:'PACE',raceLbl:'race',
- line_cat:'Wiggles one bump at a time.',line_inch:'Loops up and stretches out.',line_snail:'Slow and steady… or is it?',line_turtle:'Paddles through the sea.',line_centi:'One hundred tiny feet!',line_crab:'Swims sideways super fast.',line_garter:'Slithers in S-curves.',line_basil:'Runs on water!',line_puffer:'Puffs up when it goes fast.',line_shrimp:'SNAP! The loudest little shrimp.',line_peng:'Slides on its belly.',line_frill:'Pops its frill and sprints.',line_dragon:'Breathes a fire trail at 300+ RPM!',
+ line_cat:'Wiggles one bump at a time.',line_cham:'Sticky tongue, wobbly eyes, curly tail.',line_inch:'Loops up and stretches out.',line_snail:'Slow and steady… or is it?',line_turtle:'Paddles through the sea.',line_centi:'One hundred tiny feet!',line_crab:'Swims sideways super fast.',line_garter:'Slithers in S-curves.',line_basil:'Runs on water!',line_puffer:'Puffs up when it goes fast.',line_shrimp:'SNAP! The loudest little shrimp.',line_peng:'Slides on its belly.',line_frill:'Pops its frill and sprints.',line_dragon:'Breathes a fire trail at 300+ RPM!',
  snap:'Snap!',huff:'Huff!',phew:'Phew~',yay:'Yay!'},
 };
 const lang='en';
@@ -88,13 +89,13 @@ const KMH=100/(STEP*GAIN*CAP/(2*Math.PI)),MAXKMH=100;
 const g=p=>(p-Math.sin(p))/(2*Math.PI);
 const headOff=phi=>(N-1)*SP+STEP*g(phi-(N-1)*DELTA);
 const X0=START+120-headOff(0),S0=START+120;
-const CHARS=['cat','inch','snail','turtle','centi','garter','basil','crab','puffer','shrimp','frill','peng','imugi','dragon'];
+const CHARS=['cat','inch','centi','snail','turtle','puffer','crab','shrimp','cham','garter','basil','frill','imugi','dragon'];
 const ALLC=[...CHARS,'king']; // 'king' is the level-30 boss, never playable
 // in a mission every lane uses that mission's world; elsewhere each animal races at its own home
 const WHAB=['garden','pond','sea','desert','ice','waterfall'];
 const habOf=ch=>VID?(HAB[ch]||'garden'):mode==='solo'&&MIS[raceLv-1]?WHAB[MIS[raceLv-1].w]:(HAB[ch]||'garden');
-const HAB={cat:'garden',inch:'garden',centi:'garden',snail:'garden',garter:'garden',frill:'desert',basil:'pond',turtle:'sea',puffer:'sea',shrimp:'sea',crab:'sea',peng:'ice',dragon:'volcano',king:'volcano',imugi:'waterfall'};
-const SIG={cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86a',dark:'#3f8a24',spot:'#fff6a8'},centi:{body:'#c9b3ff',dark:'#5b3fb0',spot:'#ff4f97'},turtle:{body:'#5fc79a',dark:'#2e7d5b',spot:'#ffe27a'},snail:{body:'#f1d2b0',dark:'#a5784e',spot:'#f0a35e'},garter:{body:'#5cbf6a',dark:'#2f7d4a',spot:'#ffe27a'},frill:{body:'#e3ad66',dark:'#8a5a2b',spot:'#ff8a5c'},basil:{body:'#6fd14a',dark:'#2f7d1f',spot:'#c9f59a'},puffer:{body:'#ffd84a',dark:'#b8860b',spot:'#fff4c8'},shrimp:{body:'#ff9a76',dark:'#c2482a',spot:'#ffd1c2'},crab:{body:'#ff7a5c',dark:'#b23a22',spot:'#ffd0c0'},peng:{body:'#2b2f36',dark:'#0f1115',spot:'#ffffff',gauge:'#6cc4ff'},dragon:{body:'#ffcf3f',dark:'#b77800',spot:'#ff8a3c'},imugi:{body:'#3fa58f',dark:'#1f5f5b',spot:'#bfe8c8'},king:{body:'#d8283c',dark:'#4a0710',spot:'#2b2b2b'}};
+const HAB={cham:'garden',cat:'garden',inch:'garden',centi:'garden',snail:'garden',garter:'garden',frill:'desert',basil:'pond',turtle:'sea',puffer:'sea',shrimp:'sea',crab:'sea',peng:'ice',dragon:'volcano',king:'volcano',imugi:'waterfall'};
+const SIG={cham:{body:'#57c24f',dark:'#2f7d2a',spot:'#ffd23f'},cat:{body:'#6fd14a',dark:'#2f7d1f',spot:'#ffd23f'},inch:{body:'#a6e86a',dark:'#3f8a24',spot:'#fff6a8'},centi:{body:'#c9b3ff',dark:'#5b3fb0',spot:'#ff4f97'},turtle:{body:'#5fc79a',dark:'#2e7d5b',spot:'#ffe27a'},snail:{body:'#f1d2b0',dark:'#a5784e',spot:'#f0a35e'},garter:{body:'#5cbf6a',dark:'#2f7d4a',spot:'#ffe27a'},frill:{body:'#e3ad66',dark:'#8a5a2b',spot:'#ff8a5c'},basil:{body:'#6fd14a',dark:'#2f7d1f',spot:'#c9f59a'},puffer:{body:'#ffd84a',dark:'#b8860b',spot:'#fff4c8'},shrimp:{body:'#ff9a76',dark:'#c2482a',spot:'#ffd1c2'},crab:{body:'#ff7a5c',dark:'#b23a22',spot:'#ffd0c0'},peng:{body:'#2b2f36',dark:'#0f1115',spot:'#ffffff',gauge:'#6cc4ff'},dragon:{body:'#ffcf3f',dark:'#b77800',spot:'#ff8a3c'},imugi:{body:'#3fa58f',dark:'#1f5f5b',spot:'#bfe8c8'},king:{body:'#d8283c',dark:'#4a0710',spot:'#2b2b2b'}};
 // Every character moves the same average distance per turn (fair races); only the look differs.
 function headPos(ch,phi){
   if(ch==='inch')return S0+2*STEP*g(phi/2);
@@ -149,8 +150,12 @@ const STAR_MAX=90,DRAGON_STARS=75;
 const UNLOCK={centi:3,garter:5,basil:10,puffer:13,crab:15,shrimp:15,frill:18,peng:23,imugi:30};
 const cleared=()=>{const a=getStars();let c=0;while(c<30&&a[c]>0)c++;return c};
 const dragonKept=()=>{if(store.get('cr-dragon')==='1')return true;let old=0;try{old=+JSON.parse(store.get('cr-ski')||'{}').s||0}catch(e){}if(totalStars()+old>=DRAGON_STARS){store.set('cr-dragon','1');return true}return false};
-const advP=()=>{try{const a=JSON.parse(store.get('cr-adv1')||'null');return Array.isArray(a)?a:[]}catch(e){return[]}},advStars=()=>advP().reduce((a,b)=>a+(+b||0),0);
-const isOpen=k=>CHARS.includes(k)&&(k==='dragon'?totalStars()>=DRAGON_STARS||dragonKept():!(k in UNLOCK)||getStars()[UNLOCK[k]-1]>0||(k==='centi'&&advP()[4]>0));
+const advA=a=>{try{const v=JSON.parse(store.get('cr-adv'+(a+1))||'null');return Array.isArray(v)?v.map(x=>+x||0):[]}catch(e){return[]}};
+const advTot=()=>[0,1,2].reduce((s,a)=>s+advA(a).reduce((x,y)=>x+y,0),0);
+const ADV_NAMES=["Caterpillar's Adventure","Sea Turtle's Adventure","Chameleon's Adventure"];
+const ADVLOCK={inch:[0,3],centi:[0,5],snail:[0,7],turtle:[0,10],puffer:[1,3],crab:[1,5],shrimp:[1,7],cham:[1,10],garter:[2,3],basil:[2,5],frill:[2,7],imugi:[2,10]};
+const isOpen=k=>CHARS.includes(k)&&(k==='cat'||(k==='dragon'?advTot()>=DRAGON_STARS:!!ADVLOCK[k]&&advA(ADVLOCK[k][0])[ADVLOCK[k][1]-1]>0));
+const lockText=k=>k==='dragon'?t('dragonStars',{n:DRAGON_STARS}):ADVLOCK[k]?(ADVLOCK[k][1]===10?'Beat the boss of '+ADV_NAMES[ADVLOCK[k][0]]+' to unlock the '+t('ch_'+k)+'.':'Pass mission '+ADVLOCK[k][1]+' of '+ADV_NAMES[ADVLOCK[k][0]]+' to unlock the '+t('ch_'+k)+'.'):'';
 const firstOpen=k=>isOpen(k)?k:'cat';
 let lvl=Math.max(1,Math.min(NLV,+store.get('cr-lv')||cleared()+1,cleared()+1));
 const botW=()=>LV[lvl-1]*2*Math.PI/60;
@@ -582,7 +587,7 @@ function drawSki(cam,vw,T){
 }
 
 const FEELS=[[130,130,'Now'],[500,1500,'Light'],[1000,2500,'Medium'],[1800,4000,'Heavy']];
-let feel=Math.max(0,Math.min(3,+store.get('cr-feel')||0));
+let feel=Math.max(0,Math.min(3,store.get('cr-feel')==null||store.get('cr-feel')===''?1:+store.get('cr-feel')||0));
 function upd(c,now,dt){
   const k=1-Math.exp(-dt/130);
   if(c.kind==='bot'){
@@ -952,7 +957,19 @@ function confetti(x,y,now){
   if(RM)return;const cols=['#ff6b9a','#4fb3ff','#ffd23f','#b38bff','#ff8a2a','#3fd6c6'];
   for(let k=0;k<14;k++){const tt=((now/1800)+hash(k)*1)%1,px=x+(hash(k+7)-.5)*130,py=y-70+tt*110;ctx.save();ctx.globalAlpha*=1-tt*.6;ctx.translate(px+Math.sin(now/200+k)*6,py);ctx.rotate(now/300+k);ctx.fillStyle=cols[k%6];ctx.fillRect(-3,-1.5,6,3);ctx.restore()}
 }
-const DRAW={cat:drawCat,inch:drawInch,centi:drawCenti,turtle:drawTurtle,snail:drawSnail,garter:drawGarter,frill:drawFrill,basil:drawBasil,puffer:drawPuffer,shrimp:drawShrimp,crab:drawCrab,peng:drawPeng,dragon:drawDragon,king:drawDragon,imugi:drawImugi};
+function drawCham(c,now){
+  const base=178,hx=headX(c);ctx.lineCap='round';ctx.lineJoin='round';shadow(hx-30,42);
+  for(const[w,col]of[[7,c.dark],[4,c.body]]){ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(hx-46,base-16);ctx.quadraticCurveTo(hx-62,base-14,hx-68,base-24);ctx.arc(hx-61,base-26,7,Math.PI*1.05,Math.PI*2.9,false);ctx.stroke()}
+  [[hx-42,0],[hx-34,Math.PI],[hx-16,Math.PI],[hx-9,0]].forEach(([x,o])=>{const ph=c.phi*1.4+o,fx=x+Math.cos(ph)*5,lift=Math.max(0,Math.sin(ph))*4;
+    ctx.strokeStyle=c.dark;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x,base-14);ctx.lineTo(x+4,base-7);ctx.lineTo(fx,base-lift);ctx.stroke();ctx.strokeStyle=c.body;ctx.lineWidth=2;ctx.stroke()});
+  oval(hx-26,base-19,22,11,0,c.body,c.dark,2);
+  ctx.fillStyle=c.spot;for(let k=0;k<4;k++){ctx.beginPath();ctx.arc(hx-38+k*8,base-20+(k%2?3:-2),2,0,7);ctx.fill()}
+  const hy=base-24;ctx.fillStyle=c.body;ctx.strokeStyle=c.dark;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(hx-9,hy-4);ctx.lineTo(hx-6,hy-18);ctx.lineTo(hx+6,hy-6);ctx.closePath();ctx.fill();ctx.stroke();
+  oval(hx,hy,11,9,0,headFill(c),c.dark,2);
+  if(Math.sin(now/700)>.85){ctx.strokeStyle='#ff6f91';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(hx+9,hy+3);ctx.lineTo(hx+30,hy+1);ctx.stroke();ctx.fillStyle='#ff4f7a';ctx.beginPath();ctx.arc(hx+31,hy+1,3,0,7);ctx.fill()}
+  return {x:hx+1,y:hy,r:10};
+}
+const DRAW={cham:drawCham,cat:drawCat,inch:drawInch,centi:drawCenti,turtle:drawTurtle,snail:drawSnail,garter:drawGarter,frill:drawFrill,basil:drawBasil,puffer:drawPuffer,shrimp:drawShrimp,crab:drawCrab,peng:drawPeng,dragon:drawDragon,king:drawDragon,imugi:drawImugi};
 function drawRacer(c,now,ghost){
   const ex=exprOf(c);ctx.save();
   if(ex==='win'&&!RM)ctx.translate(0,-Math.abs(Math.sin(now/170))*16);
@@ -1606,7 +1623,7 @@ const MAP_BAND=330,MAP_TOP=96;
 const MAP_REWARD={2:['centi'],4:['garter'],9:['basil'],12:['puffer'],14:['crab','shrimp'],17:['frill'],22:['peng'],29:['imugi']};
 function mapPoints(){const xs=[95,265,110,250,180],yo=[295,235,175,115,50],p=[];
   for(let w=0;w<6;w++)for(let i=0;i<5;i++)p.push([w%2===0?xs[i]:360-xs[i],MAP_TOP+MAP_BAND*(5-w)+yo[i]]);return p}
-function mapScreen(){
+function mapScreen(){if(window.ADV){ADV.open();return}
   panel='map';state='menu';closeNet();mode='solo';
   const st=getStars(),cur=progLv(),tot=totalStars(),H=MAP_TOP+MAP_BAND*6+80,P=mapPoints(),s=[];
   const by=w=>MAP_TOP+MAP_BAND*(5-w),B=MAP_BAND;
@@ -1675,8 +1692,7 @@ function home(){
   const tot=totalStars();
   ov.innerHTML=`<div class="panel home">${meCard()}<h2>${t('letsRace')}</h2>
   <div class="tiles">
-   <button class="tile cadv wide" data-act="adv"><span class="e">🐛</span><b>Caterpillar's Adventure</b><small>NEW · 10 steering missions · make garden friends</small><span class="live">⭐ ${advStars()} / 30 stars</span></button>
-   <button class="tile c1 wide" data-act="mission"><span class="e">🗺️</span><b>${t('misTile')}</b><small>${t('misTileSub')}</small><span class="live">${t('starsOf',{n:tot})}</span><span class="minibar" aria-hidden="true"><i style="width:${Math.round(tot/90*100)}%"></i></span></button>
+   <button class="tile c1 wide" data-act="mission"><span class="e">🗺️</span><b>Adventures</b><small>Caterpillar · Sea Turtle · Chameleon · 30 missions</small><span class="live">⭐ ${advTot()} / 90 stars</span><span class="minibar" aria-hidden="true"><i style="width:${Math.round(advTot()/90*100)}%"></i></span></button>
    <button class="tile c2" data-act="any"><span class="e">🌍</span><b>${t('anyTile')}</b><small>${t('anyTileSub')}</small><span class="live" id="anyLive"${anyCount>0?'':' hidden'}><i></i>${t('racingNow',{n:anyCount})}</span></button>
    <button class="tile c3" data-act="friends"><span class="e">👫</span><b>${t('friendsTile')}</b><small>${t('friendsSub')}</small></button>
    <button class="tile c5 small" data-act="practice"><span class="e">🏁</span><b>${t('practice')}</b><small>${t('notBoard')}</small></button>
@@ -1688,7 +1704,7 @@ function home(){
   anyPeek();
 }
 function animalCard(k){
-  panel='acard';const op=isOpen(k),how=k==='dragon'?t('dragonStars',{n:DRAGON_STARS}):t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)});
+  panel='acard';const op=isOpen(k),how=lockText(k);
   ov.innerHTML=`<div class="panel acard">${homeBtn(false,'acback')}<div class="acpic${op?'':' lkpic'}">${phImg(k,'big')}</div><h2>${op?'':'🔒 '}${esc(t('ch_'+k))}</h2><p class="small"><i>${esc(t('line_'+k))}</i></p><p class="fact">${esc(t('fact_'+k))}</p>
   ${op?`<div class="acbtns"><button class="go" data-act="choose" data-v="${k}">${k===myChar?t('chosenA'):t('chooseA')}</button><button class="go alt" data-act="vidplay" data-v="${k}">${t('watchVid')}</button></div>`:`<p class="small"><b>${esc(how)}</b></p>`}</div>`;
 }
@@ -2102,7 +2118,7 @@ ov.addEventListener('click',e=>{
   if(act==='leaveyes'||act==='leave'){leaveRoom();return}
   if(gp==='char'){animalCard(b.dataset.v);return}
   if(gp==='lbkind'){lbKind=b.dataset.v;loadBoard();return}
-  if(gp==='char2'){const k=b.dataset.v;if(!isOpen(k)){say(k==='dragon'?t('dragonStars',{n:DRAGON_STARS}):t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)}));return}p2Char=k;store.set('cr-char2',p2Char);duoScreen();return}
+  if(gp==='char2'){const k=b.dataset.v;if(!isOpen(k)){say(lockText(k));return}p2Char=k;store.set('cr-char2',p2Char);duoScreen();return}
   if(gp==='otab'){saveForm();onTab=b.dataset.v;friends();return}
   if(gp==='cap'){cap=+b.dataset.v;store.set('cr-cap',String(cap));friends();return}
   if(gp==='period'){lbPeriod=b.dataset.v;loadBoard();return}
@@ -2116,12 +2132,11 @@ ov.addEventListener('click',e=>{
   if(act==='savename'){const i=document.getElementById('nick'),v=(i?i.value:'').trim().slice(0,NAMEMAX);if(v&&isBad(v)){say(t('badName'));if(i){i.focus();i.style.borderColor='#ff8a2a'}return}
     if(!v||v===autoName()){store.set('cr-nick','')}else if(/^(Zippy|Turbo|Rapid|Lucky|Super|Happy|Brave|Swift|Jolly|Sunny|Fizzy|Peppy|Mega|Comet|Rocket|Speedy|Dizzy|Bouncy|Sparky|Mighty) \w+ \d\d$/.test(v)){store.set('cr-auto',v);store.set('cr-nick','')}else store.set('cr-nick',v);
     backFromName();return}
-  if(act==='adv'){window.ADV&&ADV.open();return}
   if(act==='mission'||act==='map'){mapScreen();return}
   if(act==='mgo'){mode='solo';anyone=false;startLocal();return}
   if(act==='mnext'){missionStart(raceLv+1);return}
   if(act==='mretry'){missionStart(raceLv);return}
-  if(act==='ski'){missionStart(31);return}
+  if(act==='ski'){if(window.PJ){PJ.open();return}missionStart(31);return}
   if(act==='getapp'){if(instEvt){const e=instEvt;instEvt=null;e.prompt();e.userChoice.then(()=>home()).catch(()=>{})}else appGuide();return}
   if(act==='practice'){mode='practice';startLocal();return}
   if(act==='cpurace'){mode='cpu';startLocal();return}
@@ -2182,7 +2197,7 @@ function moveP(p,x,y,id){
   if(p.pa!=null){let d=a-p.pa;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;if(Math.abs(d)<1.3){p.sum=p.sum*.9+d;if(isDriver(p,id))feed(p.c,Math.abs(p.sum)>.15?d*Math.sign(p.sum):0)}}
   p.pa=a;
 }
-cv.addEventListener('pointermove',e=>{const p=ptr.get(e.pointerId);if(!p||(state!=='race'&&state!=='count'))return;if(!p.c)p.c=who(e.clientY);const evs=e.getCoalescedEvents?e.getCoalescedEvents():[];(evs.length?evs:[e]).forEach(v=>moveP(p,v.clientX,v.clientY,e.pointerId))});
+cv.addEventListener('pointermove',e=>{let p=ptr.get(e.pointerId);if(state!=='race'&&state!=='count')return;if(!p){if(!(e.buttons&1))return;p={c:null,cx:e.clientX,cy:e.clientY,pa:null,sum:0};ptr.set(e.pointerId,p)}if(!p.c||!racers.includes(p.c)){p.c=who(e.clientY);p.pa=null;p.sum=0;if(p.c&&!ptr.has(driver.get(p.c)))driver.set(p.c,e.pointerId)}const evs=e.getCoalescedEvents?e.getCoalescedEvents():[];(evs.length?evs:[e]).forEach(v=>moveP(p,v.clientX,v.clientY,e.pointerId))});
 const up=e=>{const p=ptr.get(e.pointerId);ptr.delete(e.pointerId);if(p&&p.c&&driver.get(p.c)===e.pointerId){driver.delete(p.c);for(const [id,q] of ptr)if(q.c===p.c){driver.set(p.c,id);q.pa=null;q.sum=0;break}}};
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 addEventListener('keydown',e=>{
@@ -2212,7 +2227,7 @@ if(qs.get('cardtest')==='1')window.__sound=async(name,dur)=>{
   for(let i=0;i<n;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,x[i]))*32767,true);
   let bin='';const u=new Uint8Array(ab);for(let i=0;i<u.length;i+=8192)bin+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(bin);
 };
-window.CRB={store,sfx,home,t,buzz,playVid,isOpen};
+window.CRB={store,sfx,home,t,buzz,playVid,isOpen,submitJump,board:()=>loadBoard()};
 applyLang();menu();requestAnimationFrame(loop);
 }
 

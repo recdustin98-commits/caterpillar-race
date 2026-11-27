@@ -1,6 +1,6 @@
 // Caterpillar Race offline support: try the network first (so new versions show up), fall back to the saved copy when offline.
-const C='cr-v2';
-const CORE=['/','/index.html','/game.js','/adv.js','/manifest.webmanifest','/icon-192.png','/icon-512.png','/apple-touch-icon.png',
+const C='cr-v3';
+const CORE=['/','/index.html','/game.js','/adv.js','/penguin.js','/manifest.webmanifest','/icon-192.png','/icon-512.png','/apple-touch-icon.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js',
   ...'cat inch snail turtle centi garter crab basil puffer shrimp peng frill imugi dragon king'.split(' ').map(k=>'/img/'+k+'.webp')];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(CORE.map(u=>c.add(new Request(u,{mode:u.startsWith('http')?'no-cors':'same-origin'})).catch(()=>{})))).then(()=>self.skipWaiting()))});
