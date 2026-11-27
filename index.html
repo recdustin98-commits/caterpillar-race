@@ -83,7 +83,7 @@ tbody tr+tr td{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent
 .tile .e{font-size:30px;line-height:1}.tile b{font-size:18px;line-height:1.1}.tile small{font-size:12px;line-height:1.2;opacity:.95}
 .tile.c1{background:#e8701a}.tile.c2{background:#2f9e3a}.tile.c3{background:#3f6be0}.tile.c4{background:#9a45c4}
 .tile .live{display:inline-flex;align-items:center;gap:4px;margin-top:auto;background:rgba(255,255,255,.25);border-radius:8px;padding:0 6px;font-size:11.5px;font-weight:800}.tile .live[hidden]{display:none}.tile .live i{width:7px;height:7px;border-radius:50%;background:#bfff6a}
-.chars button.lk img{filter:grayscale(1);opacity:.45}.chars button.lk span{color:var(--muted)}
+.chars button.lk img{filter:grayscale(1);opacity:.45}.chars button.lk img.ph{filter:grayscale(1);opacity:.4}.chars button.lk span{color:var(--muted)}
 .chars button.gold:not(.lk){background:linear-gradient(#fff4c2,#ffd86b);color:#5a3a00}
 .chars button:disabled{opacity:.35;cursor:not-allowed}
 .nm{font:800 22px "Baloo 2",system-ui,sans-serif;margin:0;text-align:left}
@@ -135,7 +135,8 @@ tbody tr+tr td{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent
 .vidbar{color:#14301f;pointer-events:auto;margin-top:auto;max-width:min(560px,96%);background:rgba(255,255,255,.95);border-radius:16px;padding:10px 14px;box-shadow:0 6px 24px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:6px}
 .vidbar .vt{display:flex;align-items:center;gap:8px;font-size:18px}.vidbar .vt img{width:44px;height:28px;object-fit:contain}.vidbar p{margin:0;font-size:15px}.vidbar button{align-self:flex-end;flex:none;padding:0 18px;background:#14301f;color:#fff}
 .acbtns{display:flex;flex-direction:column;gap:10px;width:100%}.acbtns .go{margin:0}
-.acard .acpic img{width:180px;height:110px;object-fit:contain}.acard .lkpic img{filter:brightness(0) opacity(.45)}.acard .fact{background:#eef7f3;color:#1f4a3f;border-radius:12px;padding:8px 10px;text-align:left}
+.acard h2{margin:2px 0}.acard>p.small{margin:0 0 6px}
+.acard .acpic img{width:min(240px,80%);height:110px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.18))}.acard .lkpic img{filter:brightness(0) opacity(.45)}.acard .fact{background:#eef7f3;color:#1f4a3f;border-radius:12px;padding:8px 10px;text-align:left}
 .mappanel .endb{position:sticky;top:8px;float:right;margin:8px 8px -48px 0;z-index:2}
 .row.two{display:flex;gap:8px;width:100%}.go.half{flex:1;font-size:19px;padding:12px 6px;margin:6px 0 0}
 @media(min-width:900px){.stage{border-radius:22px;width:calc(100% - 8vw)}}

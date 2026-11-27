@@ -453,7 +453,7 @@ function apRPM(c,now){const m=curMis();if(!m)return 0;const R=m.rpm*(window.__AP
 // ---------- animal videos, the butterfly ending (drawn on the game canvas, no video files) ----------
 let VID=null;
 function vidPanel(){panel='vid';const k=VID.kind==='animal'?VID.ch:null;
-  ov.innerHTML=`<div class="vidbar">${k?`<div class="vt">${icImg(k)}<b>${esc(t('ch_'+k))}</b></div><p>${esc(t('fact_'+k))}</p>`:''}<button class="sec" data-act="vidskip">${t('skipVid')}</button></div>`}
+  ov.innerHTML=`<div class="vidbar">${k?`<div class="vt">${phImg(k)}<b>${esc(t('ch_'+k))}</b></div><p>${esc(t('fact_'+k))}</p>`:''}<button class="sec" data-act="vidskip">${t('skipVid')}</button></div>`}
 function playVid(ch,done){VID={kind:'animal',ch,t0:performance.now(),dur:7000,done,c:mk(SIG[ch],'','bot',null,ch),last:0};VID.c.phi=0;vidPanel();sfx.unlock&&sfx.unlock()}
 function playEnding(done){VID={kind:'end',t0:performance.now(),dur:17500,done,c:mk(SIG.cat,'','bot',null,'cat'),last:0};vidPanel();sfx.champion&&sfx.champion()}
 function playVids(list,done){if(!list.length){done();return}playVid(list[0],()=>playVids(list.slice(1),done))}
@@ -1556,6 +1556,8 @@ function crop(big,ch){
   o.drawImage(big,x0,y0,bw,bh,(360-bw*k)/2,(216-bh*k)/2,bw*k,bh*k);
   return out.toDataURL();
 }
+const PHOTO=new Set('cat inch snail turtle centi garter crab basil puffer shrimp peng frill imugi dragon king'.split(' '));
+const phImg=(ch,cls)=>PHOTO.has(ch)?`<img class="ph ${cls||''}" src="img/${ch}.webp" alt="${esc(t('ch_'+ch))}" decoding="async">`:icImg(ch,cls);
 const icImg=(ch,cls)=>`<img class="${cls||''}" src="${iconURL(ch)}" alt="">`;
 // ---------- screens: home -> one tap per mode ----------
 let nameBack='home',invite=!!qs.get('room'),onTab='create',cap=Math.min(8,Math.max(2,+store.get('cr-cap')||4)),codeDraft=(qs.get('room')||'').replace(/\D/g,'').slice(0,4),meBack='home';
@@ -1569,7 +1571,7 @@ function lvStrip(){
   <p class="small" style="margin:2px 0 0">${c>=NLV?t('allCleared'):t('nextUp',{n:nx})+(na?' · '+t('nextAnimal',{n:UNLOCK[na],a:t('ch_'+na)}):'')}</p></div>`;
 }
 const lockLvl=k=>UNLOCK[k];
-function animalGrid(sel,g,skip){return `<div class="chars" data-g="${g}">${CHARS.map(k=>{const op=isOpen(k),dis=skip===k;return `<button data-v="${k}" class="${k===sel?'on':''}${op?'':' lk'}${k==='dragon'?' gold':''}" aria-pressed="${k===sel}" ${dis?'disabled':''}>${icImg(k)}<span>${op?t('ch_'+k):'🔒 '+(k==='dragon'?DRAGON_STARS+' ⭐':t('lockLv',{n:lockLvl(k)}))}</span></button>`}).join('')}</div>`}
+function animalGrid(sel,g,skip){return `<div class="chars" data-g="${g}">${CHARS.map(k=>{const op=isOpen(k),dis=skip===k;return `<button data-v="${k}" class="${k===sel?'on':''}${op?'':' lk'}${k==='dragon'?' gold':''}" aria-pressed="${k===sel}" ${dis?'disabled':''}>${phImg(k)}<span>${op?t('ch_'+k):'🔒 '+(k==='dragon'?DRAGON_STARS+' ⭐':t('lockLv',{n:lockLvl(k)}))}</span></button>`}).join('')}</div>`}
 function meCard(){return `<div class="me"><button class="ic2" data-act="me" aria-label="${t('changeAnimal')}">${icImg(myChar)}</button><span class="mt"><button class="nmb" data-act="name" aria-label="${t('editName')}"><b>${esc(myName())}</b> <span aria-hidden="true">✏️</span></button><span class="sub"><small>${t('theAnimal',{a:t('ch_'+myChar)})}</small><button class="ed" data-act="me">${t('changeAnimal')}</button></span></span></div>`}
 function nameBox(){
   nameBack=panel;panel='namebox';
@@ -1672,7 +1674,7 @@ function home(){
 }
 function animalCard(k){
   panel='acard';const op=isOpen(k),how=k==='dragon'?t('dragonStars',{n:DRAGON_STARS}):t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)});
-  ov.innerHTML=`<div class="panel acard">${homeBtn(false,'acback')}<div class="acpic${op?'':' lkpic'}">${icImg(k,'big')}</div><h2>${op?'':'🔒 '}${esc(t('ch_'+k))}</h2><p class="small"><i>${esc(t('line_'+k))}</i></p><p class="fact">${esc(t('fact_'+k))}</p>
+  ov.innerHTML=`<div class="panel acard">${homeBtn(false,'acback')}<div class="acpic${op?'':' lkpic'}">${phImg(k,'big')}</div><h2>${op?'':'🔒 '}${esc(t('ch_'+k))}</h2><p class="small"><i>${esc(t('line_'+k))}</i></p><p class="fact">${esc(t('fact_'+k))}</p>
   ${op?`<div class="acbtns"><button class="go" data-act="choose" data-v="${k}">${k===myChar?t('chosenA'):t('chooseA')}</button><button class="go alt" data-act="vidplay" data-v="${k}">${t('watchVid')}</button></div>`:`<p class="small"><b>${esc(how)}</b></p>`}</div>`;
 }
 function meScreen(){
@@ -1809,7 +1811,7 @@ function starBox(){
 }
 function unlockScreen(){
   panel='unlock';const list=newUnlocks,leg=list.includes('dragon'),one=list.length===1;
-  const pics=list.map(k=>{const sh=animalShot(k,'clap',3);return `<figure class="ul${k==='dragon'?' gold':''}"><img src="${sh?sh.toDataURL():iconURL(k)}" alt=""><figcaption><b>${t('ch_'+k)}</b>${one?`<small>${t('line_'+k)}</small>`:''}</figcaption></figure>`}).join('');
+  const pics=list.map(k=>{const sh=animalShot(k,'clap',3);return `<figure class="ul${k==='dragon'?' gold':''}">${PHOTO.has(k)?phImg(k):`<img src="${sh?sh.toDataURL():iconURL(k)}" alt="">`}<figcaption><b>${t('ch_'+k)}</b>${one?`<small>${t('line_'+k)}</small>`:''}</figcaption></figure>`}).join('');
   ov.innerHTML=`<div class="panel unlock${leg?' legend':''}"><p class="lvc">${t('misDone',{n:raceLv})}</p><h2>${leg?t('legendary'):one?t('newAnimal'):t('newAnimals',{n:list.length})}</h2><div class="uls">${pics}</div>
   ${list.map(k=>`<button class="go${k==='dragon'?' goldb':''}" data-act="raceas" data-v="${k}">${t('raceAs',{a:t('ch_'+k)})}</button><button class="sec" data-act="vidul" data-v="${k}">${t('watchVid')}</button>`).join('')}
   ${raceLv<NLV?`<button class="go alt" data-act="mnext">${t('nextMission')}</button>`:''}
