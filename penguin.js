@@ -23,14 +23,20 @@ const css=`#pjL{position:fixed;inset:0;z-index:1001;display:none;background:#cfe
 #pjU .big{font:800 46px "Baloo 2",system-ui;color:#1f5f9a;margin:2px 0}
 #pjU .ab{display:block;width:100%;min-height:52px;border:0;border-radius:14px;background:#ff8a2a;color:#2a1200;font:800 21px "Baloo 2",system-ui,sans-serif;margin-top:10px;cursor:pointer;box-shadow:0 4px 0 #c45a0c}
 #pjU .ab.g{background:#4fa3e0;color:#fff;box-shadow:0 4px 0 #2f6f9a}#pjU .row2{display:flex;gap:8px}#pjU .row2 .ab{flex:1}
+#pjU .opt{display:flex;align-items:center;justify-content:center;gap:6px;margin:6px 0}#pjU .opt span{font-weight:800;font-size:14px;width:96px;text-align:right}#pjU .opt button{border:0;border-radius:10px;padding:7px 10px;font:800 14px "Baloo 2",system-ui;background:#e8f2fb;color:#1f5f9a;cursor:pointer}#pjU .opt button.on{background:#ffd23f;color:#2a1200}
 #pjU .x{position:absolute;left:10px;top:10px;border:0;background:#e8f2fb;border-radius:12px;width:44px;height:44px;font-size:22px;cursor:pointer}`;
 (()=>{const s=document.createElement('style');s.textContent=css;document.head.appendChild(s)})();
 let L,cv,g,U,W,H,dpr=1,on=false,raf=0,last=0,P=null,scr='intro';
+// test options (Dustin, Nov 27: "put options here too so I can judge"): camera distance and speed effects, saved on the phone
+const VIEWS=[[220,'Close'],[380,'Medium'],[700,'Far']],FXS=['Off','On','Max'];
+let VIEW=+(st.get('pj-view')??0)||0,FX=st.get('pj-fx')==null?1:+st.get('pj-fx')||0,lines=[],snow=[],camZ=1;
+const optHtml=()=>`<div class="opt"><span>Camera</span>${VIEWS.map((v,i)=>`<button class="${i===VIEW?'on':''}" data-a="view" data-v="${i}">${v[1]}</button>`).join('')}</div>
+  <div class="opt"><span>Speed effects</span>${FXS.map((v,i)=>`<button class="${i===FX?'on':''}" data-a="fx" data-v="${i}">${v}</button>`).join('')}</div>`;
 function mount(){if(L)return;L=document.createElement('div');L.id='pjL';L.innerHTML='<canvas></canvas><div id="pjU"></div>';document.body.appendChild(L);
   cv=L.querySelector('canvas');g=cv.getContext('2d');U=L.querySelector('#pjU');addEventListener('resize',size);size();
   cv.addEventListener('pointerdown',down);cv.addEventListener('pointermove',move);['pointerup','pointercancel'].forEach(e=>cv.addEventListener(e,up));
   addEventListener('keydown',e=>{if(on&&(e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();tap()}});
-  U.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S('tap');const a=b.dataset.a;if(a==='go')start();if(a==='home')close();if(a==='board'){close();try{B().board&&B().board()}catch(err){}}})}
+  U.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S('tap');const a=b.dataset.a;if(a==='view'||a==='fx'){if(a==='view'){VIEW=+b.dataset.v;st.set('pj-view',VIEW)}else{FX=+b.dataset.v;st.set('pj-fx',FX)}b.parentElement.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));return}if(a==='go')start();if(a==='home')close();if(a==='board'){close();try{B().board&&B().board()}catch(err){}}})}
 function size(){if(!cv)return;dpr=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr}
 function open(){mount();on=true;L.style.display='block';size();intro();if(!raf){last=performance.now();raf=requestAnimationFrame(tick)}}
 function close(){on=false;L.style.display='none';cancelAnimationFrame(raf);raf=0;P=null;try{B().home&&B().home()}catch(e){}}
@@ -43,7 +49,7 @@ function move(e){if(!fp||e.pointerId!==fp.id||!P)return;const evs=e.getCoalesced
 function up(e){if(fp&&e.pointerId===fp.id)fp=null}
 function tap(){if(!P||scr!=='play')return;if(P.ph==='air'&&P.flapCd<=0){P.flapCd=FLAPGAP;P.flaps++;P.wing=1;if(P.vy<-MINSINK)P.vy=Math.min(P.vy*FLAP,-MINSINK);S('puff')}}
 // ---------- run ----------
-function start(){scr='play';U.innerHTML='';P={ph:'count',cnt:3,ct:0,x:0,y:0,v:3,vx:0,vy:0,acc:0,rpm:0,top:0,flaps:0,flapCd:0,wing:0,lipV:0,flightFt:0,t:0,trail:[]};S('beep')}
+function start(){scr='play';U.innerHTML='';lines=[];snow=[];camZ=1;P={ph:'count',cnt:3,ct:0,x:0,y:0,v:3,vx:0,vy:0,acc:0,rpm:0,top:0,flaps:0,flapCd:0,wing:0,lipV:0,flightFt:0,t:0,trail:[]};S('beep')}
 function stepP(dt){const p=P;p.t+=dt;p.flapCd-=dt;p.wing=Math.max(0,p.wing-dt*5);
   const inst=dt>0?p.acc/dt*60/TAU:0;p.acc=0;p.rpm+=(Math.min(520,inst)-p.rpm)*(1-Math.exp(-dt/0.13));
   if(p.ph==='count'){p.ct+=dt;if(p.ct>=1){p.ct=0;p.cnt--;S(p.cnt?'beep':'go');if(!p.cnt)p.ph='run'}return}
@@ -58,10 +64,10 @@ function done(){const ft=dist(),b=best(),nb=ft>b;if(nb)st.set('cr-ski',JSON.stri
   setTimeout(()=>{if(!on)return;scr='result';U.innerHTML=`<div class="ap"><h2>🐧 ${nb?'NEW BEST!':'Nice jump!'}</h2><div class="big">${ft.toLocaleString('en-US')} ft</div>
   <p>Flight ${P.flightFt.toLocaleString('en-US')} ft · take-off ${Math.round(P.lipV*0.6818)} mph · top spin ${Math.round(P.top)} RPM · ${P.flaps} flaps</p>
   <p><b>Best: ${Math.max(b,ft).toLocaleString('en-US')} ft</b></p>
-  <button class="ab" data-a="go">🎿 Jump again</button><div class="row2"><button class="ab g" data-a="board">🏆 Leaderboard</button><button class="ab g" data-a="home">🏠 Home</button></div></div>`},900)}
+  ${optHtml()}<button class="ab" data-a="go">🎿 Jump again</button><div class="row2"><button class="ab g" data-a="board">🏆 Leaderboard</button><button class="ab g" data-a="home">🏠 Home</button></div></div>`},900)}
 function intro(){scr='intro';P=null;const b=best();U.innerHTML=`<div class="ap"><button class="x" data-a="home" aria-label="Home">🏠</button><h2>🎿 Penguin jump</h2>
-  <ol><li><b>Spin circles</b> as fast as you can on the downhill — faster spinning = more speed.</li><li>After the take-off, <b>TAP TAP TAP</b> to flap your wings and fall slower.</li><li>Then you slide on your belly until you stop.</li></ol>
-  ${b?`<p><b>Your best: ${b.toLocaleString('en-US')} ft</b></p>`:''}<button class="ab" data-a="go">▶ Jump!</button></div>`}
+  <ol><li>Belly down! <b>Spin circles</b> as fast as you can on the downhill — faster spinning = more speed.</li><li>After the take-off, <b>TAP TAP TAP</b> to flap your wings and fall slower.</li><li>Then you slide on your belly until you stop.</li></ol>
+  ${b?`<p><b>Your best: ${b.toLocaleString('en-US')} ft</b></p>`:''}${optHtml()}<button class="ab" data-a="go">▶ Jump!</button></div>`}
 // ---------- drawing ----------
 function tick(now){raf=requestAnimationFrame(tick);if(!on)return;const dt=Math.min(0.05,(now-last)/1000);last=now;
   if(P&&scr==='play'){let k=dt;while(k>0){const h=Math.min(1/120,k);stepP(h);k-=h}}
@@ -69,9 +75,14 @@ function tick(now){raf=requestAnimationFrame(tick);if(!on)return;const dt=Math.m
 function draw(now){g.setTransform(dpr,0,0,dpr,0,0);const p=P,px=p?p.x:200,py=p?p.y:inrun(200);
   const sk=g.createLinearGradient(0,0,0,H);sk.addColorStop(0,'#8fc7f0');sk.addColorStop(1,'#e8f4fd');g.fillStyle=sk;g.fillRect(0,0,W,H);
   // zoomed-out view that follows the penguin (about 700 ft across)
-  const sc=Math.min(W/700,H/520),cx=W*0.35,cy=H*0.5,X=x=>cx+(x-px)*sc,Y=y=>cy-(y-py)*sc;
+  const spd=p?(p.ph==='air'?Math.hypot(p.vx,p.vy):p.v):0,vw=VIEWS[VIEW][0];camZ+=((1+Math.min(0.35,spd/600))-camZ)*0.05;
+  const sc=Math.min(W/(vw*camZ),H/(vw*camZ*0.75)),sh=FX===2&&spd>110&&p&&p.ph!=='stop'?Math.min(4,(spd-110)/25):0,shx=(Math.random()-.5)*sh*2,shy=(Math.random()-.5)*sh*2;
+  const cx=W*0.33+shx,cy=H*0.5+shy,X=x=>cx+(x-px)*sc,Y=y=>cy-(y-py)*sc;
   g.fillStyle='rgba(255,255,255,.6)';for(let i=0;i<6;i++){const x=((i*260-px*0.15*sc)%(W+300)+W+300)%(W+300)-150;g.beginPath();g.arc(x,80+(i%3)*40,24,0,TAU);g.arc(x+26,72+(i%3)*40,30,0,TAU);g.arc(x+56,82+(i%3)*40,22,0,TAU);g.fill()}
   const x0=px-cx/sc-20,x1=px+(W-cx)/sc+20;g.fillStyle='#ffffff';g.beginPath();g.moveTo(X(x0),H);for(let x=x0;x<=x1;x+=4)g.lineTo(X(x),Y(hill(x)));g.lineTo(X(x1),H);g.fill();
+  // snow texture marks every 12 ft so the ground visibly rushes past
+  g.strokeStyle='rgba(150,190,220,.55)';g.lineWidth=2;for(let x=Math.floor(x0/12)*12;x<x1;x+=12){const h=hill(x),k=((x*7919)%13)/13;g.beginPath();g.moveTo(X(x),Y(h)+4+k*10);g.lineTo(X(x+5),Y(hill(x+5))+4+k*10);g.stroke()}
+  g.fillStyle='rgba(160,200,230,.5)';for(let x=Math.floor(x0/40)*40;x<x1;x+=40){const k=((x*104729)%17)/17;g.beginPath();g.ellipse(X(x+k*20),Y(hill(x+k*20))+18+k*30,6+k*8,2,0,0,TAU);g.fill()}
   g.strokeStyle='#9cc6e6';g.lineWidth=3;g.beginPath();for(let x=x0;x<=x1;x+=4){const y=Y(hill(x));x===x0?g.moveTo(X(x),y):g.lineTo(X(x),y)}g.stroke();
   // take-off lip + start flag
   g.fillStyle='#e0402f';g.fillRect(X(LIP)-3,Y(inrun(LIP))-26,6,26);g.font='800 13px "Baloo 2",system-ui';g.textAlign='center';g.fillText('TAKE OFF',X(LIP),Y(inrun(LIP))-32);
@@ -80,18 +91,36 @@ function draw(now){g.setTransform(dpr,0,0,dpr,0,0);const p=P,px=p?p.x:200,py=p?p
   g.font='800 12px "Baloo 2",system-ui';for(let f=250;f<=4000;f+=250){const x=LIP+f;if(x<x0||x>x1)continue;const y=Y(land(x));g.fillStyle='#7a5530';g.fillRect(X(x)-1.5,y-24,3,24);g.fillStyle='#fff';g.strokeStyle='#14301f';g.lineWidth=1.5;rr(X(x)-30,y-42,60,18,5);g.fill();g.stroke();g.fillStyle='#14301f';g.fillText(f.toLocaleString('en-US')+' ft',X(x),y-29)}
   const b=best();if(b){const x=LIP+b;if(x>x0&&x<x1){const y=Y(land(x));g.fillStyle='#7a3cff';g.fillRect(X(x)-1.5,y-50,3,50);g.beginPath();g.moveTo(X(x)+1.5,y-50);g.lineTo(X(x)+26,y-43);g.lineTo(X(x)+1.5,y-36);g.fill();g.textAlign='left';g.fillText('BEST',X(x)+4,y-54)}}
   if(p){g.strokeStyle='rgba(255,255,255,.8)';g.setLineDash([4,6]);g.lineWidth=2;g.beginPath();p.trail.forEach(([x,y],i)=>i?g.lineTo(X(x),Y(y)):g.moveTo(X(x),Y(y)));g.stroke();g.setLineDash([])}
+  if(p&&FX>0)speedFx(p,spd,X(px),Y(py),now);
   // penguin (drawn a little bigger than true scale so you can see it)
   const ang=p?(p.ph==='air'?Math.atan2(p.vy,p.vx):p.ph==='run'?Math.atan(slope(inrun,px)):Math.atan(-SLOPE)):0;penguin(X(px),Y(py),-ang,p,now);
   minimap(p);hud(p,now)}
 function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
-function penguin(x,y,a,p,now){g.save();g.translate(x,y);g.rotate(a);const belly=p&&(p.ph==='slide'||p.ph==='stop'),s=1.1;
-  if(belly){g.fillStyle='#1d2733';g.beginPath();g.ellipse(0,-7*s,16*s,8*s,0,0,TAU);g.fill();g.fillStyle='#fff';g.beginPath();g.ellipse(1*s,-4*s,12*s,4.5*s,0,0,TAU);g.fill();
-    g.fillStyle='#ffa72a';g.beginPath();g.moveTo(16*s,-8*s);g.lineTo(23*s,-6*s);g.lineTo(16*s,-4*s);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(11*s,-10*s,2.4*s,0,TAU);g.fill();g.fillStyle='#123';g.beginPath();g.arc(11.6*s,-10*s,1.2*s,0,TAU);g.fill()}
-  else{g.fillStyle='#ffa72a';g.fillRect(-6*s,-3*s,5*s,3*s);g.fillRect(2*s,-3*s,5*s,3*s);g.fillStyle='#1d2733';g.beginPath();g.ellipse(0,-14*s,9*s,13*s,0,0,TAU);g.fill();
-    g.fillStyle='#fff';g.beginPath();g.ellipse(2*s,-12*s,6*s,9*s,0,0,TAU);g.fill();
-    const w=p&&p.ph==='air'?(p.wing>0?-1.1*p.wing:0.2)+Math.sin(now/90)*0.15:0.25;for(const sd of[-1,1]){g.save();g.translate(-2*s,-18*s);g.rotate(sd>0?w:-w*0.4);g.fillStyle='#2a3642';g.beginPath();g.ellipse(-2*s,8*s,3.5*s,11*s,0.3,0,TAU);g.fill();g.restore()}
-    g.fillStyle='#ffa72a';g.beginPath();g.moveTo(7*s,-24*s);g.lineTo(13*s,-22*s);g.lineTo(7*s,-20*s);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(4*s,-25*s,2.4*s,0,TAU);g.fill();g.fillStyle='#123';g.beginPath();g.arc(4.6*s,-25*s,1.2*s,0,TAU);g.fill()}
+function penguin(x,y,a,p,now){g.save();g.translate(x,y);g.rotate(a);const s=1.15,ph=p?p.ph:'run',air=ph==='air';
+  // belly-down pose: on the downhill (tobogganing), in the air (streamlined, wings out) and in the slide
+  const lift=air?-6:0;g.translate(0,lift);
+  g.fillStyle='#ffa72a';g.beginPath();g.ellipse(-17*s,-4*s,4*s,2*s,0.3,0,TAU);g.fill();g.beginPath();g.ellipse(-17*s,-1*s,4*s,2*s,-0.2,0,TAU);g.fill();
+  g.fillStyle='#1d2733';g.beginPath();g.ellipse(0,-7*s,17*s,7.5*s,0,0,TAU);g.fill();
+  g.fillStyle='#fff';g.beginPath();g.ellipse(1*s,-3.5*s,13*s,4*s,0,0,TAU);g.fill();
+  const flap=p&&p.wing>0?p.wing:0,wa=air?(-0.9-flap*1.2+Math.sin(now/70)*0.12):0.15;
+  g.save();g.translate(-2*s,-9*s);g.rotate(wa);g.fillStyle='#2a3642';g.beginPath();g.ellipse(-6*s,-2*s,11*s,3*s,0,0,TAU);g.fill();g.restore();
+  g.fillStyle='#1d2733';g.beginPath();g.arc(15*s,-9*s,6.5*s,0,TAU);g.fill();
+  g.fillStyle='#ffa72a';g.beginPath();g.moveTo(20*s,-10*s);g.lineTo(27*s,-8.5*s);g.lineTo(20*s,-7*s);g.fill();
+  g.fillStyle='#fff';g.beginPath();g.arc(17*s,-11*s,2.3*s,0,TAU);g.fill();g.fillStyle='#123';g.beginPath();g.arc(17.8*s,-11*s,1.2*s,0,TAU);g.fill();
+  if(ph==='run'||ph==='slide'){g.strokeStyle='rgba(255,255,255,.9)';g.lineWidth=2;g.beginPath();g.moveTo(-20*s,1*s);g.lineTo(-30*s,0);g.stroke()}
   g.restore()}
+function speedFx(p,spd,px,py,now){const k=FX===2?1.8:1,n=Math.min(60,Math.floor(spd/6*k));
+  // speed lines streaming past (more and longer the faster you go)
+  while(lines.length<n)lines.push({x:Math.random()*W,y:Math.random()*H,l:0.5+Math.random()});lines.length=Math.min(lines.length,n);
+  const ang=p.ph==='air'?Math.atan2(-p.vy,p.vx):Math.atan2(-(p.ph==='run'?slope(inrun,p.x):-SLOPE),1),dx=Math.cos(ang),dy=Math.sin(ang),len=spd*0.5*k;
+  g.strokeStyle=`rgba(255,255,255,${Math.min(0.75,spd/250)})`;g.lineWidth=FX===2?2.5:1.6;
+  for(const l of lines){l.x-=dx*spd*0.18*k;l.y-=dy*spd*0.18*k;if(l.x<-60||l.y<-60||l.y>H+60){l.x=W+Math.random()*80;l.y=Math.random()*H}
+    g.beginPath();g.moveTo(l.x,l.y);g.lineTo(l.x+dx*len*l.l,l.y+dy*len*l.l);g.stroke()}
+  // snow spray behind the belly on the ground
+  if((p.ph==='run'||p.ph==='slide')&&spd>8){for(let i=0;i<Math.min(6,spd/20*k);i++)snow.push({x:px-18,y:py-2,vx:-(40+Math.random()*80)*k-spd*0.3,vy:-(20+Math.random()*90),t:0})}
+  snow=snow.filter(q=>(q.t+=1/60)<0.7);g.fillStyle='rgba(255,255,255,.95)';for(const q of snow){q.x+=q.vx/60;q.y+=q.vy/60;q.vy+=260/60;g.beginPath();g.arc(q.x,q.y,1.5+FX,0,TAU);g.fill()}
+  // vignette at high speed
+  if(FX===2&&spd>120){const v=g.createRadialGradient(W/2,H/2,Math.min(W,H)*0.3,W/2,H/2,Math.max(W,H)*0.7);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,`rgba(10,40,80,${Math.min(0.35,(spd-120)/300)})`);g.fillStyle=v;g.fillRect(0,0,W,H)}}
 function minimap(p){const mw=Math.min(W-24,360),mh=46,mx=(W-mw)/2,my=8;g.fillStyle='rgba(255,255,255,.75)';rr(mx,my,mw,mh,10);g.fill();
   const xs=-20,xe=3400,yt=10,yb=-DROP-12-SLOPE*(xe-LIP),fx=x=>mx+8+(x-xs)/(xe-xs)*(mw-16),fy=y=>my+6+(yt-y)/(yt-yb)*(mh-12);
   g.strokeStyle='#5d9fd0';g.lineWidth=2;g.beginPath();for(let x=xs;x<=xe;x+=40){const y=fy(hill(x));x===xs?g.moveTo(fx(x),y):g.lineTo(fx(x),y)}g.stroke();
