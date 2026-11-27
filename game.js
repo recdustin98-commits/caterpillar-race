@@ -2069,10 +2069,9 @@ ov.addEventListener('click',e=>{
   if(act==='quit'){confirmBox(t('quitQ'),'keep',t('keep'),'quityes',t('quitYes'));return}
   if(act==='keep'){if(state==='race'||state==='count')raceOv();return}
   if(act==='quityes'){finishId++;
-    if(mode==='online'&&net){net.send({t:'quit'});if(anyone){enterMatch();return}state='lobby';panel='lobby';sig='';lobby();return}
-    if(mode==='online'){leaveRoom();return}
-    if(mode==='duo'){duoScreen();return}
-    if(mode==='solo'){missionStart(raceLv);return}
+    // quit goes one step further back than "race again" (Dustin, Nov 27): anyone → home, friends → Play friends screen, same phone → home, mission → map
+    if(mode==='online'){const wasAny=anyone;if(net)net.send({t:'quit'});leaveRoom();if(!wasAny){onTab='create';friends()}return}
+    if(mode==='solo'){mapScreen();return}
     home();return}
   if(act==='homeask'){confirmBox(t('leaveQ'),'stay',t('stay'),'leaveyes',t('leaveYes'));return}
   if(act==='stay'){sig='';refreshPanel(true);return}
