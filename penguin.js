@@ -8,11 +8,13 @@ const S=n=>{try{const f=B().sfx&&B().sfx[n];f&&f()}catch(e){}};
 const vib=ms=>{try{B().buzz&&B().buzz(ms)}catch(e){}};
 const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const TAU=Math.PI*2,clamp=(v,a,b)=>v<a?a:v>b?b:v;
-// physics (feet, seconds) — 3x longer in-run (Dustin, Nov 27). Tuned by simulation (no flaps → flapping all the way):
-// 150 RPM ≈ 1,300–1,500 ft, 300 ≈ 1,800–2,450, 450 ≈ 2,200–3,200; about 10–15 s of spinning on the in-run
-const G=32,LIP=1260,DROP=180,KICK=8*Math.PI/180,SLOPE=0.3,MU=0.55,DRAG=0.0006,KSPIN=0.08,FLAP=0.92,MINSINK=40,FLAPGAP=0.125,END=4600;
-const inrun=x=>x<=60?0:x<=LIP?-DROP*(1-Math.cos(Math.PI*(x-60)/(LIP-60)))/2:-DROP;
-const land=x=>x<LIP?-DROP:-DROP-12-SLOPE*(x-LIP);
+// physics (feet, seconds of game time). Nov 27 (Dustin): 420-ft in-run whose last 120 ft is a take-off ramp that curves UP to 8°,
+// and the whole game runs 2x faster on screen (TIME=2; distances and mph unchanged). Simulated (no flaps → flapping all the way):
+// 100 RPM ≈ 1,140–1,250 ft, 150 ≈ 1,320–1,540, 300 ≈ 1,770–2,350, 450 ≈ 2,120–3,040; ~2–4 s of spinning, ~12 s per jump (real time)
+const TIME=2,RAMP=120,G=32,LIP=420,DROP=180,KICK=8*Math.PI/180,SLOPE=0.3,MU=0.55,DRAG=0.0006,KSPIN=0.12,FLAP=0.92,MINSINK=40,FLAPGAP=0.125,END=4600;
+const RB=LIP-RAMP,TK=Math.tan(KICK),LTOP=-DROP+TK*RAMP/2;
+const inrun=x=>x<=60?0:x<=RB?-DROP*(1-Math.cos(Math.PI*(x-60)/(RB-60)))/2:x<=LIP?-DROP+TK*(x-RB)*(x-RB)/(2*RAMP):LTOP;
+const land=x=>x<LIP?LTOP:LTOP-20-SLOPE*(x-LIP);
 const hill=x=>x<=LIP?inrun(x):land(x);
 const slope=(f,x)=>(f(x+0.5)-f(x-0.5));
 const best=()=>{try{return +JSON.parse(st.get('cr-ski')||'{}').ft||0}catch(e){return 0}};
@@ -51,9 +53,10 @@ function up(e){if(fp&&e.pointerId===fp.id)fp=null}
 function tap(){if(!P||scr!=='play')return;if(P.ph==='air'&&P.flapCd<=0){P.flapCd=FLAPGAP;P.flaps++;P.wing=1;if(P.vy<-MINSINK)P.vy=Math.min(P.vy*FLAP,-MINSINK);S('puff')}}
 // ---------- run ----------
 function start(){scr='play';U.innerHTML='';lines=[];snow=[];camZ=1;P={ph:'count',cnt:3,ct:0,x:0,y:0,v:3,vx:0,vy:0,acc:0,rpm:0,fa:-Math.PI/2,top:0,flaps:0,flapCd:0,wing:0,lipV:0,flightFt:0,t:0,trail:[]};S('beep')}
+// real-time part: finger RPM with the same 'Light' feel as every race (0.5 s up, 1.5 s down) and the 3-2-1 countdown
+function realP(dt){const p=P,inst=dt>0?p.acc/dt*60/TAU:0;p.acc=0;const ti=Math.min(520,inst);p.rpm+=(ti-p.rpm)*(1-Math.exp(-dt/(ti>p.rpm?0.5:1.5)));
+  if(p.ph==='count'){p.ct+=dt;if(p.ct>=1){p.ct=0;p.cnt--;S(p.cnt?'beep':'go');if(!p.cnt)p.ph='run'}}}
 function stepP(dt){const p=P;p.t+=dt;p.flapCd-=dt;p.wing=Math.max(0,p.wing-dt*5);
-  const inst=dt>0?p.acc/dt*60/TAU:0;p.acc=0;{const ti=Math.min(520,inst);p.rpm+=(ti-p.rpm)*(1-Math.exp(-dt/(ti>p.rpm?0.5:1.5)))} // same 'Light' feel as every race (0.5 s up, 1.5 s down)
-  if(p.ph==='count'){p.ct+=dt;if(p.ct>=1){p.ct=0;p.cnt--;S(p.cnt?'beep':'go');if(!p.cnt)p.ph='run'}return}
   if(p.ph==='run'){const th=Math.atan(slope(inrun,p.x)),a=-G*Math.sin(th)+KSPIN*p.rpm-DRAG*p.v*p.v-0.02*G;p.v=Math.max(2,p.v+a*dt);p.x+=p.v*Math.cos(th)*dt;p.y=inrun(p.x);p.top=Math.max(p.top,p.rpm);
     if(p.x>=LIP){p.ph='air';p.lipV=p.v;p.vx=p.v*Math.cos(KICK);p.vy=p.v*Math.sin(KICK);p.y=inrun(LIP);S('whoosh');vib(60)}}
   else if(p.ph==='air'){p.vy-=G*dt;p.vx-=DRAG*p.vx*p.vx*dt*0.5;p.x+=p.vx*dt;p.y+=p.vy*dt;p.trail.push([p.x,p.y]);if(p.trail.length>400)p.trail.shift();
@@ -71,7 +74,7 @@ function intro(){scr='intro';P=null;const b=best();U.innerHTML=`<div class="ap">
   ${b?`<p><b>Your best: ${b.toLocaleString('en-US')} ft</b></p>`:''}${optHtml()}<button class="ab" data-a="go">▶ Jump!</button></div>`}
 // ---------- drawing ----------
 function tick(now){raf=requestAnimationFrame(tick);if(!on)return;const dt=Math.min(0.05,(now-last)/1000);last=now;
-  if(P&&scr==='play'){let k=dt;while(k>0){const h=Math.min(1/120,k);stepP(h);k-=h}}
+  if(P&&scr==='play'){realP(dt);if(P.ph!=='count'){let k=dt*TIME;while(k>0&&P&&P.ph!=='stop'){const h=Math.min(1/120,k);stepP(h);k-=h}}}
   draw(now)}
 function draw(now){g.setTransform(dpr,0,0,dpr,0,0);const p=P,px=p?p.x:200,py=p?p.y:inrun(200);
   const sk=g.createLinearGradient(0,0,0,H);sk.addColorStop(0,'#8fc7f0');sk.addColorStop(1,'#e8f4fd');g.fillStyle=sk;g.fillRect(0,0,W,H);
@@ -85,6 +88,8 @@ function draw(now){g.setTransform(dpr,0,0,dpr,0,0);const p=P,px=p?p.x:200,py=p?p
   g.strokeStyle='rgba(150,190,220,.55)';g.lineWidth=2;for(let x=Math.floor(x0/12)*12;x<x1;x+=12){const h=hill(x),k=((x*7919)%13)/13;g.beginPath();g.moveTo(X(x),Y(h)+4+k*10);g.lineTo(X(x+5),Y(hill(x+5))+4+k*10);g.stroke()}
   g.fillStyle='rgba(160,200,230,.5)';for(let x=Math.floor(x0/40)*40;x<x1;x+=40){const k=((x*104729)%17)/17;g.beginPath();g.ellipse(X(x+k*20),Y(hill(x+k*20))+18+k*30,6+k*8,2,0,0,TAU);g.fill()}
   g.strokeStyle='#9cc6e6';g.lineWidth=3;g.beginPath();for(let x=x0;x<=x1;x+=4){const y=Y(hill(x));x===x0?g.moveTo(X(x),y):g.lineTo(X(x),y)}g.stroke();
+  // take-off ramp (last 120 ft, curves up to 8°): blue ice surface
+  if(RB<x1&&LIP>x0){g.strokeStyle='#4fa3e0';g.lineWidth=5;g.beginPath();for(let x=RB;x<=LIP;x+=3){x===RB?g.moveTo(X(x),Y(inrun(x))):g.lineTo(X(x),Y(inrun(x)))}g.stroke()}
   // take-off lip + start flag
   g.fillStyle='#e0402f';g.fillRect(X(LIP)-3,Y(inrun(LIP))-26,6,26);g.font='800 13px "Baloo 2",system-ui';g.textAlign='center';g.fillText('TAKE OFF',X(LIP),Y(inrun(LIP))-32);
   g.fillStyle='#ff8a2a';g.fillRect(X(30)-2,Y(0)-30,4,30);g.beginPath();g.moveTo(X(30)+2,Y(0)-30);g.lineTo(X(30)+22,Y(0)-24);g.lineTo(X(30)+2,Y(0)-18);g.fill();
@@ -123,7 +128,7 @@ function speedFx(p,spd,px,py,now){const k=FX===2?1.8:1,n=Math.min(60,Math.floor(
   // vignette at high speed
   if(FX===2&&spd>120){const v=g.createRadialGradient(W/2,H/2,Math.min(W,H)*0.3,W/2,H/2,Math.max(W,H)*0.7);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,`rgba(10,40,80,${Math.min(0.35,(spd-120)/300)})`);g.fillStyle=v;g.fillRect(0,0,W,H)}}
 function minimap(p){const mw=Math.min(W-24,360),mh=46,mx=(W-mw)/2,my=8;g.fillStyle='rgba(255,255,255,.75)';rr(mx,my,mw,mh,10);g.fill();
-  const xs=-20,xe=LIP+3000,yt=10,yb=-DROP-12-SLOPE*(xe-LIP),fx=x=>mx+8+(x-xs)/(xe-xs)*(mw-16),fy=y=>my+6+(yt-y)/(yt-yb)*(mh-12);
+  const xs=-20,xe=LIP+3200,yt=10,yb=land(xe),fx=x=>mx+8+(x-xs)/(xe-xs)*(mw-16),fy=y=>my+6+(yt-y)/(yt-yb)*(mh-12);
   g.strokeStyle='#5d9fd0';g.lineWidth=2;g.beginPath();for(let x=xs;x<=xe;x+=40){const y=fy(hill(x));x===xs?g.moveTo(fx(x),y):g.lineTo(fx(x),y)}g.stroke();
   const b=best();if(b){g.fillStyle='#7a3cff';g.fillRect(fx(LIP+b)-1,my+4,2,mh-8)}
   if(p){g.fillStyle='#e0402f';g.beginPath();g.arc(fx(clamp(p.x,xs,xe)),fy(clamp(p.y,yb,yt)),4,0,TAU);g.fill()}}
