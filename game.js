@@ -149,7 +149,8 @@ const STAR_MAX=90,DRAGON_STARS=75;
 const UNLOCK={centi:3,garter:5,basil:10,puffer:13,crab:15,shrimp:15,frill:18,peng:23,imugi:30};
 const cleared=()=>{const a=getStars();let c=0;while(c<30&&a[c]>0)c++;return c};
 const dragonKept=()=>{if(store.get('cr-dragon')==='1')return true;let old=0;try{old=+JSON.parse(store.get('cr-ski')||'{}').s||0}catch(e){}if(totalStars()+old>=DRAGON_STARS){store.set('cr-dragon','1');return true}return false};
-const isOpen=k=>CHARS.includes(k)&&(k==='dragon'?totalStars()>=DRAGON_STARS||dragonKept():!(k in UNLOCK)||getStars()[UNLOCK[k]-1]>0);
+const advP=()=>{try{const a=JSON.parse(store.get('cr-adv1')||'null');return Array.isArray(a)?a:[]}catch(e){return[]}},advStars=()=>advP().reduce((a,b)=>a+(+b||0),0);
+const isOpen=k=>CHARS.includes(k)&&(k==='dragon'?totalStars()>=DRAGON_STARS||dragonKept():!(k in UNLOCK)||getStars()[UNLOCK[k]-1]>0||(k==='centi'&&advP()[4]>0));
 const firstOpen=k=>isOpen(k)?k:'cat';
 let lvl=Math.max(1,Math.min(NLV,+store.get('cr-lv')||cleared()+1,cleared()+1));
 const botW=()=>LV[lvl-1]*2*Math.PI/60;
@@ -1674,6 +1675,7 @@ function home(){
   const tot=totalStars();
   ov.innerHTML=`<div class="panel home">${meCard()}<h2>${t('letsRace')}</h2>
   <div class="tiles">
+   <button class="tile cadv wide" data-act="adv"><span class="e">🐛</span><b>Caterpillar's Adventure</b><small>NEW · 10 steering missions · make garden friends</small><span class="live">⭐ ${advStars()} / 30 stars</span></button>
    <button class="tile c1 wide" data-act="mission"><span class="e">🗺️</span><b>${t('misTile')}</b><small>${t('misTileSub')}</small><span class="live">${t('starsOf',{n:tot})}</span><span class="minibar" aria-hidden="true"><i style="width:${Math.round(tot/90*100)}%"></i></span></button>
    <button class="tile c2" data-act="any"><span class="e">🌍</span><b>${t('anyTile')}</b><small>${t('anyTileSub')}</small><span class="live" id="anyLive"${anyCount>0?'':' hidden'}><i></i>${t('racingNow',{n:anyCount})}</span></button>
    <button class="tile c3" data-act="friends"><span class="e">👫</span><b>${t('friendsTile')}</b><small>${t('friendsSub')}</small></button>
@@ -2114,6 +2116,7 @@ ov.addEventListener('click',e=>{
   if(act==='savename'){const i=document.getElementById('nick'),v=(i?i.value:'').trim().slice(0,NAMEMAX);if(v&&isBad(v)){say(t('badName'));if(i){i.focus();i.style.borderColor='#ff8a2a'}return}
     if(!v||v===autoName()){store.set('cr-nick','')}else if(/^(Zippy|Turbo|Rapid|Lucky|Super|Happy|Brave|Swift|Jolly|Sunny|Fizzy|Peppy|Mega|Comet|Rocket|Speedy|Dizzy|Bouncy|Sparky|Mighty) \w+ \d\d$/.test(v)){store.set('cr-auto',v);store.set('cr-nick','')}else store.set('cr-nick',v);
     backFromName();return}
+  if(act==='adv'){window.ADV&&ADV.open();return}
   if(act==='mission'||act==='map'){mapScreen();return}
   if(act==='mgo'){mode='solo';anyone=false;startLocal();return}
   if(act==='mnext'){missionStart(raceLv+1);return}
@@ -2209,6 +2212,7 @@ if(qs.get('cardtest')==='1')window.__sound=async(name,dur)=>{
   for(let i=0;i<n;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,x[i]))*32767,true);
   let bin='';const u=new Uint8Array(ab);for(let i=0;i<u.length;i+=8192)bin+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(bin);
 };
+window.CRB={store,sfx,home,t,buzz,playVid,isOpen};
 applyLang();menu();requestAnimationFrame(loop);
 }
 
