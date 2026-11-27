@@ -362,8 +362,8 @@ function raftInit(m,o){const r=rng(o.seed);Object.assign(m,{cur:o.cur,beach:null
   m.whirls=[];for(let i=0;i<o.whirls;i++){const y=-500-i*(o.len-900)/Math.max(1,o.whirls)-r()*120;m.whirls.push({x:m.cx(y)+(r()*2-1)*(m.hwAt(y)-60),y,r:44})}
   m.petals=[];for(let i=0;i<(o.petals||0);i++){const y=-200-i*(o.len-400)/o.petals,c=m.cx(y);let x,n=0;do{x=c+(r()*2-1)*(m.hwAt(y)-30)}while(n++<30&&m.rocks.some(k=>hyp(k.x-x,k.y-y)<k.r+22));m.petals.push({x,y})}
   if(o.beach){const y=-o.len+260;m.beach={y,side:r()<0.5?-1:1,h:150}}m.end=-o.len}
-function raftUpd(m,dt,now){m.cool-=dt;const R=m.raft,o=oars(now);
-  const hx=Math.cos(R.a),hy=Math.sin(R.a),th=(o.l+o.r)*95;R.vx+=hx*th*dt;R.vy+=hy*th*dt;R.w+=(o.l-o.r)*3.1*dt;
+function raftUpd(m,dt,now){m.cool-=dt;const R=m.raft,j=stick();
+  if(j.on){const d=wrap(j.a-R.a);R.w+=clamp(d*6,-6,6)*dt;const hx=Math.cos(R.a),hy=Math.sin(R.a),th=110*Math.max(0,Math.cos(d));R.vx+=hx*th*dt;R.vy+=hy*th*dt}
   for(const w of m.whirls){const dx=R.x-w.x,dy=R.y-w.y,d=hyp(dx,dy);if(d<w.r&&d>0.1){R.w+=2.6*dt;R.vx+=(-dy/d)*80*dt-dx/d*25*dt;R.vy+=(dx/d)*80*dt-dy/d*25*dt}}
   const dr=Math.exp(-dt/1.1);R.vx*=dr;R.vy*=dr;R.w*=Math.exp(-dt/0.7);const sp=hyp(R.vx,R.vy);if(sp>140){R.vx*=140/sp;R.vy*=140/sp}
   R.a+=R.w*dt;R.x+=R.vx*dt;R.y+=(R.vy-m.cur)*dt;
@@ -405,7 +405,7 @@ const ADV=[
     spd:75,limit:40,th:[28,40,50],icon:'🍃'}),
   T.cross({name:'Ant parade',e:'🐜',story:'Four lines of ants are marching! Let go to stop and wait for a gap, then cross to the flower.',stars:['Reach the flower','2 bumps or less','No bumps'],
     bg:'dirt',who:'ant',spd:75,icon:'🐜',goal:(x,y,t)=>flower(x,y,30,t),rows:[{y:430,v:38,o:0},{y:340,v:-52,o:60},{y:250,v:64,o:130},{y:160,v:-80,o:20}]}),
-  T.raft({name:'Leaf raft',e:'🍂',story:'Ride a leaf down the stream! Two thumbs are two oars: drag DOWN to row forward, UP to row back. Left up + right down = spin left. Dodge rocks and whirlpools, pick up petals.',
+  T.raft({name:'Leaf raft',e:'🍂',story:'Ride a leaf down the stream! Push the joystick the way you want to paddle — the leaf turns slowly and glides. Dodge rocks and whirlpools, pick up petals.',
     stars:['Reach the end of the stream','3 bumps or less and 3+ petals','1 bump or less and 6+ petals'],len:2300,cur:52,hw:128,seed:41,rocks:9,whirls:2,petals:8,vessel:'leaf',oarL:'OAR'}),
   T.maze({name:'Mole tunnels',e:'🕳️',story:'Find the way out of the tunnels. Moles are patrolling! Let go to stop and hide in a side tunnel until they pass.',stars:['Find the way out','Caught once or less','Never caught'],
     map:['#E######','#.#....#','#.#.##.#','#...#..#','###.#.##','#...#..#','#.####.#','#......#','#.##.###','#.#..#.#','#S#....#'],start:[1,10],exit:[1,0],checks:[[1,7],[3,5]],
@@ -417,7 +417,7 @@ const ADV=[
   T.jump({name:'Puddle hop',e:'💦',story:'It rained! You crawl by yourself — just jump over the puddles and pebbles. TAP for a little hop, HOLD for a big jump. Watch the puddle size!',
     stars:['Reach the flower','2 mistakes or less','No mistakes'],spd:125,seed:31,seq:['s','r','s','m','l','r','s','l','m','r','l','s','m','l'],
     sky:'#bfe6ff',water:'#5aa9e6',ground:'#a77d52',top:'#6fbf4a',far:'☁️',goal:(x,y,t)=>flower(x,y,30,t)}),
-  T.raft({name:'Rapids!',e:'🌊',story:'The stream is faster now, and there is a WATERFALL at the end! Paddle with both thumbs and get off the leaf at the sandy beach before the waterfall.',
+  T.raft({name:'Rapids!',e:'🌊',story:'The stream is faster now, and there is a WATERFALL at the end! Paddle with the joystick and get off the leaf at the sandy beach before the waterfall.',
     stars:['Land on the beach','3 bumps or less','1 bump or less'],len:2500,cur:78,hw:108,seed:93,rocks:12,whirls:3,beach:true,vessel:'leaf',oarL:'OAR'}),
   T.hide({name:'The hungry bird',e:'🐦',story:'BOSS! A bird is looking for a snack. When its shadow comes, hide under a big leaf and let go to freeze. Reach the twig, then crawl around it 3 times to spin your cocoon!',
     stars:['Spin your cocoon','Spotted once or less','Never spotted'],bg:'grass',spd:85,hunter:'🐦',cover:leafCover,warnTxt:'🐦 Bird coming — hide!',spinTxt:'Crawl around the twig 3 times!',
@@ -432,7 +432,7 @@ const ADV=[
   T.collect({name:'Jellyfish snack',e:'🍮',story:'Sea turtles love to eat jellyfish! Swim around and eat all 7 — but stay away from plastic bags.',stars:['Eat all 7 jellyfish','1 bump or less','No bumps'],
     shape:'pool',bg:'sand',pool:'#2f8fc6',n:7,spd:75,icon:'🎐',seed:21,item:(x,y,t)=>jelly(x,y,t,1.2),
     hazards:[{cx:120,cy:200,ax:60,ay:40,sp:1.1,ph:0,r:14},{cx:280,cy:330,ax:60,ay:60,sp:0.9,ph:2,r:14},{cx:200,cy:430,ax:90,ay:20,sp:1.3,ph:4,r:14}],hz:(x,y)=>emo('🛍️',x,y,26)}),
-  T.raft({name:'Ride the current',e:'🌀',story:'Catch the ocean current! Your two thumbs are your two front flippers: drag DOWN to swim forward, UP to back up. Grab the sea stars, dodge the coral.',
+  T.raft({name:'Ride the current',e:'🌀',story:'Catch the ocean current! Push the joystick the way you want to swim — your flippers take you there. Grab the sea stars, dodge the coral.',
     stars:['Reach the reef','3 bumps or less and 3+ stars','1 bump or less and 6+ stars'],len:2300,cur:56,hw:124,seed:52,rocks:10,whirls:2,petals:8,petE:'⭐',vessel:'turtle',water:'#2f8fc6',bank:'#e7d39a',rock:'coral',oarL:'FLIPPER'}),
   T.eat({name:'Seagrass lunch',e:'🌱',story:'Grown-up green sea turtles munch seagrass. Graze the meadow — eat as much as you can before time runs out!',stars:['Eat 28% of the meadow','Eat 40%','Eat 50%'],
     meadow:true,bg:'sand',spd:80,limit:40,th:[28,40,50],icon:'🌱'}),
@@ -447,7 +447,7 @@ const ADV=[
   T.freeze({name:'Sleepy shark',e:'🦈',story:'A nurse shark naps in front of a yummy sponge. Sneak in! When it opens its eyes, let go and FREEZE.',stars:['Reach the sponge','Caught once or less','Never caught'],
     bg:'sea',prop:'coral',spd:64,icon:'🦈',watcher:'🦈',warn:0.8,stones:STONES,
     home:()=>{g.fillStyle='#ffd23f';g.beginPath();g.arc(200,110,16,0,TAU);g.fill();g.fillStyle='#e0a000';for(let i=0;i<6;i++){g.beginPath();g.arc(200+Math.cos(i)*8,110+Math.sin(i)*8,3,0,TAU);g.fill()}}}),
-  T.raft({name:'Storm swim',e:'⛈️',story:'A storm makes the current super strong! Swim with both flippers and climb onto the beach before the big rock drop.',
+  T.raft({name:'Storm swim',e:'⛈️',story:'A storm makes the current super strong! Swim with the joystick and climb onto the beach before the big rock drop.',
     stars:['Reach the beach','3 bumps or less','1 bump or less'],len:2500,cur:80,hw:106,seed:77,rocks:12,whirls:3,beach:true,vessel:'turtle',water:'#2577ad',bank:'#e7d39a',rock:'coral',oarL:'FLIPPER',endWord:'⚠️ ROCK DROP ⚠️',overMsg:'Whoosh — over the rock drop! Get to the beach next time.'}),
   T.hide({name:'Tiger shark',e:'🦈',story:'BOSS! A tiger shark is cruising. When its shadow comes, hide in the seagrass and let go to freeze. Reach the beach, then crawl around the nest spot 3 times to dig your nest!',
     stars:['Dig your nest','Spotted once or less','Never spotted'],bg:'sea',spd:85,hunter:'🦈',cover:grassCover,warnTxt:'🦈 Shark coming — hide!',spinTxt:'Go around the nest spot 3 times!',
@@ -476,7 +476,7 @@ const ADV=[
   T.gaps({name:'Vine curtains',e:'🌿',story:'Thick vines block the jungle, each with one gap. A snake drops into the gap now and then — wait, then slip through!',stars:['Get through all vines','Caught once or less','Never caught'],
     bg:'jungle',spd:82,icon:'🐍',dropper:'🐍',thread:true,seed:12,goal:(x,y)=>emo('🍌',x,y+6,24),walls:[{y:430,gx:290,gw:70},{y:300,gx:110,gw:66},{y:170,gx:250,gw:62}],
     wall:(a,b,y)=>{g.strokeStyle='#2f6e1f';g.lineWidth=4;for(let k=-1;k<=1;k++){g.beginPath();for(let x=a;x<=b;x+=6)g.lineTo(x,y+k*5+Math.sin(x/9+k)*3);g.stroke()}g.fillStyle='#4fae3a';for(let x=a+6;x<b;x+=18){g.beginPath();g.ellipse(x,y,5,3,0.6,0,TAU);g.fill()}}}),
-  T.raft({name:'Jungle river',e:'🪵',story:'Ride a log down the jungle river! Two thumbs are two paddles. Land on the beach before the waterfall!',
+  T.raft({name:'Jungle river',e:'🪵',story:'Ride a log down the jungle river! Paddle with the joystick and land on the beach before the waterfall!',
     stars:['Land on the beach','3 bumps or less','1 bump or less'],len:2500,cur:80,hw:106,seed:15,rocks:12,whirls:3,beach:true,vessel:'log',water:'#3a8f7a',bank:'#4f9a3a',oarL:'PADDLE'}),
   T.hide({name:'The Imugi',e:'🐉',story:'FINAL BOSS! The Imugi — a giant serpent from Korean legend — guards the waterfall pearl. When its shadow comes, hide behind a rock and freeze. Reach the pearl and circle it 3 times to wake its magic!',
     stars:['Win the pearl','Spotted once or less','Never spotted'],bg:'jungle',spd:88,hunter:'🐉',cover:rockCover,warnTxt:'🐉 The Imugi is coming!',spinTxt:'Circle the pearl 3 times!',
@@ -514,24 +514,19 @@ function drawHud(m,d){g.fillStyle='rgba(20,60,30,.92)';g.fillRect(0,0,W,HUD);g.f
   g.fillStyle='rgba(255,255,255,.18)';rr(8,7,40,40,10);g.fill();g.fillStyle='#fff';g.font='22px system-ui';g.textAlign='center';g.fillText('✕',28,35)}
 function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function drawPad(d,now){const y=H-PAD;g.fillStyle='rgba(30,80,40,.88)';rr(0,y,W,PAD+20,22);g.fill();g.textAlign='center';
-  if(d.ctrl==='raft'){const o=oars(now),nmL=d.oarL||'OAR';for(const[s,x,v]of[['L',W*0.25,o.l],['R',W*0.75,o.r]]){g.fillStyle='rgba(255,255,255,.12)';rr(x-W*0.2,y+14,W*0.4,PAD-30,16);g.fill();
-      g.fillStyle='#fff';g.font='700 14px "Baloo 2",system-ui';g.fillText((s==='L'?'LEFT ':'RIGHT ')+nmL,x,y+34);g.font='13px "Baloo 2",system-ui';g.fillText('↓ forward · ↑ back',x,y+PAD-26);
-      const k=clamp(v,-1.4,1.4);g.save();g.translate(x,y+PAD/2+4);g.rotate(k*0.5*(s==='L'?-1:1));g.fillStyle='#c98a3c';rr(-5,-38,10,62,4);g.fill();g.beginPath();g.ellipse(0,30,13,20,0,0,TAU);g.fill();g.restore();
-      if(Math.abs(k)>0.15){g.fillStyle=k>0?'#9cf07a':'#ffcf5a';g.font='800 26px system-ui';g.fillText(k>0?'▼':'▲',x+(s==='L'?-44:44),y+PAD/2+12)}}
-    for(const p of ptr.values()){g.fillStyle='rgba(255,138,42,.7)';g.beginPath();g.arc(p.x,p.y,16,0,TAU);g.fill()}return}
   if(d.ctrl==='jump'||d.ctrl==='tap'){const dn=ptr.size>0||keys[' '];g.fillStyle=dn?'#ffd23f':'#ff8a2a';rr(W/2-130,y+30,260,PAD-60,24);g.fill();
     g.fillStyle='#2a1200';g.font='800 21px "Baloo 2",system-ui';g.fillText(d.ctrl==='jump'?'TAP = hop · HOLD = big jump':'TAP = tongue!',W/2,y+PAD/2+8);
     g.fillStyle='#fff';g.font='700 13px "Baloo 2",system-ui';g.fillText('Tap anywhere on the screen (or press Space)',W/2,y+18);return}
   const j=stick();g.strokeStyle='rgba(255,255,255,.8)';g.lineWidth=3;g.beginPath();g.arc(JX(),JY(),JR,0,TAU);g.stroke();g.fillStyle='rgba(255,255,255,.85)';g.beginPath();g.arc(JX(),JY(),7,0,TAU);g.fill();
   if(j.fx!=null){const a=Math.atan2(j.fy-JY(),j.fx-JX()),dd=Math.min(JR,hyp(j.fx-JX(),j.fy-JY()));g.strokeStyle='#ff8a2a';g.lineWidth=5;g.beginPath();g.moveTo(JX(),JY());g.lineTo(JX()+Math.cos(a)*dd,JY()+Math.sin(a)*dd);g.stroke();g.fillStyle='#ff8a2a';g.beginPath();g.arc(JX()+Math.cos(a)*dd,JY()+Math.sin(a)*dd,13,0,TAU);g.fill()}
-  g.fillStyle='#fff';g.font='700 14px "Baloo 2",system-ui';g.fillText(d.ctrl==='go'?'➡️ Keeps moving · steer with the joystick':'✋ Let go to STOP · hold to move',W/2,y+16)}
+  g.fillStyle='#fff';g.font='700 14px "Baloo 2",system-ui';g.fillText(d.ctrl==='go'?'➡️ Keeps moving · steer with the joystick':d.ctrl==='raft'?'🛶 Paddle toward the joystick · let go to drift':'✋ Let go to STOP · hold to move',W/2,y+16)}
 function drawMapBg(now){g.fillStyle=AV===1?'#bfe2f2':AV===2?'#e8d9b8':'#bfe3a5';g.fillRect(0,0,W,H);const r=rng(3);g.font='28px system-ui';g.globalAlpha=0.35;
   const set=AV===1?['🐚','🌊','⭐','🐠']:AV===2?['🌵','🌿','🍃','🌼']:['🍃','🌼','🍀','🌸'];for(let i=0;i<18;i++){const x=r()*W,y=(r()*H+now*0.01*(0.5+r()))%H;g.fillText(set[i%4],x,y)}g.globalAlpha=1}
 
 // ---------- screens ----------
 const starsHtml=n=>`<span class="s">${'★'.repeat(n)}${'<i>★</i>'.repeat(3-n)}</span>`;
-const CTLS={go:'➡️ keeps moving',stop:'✋ let go to stop',raft:'🛶 two-thumb paddles',jump:'⤴️ tap / hold to jump',tap:'👅 tap at the right time'};
-const CTL={go:'➡️ Keeps moving — you only steer',stop:'✋ Let go of the joystick to STOP',raft:'🛶 Two thumbs = two paddles',jump:'⤴️ No steering! TAP = little hop · HOLD = big jump',tap:'👅 No steering! TAP to shoot your tongue'};
+const CTLS={go:'➡️ keeps moving',stop:'✋ let go to stop',raft:'🛶 paddle with the joystick',jump:'⤴️ tap / hold to jump',tap:'👅 tap at the right time'};
+const CTL={go:'➡️ Keeps moving — you only steer',stop:'✋ Let go of the joystick to STOP',raft:'🛶 Paddle toward the joystick · let go to drift with the water',jump:'⤴️ No steering! TAP = little hop · HOLD = big jump',tap:'👅 No steering! TAP to shoot your tongue'};
 function pickScr(){scr='pick';M=null;const tot=totStars();
   U.innerHTML=`<div class="ap"><button class="x" data-a="home" aria-label="Home">🏠</button><h2>🗺️ Adventures</h2>
   <p class="sm">⭐ ${tot} / 90 stars · 🐉 Golden Dragon at ${DRAGON} ⭐</p><div class="bar"><i style="width:${Math.min(100,tot/DRAGON*100)}%"></i></div>
@@ -546,7 +541,7 @@ function listScr(a){AV=a;scr='map';M=null;const A=ADV[a],p=getP(a),tot=p.reduce(
 function startScr(i){scr='start';const d=ADV[AV].ms[i],p=getP(AV);U.innerHTML=`<div class="ap"><button class="x" data-a="list" data-v="${AV}" aria-label="Back">←</button><h2>${d.e} ${i+1}. ${esc(d.name)}</h2>
   ${d.boss?'<p><b>👑 Boss mission</b></p>':''}<p>${esc(d.story)}</p><div class="ctl">${CTL[d.ctrl]}</div>
   <ul>${d.stars.map((s,k)=>`<li>${'⭐'.repeat(k+1)} ${esc(s)}</li>`).join('')}</ul>
-  ${p[i]?`<p class="sm">Your best: ${'⭐'.repeat(p[i])}</p>`:''}<p class="sm">${d.ctrl==='raft'?'On a computer: W / S = left, ↑ / ↓ = right.':d.ctrl==='jump'||d.ctrl==='tap'?'On a computer: Space bar.':'On a computer you can also use the arrow keys.'}</p>
+  ${p[i]?`<p class="sm">Your best: ${'⭐'.repeat(p[i])}</p>`:''}<p class="sm">${d.ctrl==='jump'||d.ctrl==='tap'?'On a computer: Space bar.':'On a computer you can also use the arrow keys.'}</p>
   <button class="ab" data-a="go" data-v="${i}">▶ Start</button></div>`}
 function resultScr(r){scr='result';const a=M.a,i=M.i,d=ADV[a].ms[i],nx=i<9&&misOpen(a,i+1);
   U.innerHTML=`<div class="ap"><h2>${r.stars?(r.stars===3?'PERFECT!':'Mission complete!'):'So close!'}</h2><div class="stars">${'★'.repeat(r.stars)}<i>${'★'.repeat(3-r.stars)}</i></div>
