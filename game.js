@@ -464,10 +464,8 @@ function drawVid(now){
   const c=VID.c,dt=VID.last?Math.min(50,now-VID.last):16;VID.last=now;
   const rpm=110+240*Math.max(0,Math.min(1,(tt-.6)/4));c.w=rpm*2*Math.PI/60;c.disp+=(rpm-c.disp)*Math.min(1,dt/90);c.top=Math.max(c.top,c.w);
   c.phi+=c.w*GAIN*dt/1000;c.spin+=c.w*dt/1000;
-  drawLane(c,[],0,H,now,false);
-  // title strip at the top
-  ctx.save();ctx.fillStyle='rgba(20,48,31,.78)';rr(W/2-150,14,300,40,20);ctx.fill();ctx.fillStyle='#fff';ctx.font='800 20px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText(t('ch_'+VID.ch),W/2,35);ctx.restore();
+  const lh=Math.round(H*.62);drawLane(c,[],0,lh,now,false);
+  ctx.fillStyle='#14301f';ctx.fillRect(0,lh,W,H-lh);
 }
 // extra effects for each animal's video (world coordinates, after the animal is drawn)
 function vidFx(c,now){
@@ -1031,7 +1029,7 @@ function drawLane(c,ghosts,y0,lh,now,withLabel){
   else if(hab==='ice')for(let k=Math.floor(cam/80)-1;k<(cam+vw)/80+1;k++){const q=hash(k*3.1),x=k*80+q*50;ctx.fillStyle='#ffffff';ctx.strokeStyle='#bcdcf0';ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(x,154,10+q*12,6+q*5,0,Math.PI,0);ctx.fill();ctx.stroke();
     if(q>.7){ctx.strokeStyle='#8cc6e8';ctx.lineWidth=1.6;for(let a=0;a<3;a++){const an=a*Math.PI/3;ctx.beginPath();ctx.moveTo(x+22-Math.cos(an)*5,132-Math.sin(an)*5);ctx.lineTo(x+22+Math.cos(an)*5,132+Math.sin(an)*5);ctx.stroke()}}}
   const obm=obMis(),cm=curMis();if(obm)drawObstacles(obm,now,cam,vw);else if(cm&&cm.type==='ski'&&MX)drawSki(cam,vw,now);else if(cm&&MX)drawMis(cm,now,cam,vw,c);
-  const plain=!cm||cm.type==='beat';
+  const plain=!VID&&(!cm||cm.type==='beat');
   if(!prac&&!(cm&&cm.type==='ski')){
   ctx.font='700 11px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
   if(plain)for(let i=1;i<5;i++){const x=S0+(TRACK-S0)*i/5;ctx.fillStyle='#7a5530';ctx.fillRect(x-2,146,4,16);rr(x-17,132,34,16,5);ctx.fillStyle='#fff7e0';ctx.fill();ctx.fillStyle='#5a3a1a';ctx.fillText(i*20+'%',x,140.5)}
@@ -1672,7 +1670,7 @@ function home(){
 function animalCard(k){
   panel='acard';const op=isOpen(k),how=k==='dragon'?t('dragonStars',{n:DRAGON_STARS}):t('lockedMsg',{n:UNLOCK[k],a:t('ch_'+k)});
   ov.innerHTML=`<div class="panel acard">${homeBtn(false,'acback')}<div class="acpic${op?'':' lkpic'}">${icImg(k,'big')}</div><h2>${op?'':'🔒 '}${esc(t('ch_'+k))}</h2><p class="small"><i>${esc(t('line_'+k))}</i></p><p class="fact">${esc(t('fact_'+k))}</p>
-  ${op?`<button class="go" data-act="choose" data-v="${k}">${k===myChar?t('chosenA'):t('chooseA')}</button><button class="sec" data-act="vidplay" data-v="${k}">${t('watchVid')}</button>`:`<p class="small"><b>${esc(how)}</b></p>`}</div>`;
+  ${op?`<div class="acbtns"><button class="go" data-act="choose" data-v="${k}">${k===myChar?t('chosenA'):t('chooseA')}</button><button class="go alt" data-act="vidplay" data-v="${k}">${t('watchVid')}</button></div>`:`<p class="small"><b>${esc(how)}</b></p>`}</div>`;
 }
 function meScreen(){
   panel='me';
