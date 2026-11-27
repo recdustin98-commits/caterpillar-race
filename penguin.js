@@ -8,13 +8,14 @@ const S=n=>{try{const f=B().sfx&&B().sfx[n];f&&f()}catch(e){}};
 const vib=ms=>{try{B().buzz&&B().buzz(ms)}catch(e){}};
 const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const TAU=Math.PI*2,clamp=(v,a,b)=>v<a?a:v>b?b:v;
-// physics (feet, seconds of game time). Nov 27 (Dustin): 420-ft in-run whose last 120 ft is a take-off ramp that curves UP to 8°,
-// and the whole game runs 2x faster on screen (TIME=2; distances and mph unchanged). Simulated (no flaps → flapping all the way):
-// 100 RPM ≈ 1,140–1,250 ft, 150 ≈ 1,320–1,540, 300 ≈ 1,770–2,350, 450 ≈ 2,120–3,040; ~2–4 s of spinning, ~12 s per jump (real time)
-const TIME=2,RAMP=120,G=32,LIP=420,DROP=180,KICK=8*Math.PI/180,SLOPE=0.3,MU=0.55,DRAG=0.0006,KSPIN=0.12,FLAP=0.92,MINSINK=40,FLAPGAP=0.125,END=4600;
+// physics (feet, seconds of game time). Nov 27 (Dustin, round 3): steeper in-run (drop 280 ft over 240 ft), 120-ft take-off ramp curving
+// up to 20°, less friction (rolling 0.005 g, air drag 0.0004), spin boost doubled (0.24 ft/s² per RPM), long belly slide (μ 0.12) on a
+// landing hill (0.3 slope for 800 ft) that eases into a flat outrun over 400 ft. Game runs 2x faster on screen (TIME=2).
+// Simulated (no flaps → flapping all the way): 0 RPM ≈ 2,000–2,200 ft, 150 ≈ 2,840–3,210, 300 ≈ 3,680–4,170, 450 ≈ 4,310–4,920
+const TIME=2,RAMP=120,G=32,LIP=420,DROP=280,KICK=20*Math.PI/180,SLOPE=0.3,LHILL=800,LBEND=400,MU=0.12,ROLL=0.005,DRAG=0.0004,KSPIN=0.24,FLAP=0.92,MINSINK=40,FLAPGAP=0.125,END=12000;
 const RB=LIP-RAMP,TK=Math.tan(KICK),LTOP=-DROP+TK*RAMP/2;
 const inrun=x=>x<=60?0:x<=RB?-DROP*(1-Math.cos(Math.PI*(x-60)/(RB-60)))/2:x<=LIP?-DROP+TK*(x-RB)*(x-RB)/(2*RAMP):LTOP;
-const land=x=>x<LIP?LTOP:LTOP-20-SLOPE*(x-LIP);
+const land=x=>{const d=x-LIP;if(d<0)return LTOP;const y0=LTOP-20;if(d<=LHILL)return y0-SLOPE*d;const e=Math.min(d-LHILL,LBEND);return y0-SLOPE*LHILL-SLOPE*(e-e*e/(2*LBEND))};
 const hill=x=>x<=LIP?inrun(x):land(x);
 const slope=(f,x)=>(f(x+0.5)-f(x-0.5));
 const best=()=>{try{return +JSON.parse(st.get('cr-ski')||'{}').ft||0}catch(e){return 0}};
@@ -57,11 +58,11 @@ function start(){scr='play';U.innerHTML='';lines=[];snow=[];camZ=1;P={ph:'count'
 function realP(dt){const p=P,inst=dt>0?p.acc/dt*60/TAU:0;p.acc=0;const ti=Math.min(520,inst);p.rpm+=(ti-p.rpm)*(1-Math.exp(-dt/(ti>p.rpm?0.5:1.5)));
   if(p.ph==='count'){p.ct+=dt;if(p.ct>=1){p.ct=0;p.cnt--;S(p.cnt?'beep':'go');if(!p.cnt)p.ph='run'}}}
 function stepP(dt){const p=P;p.t+=dt;p.flapCd-=dt;p.wing=Math.max(0,p.wing-dt*5);
-  if(p.ph==='run'){const th=Math.atan(slope(inrun,p.x)),a=-G*Math.sin(th)+KSPIN*p.rpm-DRAG*p.v*p.v-0.02*G;p.v=Math.max(2,p.v+a*dt);p.x+=p.v*Math.cos(th)*dt;p.y=inrun(p.x);p.top=Math.max(p.top,p.rpm);
+  if(p.ph==='run'){const th=Math.atan(slope(inrun,p.x)),a=-G*Math.sin(th)+KSPIN*p.rpm-DRAG*p.v*p.v-ROLL*G;p.v=Math.max(2,p.v+a*dt);p.x+=p.v*Math.cos(th)*dt;p.y=inrun(p.x);p.top=Math.max(p.top,p.rpm);
     if(p.x>=LIP){p.ph='air';p.lipV=p.v;p.vx=p.v*Math.cos(KICK);p.vy=p.v*Math.sin(KICK);p.y=inrun(LIP);S('whoosh');vib(60)}}
   else if(p.ph==='air'){p.vy-=G*dt;p.vx-=DRAG*p.vx*p.vx*dt*0.5;p.x+=p.vx*dt;p.y+=p.vy*dt;p.trail.push([p.x,p.y]);if(p.trail.length>400)p.trail.shift();
-    if(p.y<=land(p.x)){p.ph='slide';p.flightFt=Math.round(p.x-LIP);const th=Math.atan(-SLOPE);p.v=Math.max(0,p.vx*Math.cos(th)+p.vy*Math.sin(th));p.y=land(p.x);S('puff');vib(90)}}
-  else if(p.ph==='slide'){const th=Math.atan(-SLOPE),a=-G*Math.sin(th)-MU*G*Math.cos(th)-DRAG*p.v*p.v;p.v+=a*dt;if(p.v<=0||p.x>END){p.v=0;p.ph='stop';done()}else{p.x+=p.v*Math.cos(th)*dt;p.y=land(p.x)}}}
+    if(p.y<=land(p.x)){p.ph='slide';p.flightFt=Math.round(p.x-LIP);const th=Math.atan(slope(land,p.x));p.v=Math.max(0,p.vx*Math.cos(th)+p.vy*Math.sin(th));p.y=land(p.x);S('puff');vib(90)}}
+  else if(p.ph==='slide'){const th=Math.atan(slope(land,p.x)),a=-G*Math.sin(th)-MU*G*Math.cos(th)-DRAG*p.v*p.v;p.v+=a*dt;if(p.v<=0||p.x>END){p.v=0;p.ph='stop';done()}else{p.x+=p.v*Math.cos(th)*dt;p.y=land(p.x)}}}
 function dist(){return P?Math.max(0,Math.round(P.x-LIP)):0}
 function done(){const ft=dist(),b=best(),nb=ft>b;if(nb)st.set('cr-ski',JSON.stringify({s:0,ft}));S(nb?'winBig':'win');
   try{B().submitJump&&ft>0&&B().submitJump(ft,Math.round(P.top))}catch(e){}
@@ -94,12 +95,12 @@ function draw(now){g.setTransform(dpr,0,0,dpr,0,0);const p=P,px=p?p.x:200,py=p?p
   g.fillStyle='#e0402f';g.fillRect(X(LIP)-3,Y(inrun(LIP))-26,6,26);g.font='800 13px "Baloo 2",system-ui';g.textAlign='center';g.fillText('TAKE OFF',X(LIP),Y(inrun(LIP))-32);
   g.fillStyle='#ff8a2a';g.fillRect(X(30)-2,Y(0)-30,4,30);g.beginPath();g.moveTo(X(30)+2,Y(0)-30);g.lineTo(X(30)+22,Y(0)-24);g.lineTo(X(30)+2,Y(0)-18);g.fill();
   // distance boards every 250 ft and the best flag
-  g.font='800 12px "Baloo 2",system-ui';for(let f=250;f<=4000;f+=250){const x=LIP+f;if(x<x0||x>x1)continue;const y=Y(land(x));g.fillStyle='#7a5530';g.fillRect(X(x)-1.5,y-24,3,24);g.fillStyle='#fff';g.strokeStyle='#14301f';g.lineWidth=1.5;rr(X(x)-30,y-42,60,18,5);g.fill();g.stroke();g.fillStyle='#14301f';g.fillText(f.toLocaleString('en-US')+' ft',X(x),y-29)}
+  g.font='800 12px "Baloo 2",system-ui';for(let f=250;f<=8000;f+=250){const x=LIP+f;if(x<x0||x>x1)continue;const y=Y(land(x));g.fillStyle='#7a5530';g.fillRect(X(x)-1.5,y-24,3,24);g.fillStyle='#fff';g.strokeStyle='#14301f';g.lineWidth=1.5;rr(X(x)-30,y-42,60,18,5);g.fill();g.stroke();g.fillStyle='#14301f';g.fillText(f.toLocaleString('en-US')+' ft',X(x),y-29)}
   const b=best();if(b){const x=LIP+b;if(x>x0&&x<x1){const y=Y(land(x));g.fillStyle='#7a3cff';g.fillRect(X(x)-1.5,y-50,3,50);g.beginPath();g.moveTo(X(x)+1.5,y-50);g.lineTo(X(x)+26,y-43);g.lineTo(X(x)+1.5,y-36);g.fill();g.textAlign='left';g.fillText('BEST',X(x)+4,y-54)}}
   if(p){g.strokeStyle='rgba(255,255,255,.8)';g.setLineDash([4,6]);g.lineWidth=2;g.beginPath();p.trail.forEach(([x,y],i)=>i?g.lineTo(X(x),Y(y)):g.moveTo(X(x),Y(y)));g.stroke();g.setLineDash([])}
   if(p&&FX>0)speedFx(p,spd,X(px),Y(py),now);
   // penguin (drawn a little bigger than true scale so you can see it)
-  const ang=p?(p.ph==='air'?Math.atan2(p.vy,p.vx):p.ph==='run'||p.ph==='count'?Math.atan(slope(inrun,px)):Math.atan(-SLOPE)):0;penguin(X(px),Y(py),-ang,p,now);
+  const ang=p?(p.ph==='air'?Math.atan2(p.vy,p.vx):p.ph==='run'||p.ph==='count'?Math.atan(slope(inrun,px)):Math.atan(slope(land,px))):0;penguin(X(px),Y(py),-ang,p,now);
   minimap(p);hud(p,now)}
 function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function penguin(x,y,a,p,now){g.save();g.translate(x,y);g.rotate(a);const s=1.15,ph=p?p.ph:'run',air=ph==='air';
@@ -118,7 +119,7 @@ function penguin(x,y,a,p,now){g.save();g.translate(x,y);g.rotate(a);const s=1.15
 function speedFx(p,spd,px,py,now){const k=FX===2?1.8:1,n=Math.min(60,Math.floor(spd/6*k));
   // speed lines streaming past (more and longer the faster you go)
   while(lines.length<n)lines.push({x:Math.random()*W,y:Math.random()*H,l:0.5+Math.random()});lines.length=Math.min(lines.length,n);
-  const ang=p.ph==='air'?Math.atan2(-p.vy,p.vx):Math.atan2(-(p.ph==='run'||p.ph==='count'?slope(inrun,p.x):-SLOPE),1),dx=Math.cos(ang),dy=Math.sin(ang),len=spd*0.5*k;
+  const ang=p.ph==='air'?Math.atan2(-p.vy,p.vx):Math.atan2(-(p.ph==='run'||p.ph==='count'?slope(inrun,p.x):slope(land,p.x)),1),dx=Math.cos(ang),dy=Math.sin(ang),len=spd*0.5*k;
   g.strokeStyle=`rgba(255,255,255,${Math.min(0.75,spd/250)})`;g.lineWidth=FX===2?2.5:1.6;
   for(const l of lines){l.x-=dx*spd*0.18*k;l.y-=dy*spd*0.18*k;if(l.x<-60||l.y<-60||l.y>H+60){l.x=W+Math.random()*80;l.y=Math.random()*H}
     g.beginPath();g.moveTo(l.x,l.y);g.lineTo(l.x+dx*len*l.l,l.y+dy*len*l.l);g.stroke()}
@@ -128,12 +129,12 @@ function speedFx(p,spd,px,py,now){const k=FX===2?1.8:1,n=Math.min(60,Math.floor(
   // vignette at high speed
   if(FX===2&&spd>120){const v=g.createRadialGradient(W/2,H/2,Math.min(W,H)*0.3,W/2,H/2,Math.max(W,H)*0.7);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,`rgba(10,40,80,${Math.min(0.35,(spd-120)/300)})`);g.fillStyle=v;g.fillRect(0,0,W,H)}}
 function minimap(p){const mw=Math.min(W-24,360),mh=46,mx=(W-mw)/2,my=8;g.fillStyle='rgba(255,255,255,.75)';rr(mx,my,mw,mh,10);g.fill();
-  const xs=-20,xe=LIP+3200,yt=10,yb=land(xe),fx=x=>mx+8+(x-xs)/(xe-xs)*(mw-16),fy=y=>my+6+(yt-y)/(yt-yb)*(mh-12);
+  const xs=-20,xe=LIP+5600,yt=10,yb=land(xe),fx=x=>mx+8+(x-xs)/(xe-xs)*(mw-16),fy=y=>my+6+(yt-y)/(yt-yb)*(mh-12);
   g.strokeStyle='#5d9fd0';g.lineWidth=2;g.beginPath();for(let x=xs;x<=xe;x+=40){const y=fy(hill(x));x===xs?g.moveTo(fx(x),y):g.lineTo(fx(x),y)}g.stroke();
   const b=best();if(b){g.fillStyle='#7a3cff';g.fillRect(fx(LIP+b)-1,my+4,2,mh-8)}
   if(p){g.fillStyle='#e0402f';g.beginPath();g.arc(fx(clamp(p.x,xs,xe)),fy(clamp(p.y,yb,yt)),4,0,TAU);g.fill()}}
 // race-style dashboard (same look as the race gauges): speedometer (mph) + tachometer (RPM, red from 300, comet ring follows your finger)
-const MAXMPH=200,MAXRPM=500,REDRPM=300;
+const MAXMPH=300,MAXRPM=500,REDRPM=300;
 function dial(cx,cy,R,frac,redFrac,col,num,unit,ringAng){const a0=Math.PI*.75,a1=Math.PI*2.25,ang=f=>a0+(a1-a0)*f,Ro=R+4,red=redFrac!=null&&frac>=redFrac;g.save();
   g.lineWidth=Math.max(3,R*.17);g.strokeStyle='#22262a';g.beginPath();g.arc(cx,cy,Ro,0,TAU);g.stroke();
   if(ringAng!=null){const rpm=frac*MAXRPM,zc=rpm>=REDRPM?'#ff3b30':rpm>=200?'#ffd23f':'#6fd14a',tail=Math.min(Math.PI*1.7,.25+rpm/300*Math.PI*1.2),head=ringAng-Math.PI/2,n=24,lw=Math.max(3,R*.17)*.8;
