@@ -8,14 +8,18 @@ const S=n=>{try{const f=B().sfx&&B().sfx[n];f&&f()}catch(e){}};
 const vib=ms=>{try{B().buzz&&B().buzz(ms)}catch(e){}};
 const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const TAU=Math.PI*2,clamp=(v,a,b)=>v<a?a:v>b?b:v;
-// physics (feet, seconds of game time). Nov 27 (Dustin, round 3): steeper in-run (drop 280 ft over 240 ft), 120-ft take-off ramp curving
-// up to 20°, less friction (rolling 0.005 g, air drag 0.0004), spin boost doubled (0.24 ft/s² per RPM), long belly slide (μ 0.12) on a
-// landing hill (0.3 slope for 800 ft) that eases into a flat outrun over 400 ft. Game runs 2x faster on screen (TIME=2).
-// Simulated (no flaps → flapping all the way): 0 RPM ≈ 2,000–2,200 ft, 150 ≈ 2,840–3,210, 300 ≈ 3,680–4,170, 450 ≈ 4,310–4,920
-const TIME=2,RAMP=120,G=32,LIP=420,DROP=280,KICK=20*Math.PI/180,SLOPE=0.3,LHILL=800,LBEND=400,MU=0.12,ROLL=0.005,DRAG=0.0004,KSPIN=0.24,FLAP=0.92,MINSINK=40,FLAPGAP=0.125,END=12000;
-const RB=LIP-RAMP,TK=Math.tan(KICK),LTOP=-DROP+TK*RAMP/2;
-const inrun=x=>x<=60?0:x<=RB?-DROP*(1-Math.cos(Math.PI*(x-60)/(RB-60)))/2:x<=LIP?-DROP+TK*(x-RB)*(x-RB)/(2*RAMP):LTOP;
-const land=x=>{const d=x-LIP;if(d<0)return LTOP;const y0=LTOP-20;if(d<=LHILL)return y0-SLOPE*d;const e=Math.min(d-LHILL,LBEND);return y0-SLOPE*LHILL-SLOPE*(e-e*e/(2*LBEND))};
+// physics (feet, seconds of game time). Nov 27 (Dustin, round 4): in-run drop section 2.25x longer (540 ft, drop 450 ft), 120-ft take-off
+// ramp curving up to 20°, low friction (rolling 0.005 g, air drag 0.0006), spin boost 0.24 ft/s² per RPM. Landing hill shaped like a real
+// ski-jump hill: a knoll easing from 0.15 to a steep 0.6 slope (31°) by 150 ft, steep to 3,000 ft, then a 1,200-ft curve into a flat
+// outrun; belly slide μ 0.2. SCORE = flight distance (lip → landing point), like real ski jumping; the slide is just for fun.
+// Game runs 2x faster on screen (TIME=2). Simulated flight (no flaps → flapping all the way):
+// 0 RPM ≈ 660–2,400 ft, 150 ≈ 1,830–4,710, 300 ≈ 2,600–5,540, 450 ≈ 3,180–6,140; ~2–3.5 s of spinning; ~20 s per jump incl. slide
+const TIME=2,F0=60,DL=540,RAMP=120,G=32,LIP=F0+DL+RAMP,DROP=450,KICK=20*Math.PI/180,S0=0.15,KNOLL=150,SL=0.6,LHILL=3000,LBEND=1200,MU=0.2,ROLL=0.005,DRAG=0.0006,KSPIN=0.24,FLAP=0.92,MINSINK=40,FLAPGAP=0.125,END=LIP+30000;
+const RB=F0+DL,TK=Math.tan(KICK),LTOP=-DROP+TK*RAMP/2;
+const inrun=x=>x<=F0?0:x<=RB?-DROP*(1-Math.cos(Math.PI*(x-F0)/DL))/2:x<=LIP?-DROP+TK*(x-RB)*(x-RB)/(2*RAMP):LTOP;
+const lslope=d=>d<0?0:d<KNOLL?S0+(SL-S0)*(1-Math.cos(Math.PI*d/KNOLL))/2:d<LHILL?SL:d<LHILL+LBEND?SL*(1+Math.cos(Math.PI*(d-LHILL)/LBEND))/2:0;
+const LN=Math.ceil((END-LIP)/2)+2,LT=(()=>{const t=new Float64Array(LN+1);t[0]=LTOP-12;for(let i=1;i<=LN;i++)t[i]=t[i-1]-lslope((i-0.5)*2)*2;return t})();
+const land=x=>{const d=x-LIP;if(d<0)return LTOP;const f=Math.min(d/2,LN-1),i=Math.floor(f);return LT[i]+(LT[i+1]-LT[i])*(f-i)};
 const hill=x=>x<=LIP?inrun(x):land(x);
 const slope=(f,x)=>(f(x+0.5)-f(x-0.5));
 const best=()=>{try{return +JSON.parse(st.get('cr-ski')||'{}').ft||0}catch(e){return 0}};
@@ -53,7 +57,7 @@ function move(e){if(!fp||e.pointerId!==fp.id||!P)return;const evs=e.getCoalesced
 function up(e){if(fp&&e.pointerId===fp.id)fp=null}
 function tap(){if(!P||scr!=='play')return;if(P.ph==='air'&&P.flapCd<=0){P.flapCd=FLAPGAP;P.flaps++;P.wing=1;if(P.vy<-MINSINK)P.vy=Math.min(P.vy*FLAP,-MINSINK);S('puff')}}
 // ---------- run ----------
-function start(){scr='play';U.innerHTML='';lines=[];snow=[];camZ=1;P={ph:'count',cnt:3,ct:0,x:0,y:0,v:3,vx:0,vy:0,acc:0,rpm:0,fa:-Math.PI/2,top:0,flaps:0,flapCd:0,wing:0,lipV:0,flightFt:0,t:0,trail:[]};S('beep')}
+function start(){scr='play';U.innerHTML='';lines=[];snow=[];camZ=1;P={ph:'count',cnt:3,ct:0,x:0,y:0,v:15,vx:0,vy:0,acc:0,rpm:0,fa:-Math.PI/2,top:0,flaps:0,flapCd:0,wing:0,lipV:0,flightFt:0,t:0,trail:[]};S('beep')}
 // real-time part: finger RPM with the same 'Light' feel as every race (0.5 s up, 1.5 s down) and the 3-2-1 countdown
 function realP(dt){const p=P,inst=dt>0?p.acc/dt*60/TAU:0;p.acc=0;const ti=Math.min(520,inst);p.rpm+=(ti-p.rpm)*(1-Math.exp(-dt/(ti>p.rpm?0.5:1.5)));
   if(p.ph==='count'){p.ct+=dt;if(p.ct>=1){p.ct=0;p.cnt--;S(p.cnt?'beep':'go');if(!p.cnt)p.ph='run'}}}
@@ -63,15 +67,15 @@ function stepP(dt){const p=P;p.t+=dt;p.flapCd-=dt;p.wing=Math.max(0,p.wing-dt*5)
   else if(p.ph==='air'){p.vy-=G*dt;p.vx-=DRAG*p.vx*p.vx*dt*0.5;p.x+=p.vx*dt;p.y+=p.vy*dt;p.trail.push([p.x,p.y]);if(p.trail.length>400)p.trail.shift();
     if(p.y<=land(p.x)){p.ph='slide';p.flightFt=Math.round(p.x-LIP);const th=Math.atan(slope(land,p.x));p.v=Math.max(0,p.vx*Math.cos(th)+p.vy*Math.sin(th));p.y=land(p.x);S('puff');vib(90)}}
   else if(p.ph==='slide'){const th=Math.atan(slope(land,p.x)),a=-G*Math.sin(th)-MU*G*Math.cos(th)-DRAG*p.v*p.v;p.v+=a*dt;if(p.v<=0||p.x>END){p.v=0;p.ph='stop';done()}else{p.x+=p.v*Math.cos(th)*dt;p.y=land(p.x)}}}
-function dist(){return P?Math.max(0,Math.round(P.x-LIP)):0}
+function dist(){return !P?0:P.ph==='slide'||P.ph==='stop'?P.flightFt:Math.max(0,Math.round(P.x-LIP))} // score = flight distance
 function done(){const ft=dist(),b=best(),nb=ft>b;if(nb)st.set('cr-ski',JSON.stringify({s:0,ft}));S(nb?'winBig':'win');
   try{B().submitJump&&ft>0&&B().submitJump(ft,Math.round(P.top))}catch(e){}
   setTimeout(()=>{if(!on)return;scr='result';U.innerHTML=`<div class="ap"><h2>🐧 ${nb?'NEW BEST!':'Nice jump!'}</h2><div class="big">${ft.toLocaleString('en-US')} ft</div>
-  <p>Flight ${P.flightFt.toLocaleString('en-US')} ft · take-off ${Math.round(P.lipV*0.6818)} mph · top spin ${Math.round(P.top)} RPM · ${P.flaps} flaps</p>
+  <p>Slide ${Math.max(0,Math.round(P.x-LIP-P.flightFt)).toLocaleString('en-US')} ft · take-off ${Math.round(P.lipV*0.6818)} mph · top spin ${Math.round(P.top)} RPM · ${P.flaps} flaps</p>
   <p><b>Best: ${Math.max(b,ft).toLocaleString('en-US')} ft</b></p>
   ${optHtml()}<button class="ab" data-a="go">🎿 Jump again</button><div class="row2"><button class="ab g" data-a="board">🏆 Leaderboard</button><button class="ab g" data-a="home">🏠 Home</button></div></div>`},900)}
 function intro(){scr='intro';P=null;const b=best();U.innerHTML=`<div class="ap"><button class="x" data-a="home" aria-label="Home">🏠</button><h2>🎿 Penguin jump</h2>
-  <ol><li>Belly down! <b>Spin circles</b> as fast as you can on the downhill — faster spinning = more speed.</li><li>After the take-off, <b>TAP TAP TAP</b> to flap your wings and fall slower.</li><li>Then you slide on your belly until you stop.</li></ol>
+  <ol><li>Belly down! <b>Spin circles</b> as fast as you can on the downhill — faster spinning = more speed.</li><li>After the take-off, <b>TAP TAP TAP</b> to flap your wings and fall slower.</li><li>Your score = <b>how far you fly</b>. Then slide on your belly to the bottom.</li></ol>
   ${b?`<p><b>Your best: ${b.toLocaleString('en-US')} ft</b></p>`:''}${optHtml()}<button class="ab" data-a="go">▶ Jump!</button></div>`}
 // ---------- drawing ----------
 function tick(now){raf=requestAnimationFrame(tick);if(!on)return;const dt=Math.min(0.05,(now-last)/1000);last=now;
@@ -95,7 +99,7 @@ function draw(now){g.setTransform(dpr,0,0,dpr,0,0);const p=P,px=p?p.x:200,py=p?p
   g.fillStyle='#e0402f';g.fillRect(X(LIP)-3,Y(inrun(LIP))-26,6,26);g.font='800 13px "Baloo 2",system-ui';g.textAlign='center';g.fillText('TAKE OFF',X(LIP),Y(inrun(LIP))-32);
   g.fillStyle='#ff8a2a';g.fillRect(X(30)-2,Y(0)-30,4,30);g.beginPath();g.moveTo(X(30)+2,Y(0)-30);g.lineTo(X(30)+22,Y(0)-24);g.lineTo(X(30)+2,Y(0)-18);g.fill();
   // distance boards every 250 ft and the best flag
-  g.font='800 12px "Baloo 2",system-ui';for(let f=250;f<=8000;f+=250){const x=LIP+f;if(x<x0||x>x1)continue;const y=Y(land(x));g.fillStyle='#7a5530';g.fillRect(X(x)-1.5,y-24,3,24);g.fillStyle='#fff';g.strokeStyle='#14301f';g.lineWidth=1.5;rr(X(x)-30,y-42,60,18,5);g.fill();g.stroke();g.fillStyle='#14301f';g.fillText(f.toLocaleString('en-US')+' ft',X(x),y-29)}
+  g.font='800 12px "Baloo 2",system-ui';for(let f=500;f<=8000;f+=500){const x=LIP+f;if(x<x0||x>x1)continue;const y=Y(land(x));g.fillStyle='#7a5530';g.fillRect(X(x)-1.5,y-24,3,24);g.fillStyle='#fff';g.strokeStyle='#14301f';g.lineWidth=1.5;rr(X(x)-30,y-42,60,18,5);g.fill();g.stroke();g.fillStyle='#14301f';g.fillText(f.toLocaleString('en-US')+' ft',X(x),y-29)}
   const b=best();if(b){const x=LIP+b;if(x>x0&&x<x1){const y=Y(land(x));g.fillStyle='#7a3cff';g.fillRect(X(x)-1.5,y-50,3,50);g.beginPath();g.moveTo(X(x)+1.5,y-50);g.lineTo(X(x)+26,y-43);g.lineTo(X(x)+1.5,y-36);g.fill();g.textAlign='left';g.fillText('BEST',X(x)+4,y-54)}}
   if(p){g.strokeStyle='rgba(255,255,255,.8)';g.setLineDash([4,6]);g.lineWidth=2;g.beginPath();p.trail.forEach(([x,y],i)=>i?g.lineTo(X(x),Y(y)):g.moveTo(X(x),Y(y)));g.stroke();g.setLineDash([])}
   if(p&&FX>0)speedFx(p,spd,X(px),Y(py),now);
@@ -129,7 +133,7 @@ function speedFx(p,spd,px,py,now){const k=FX===2?1.8:1,n=Math.min(60,Math.floor(
   // vignette at high speed
   if(FX===2&&spd>120){const v=g.createRadialGradient(W/2,H/2,Math.min(W,H)*0.3,W/2,H/2,Math.max(W,H)*0.7);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,`rgba(10,40,80,${Math.min(0.35,(spd-120)/300)})`);g.fillStyle=v;g.fillRect(0,0,W,H)}}
 function minimap(p){const mw=Math.min(W-24,360),mh=46,mx=(W-mw)/2,my=8;g.fillStyle='rgba(255,255,255,.75)';rr(mx,my,mw,mh,10);g.fill();
-  const xs=-20,xe=LIP+5600,yt=10,yb=land(xe),fx=x=>mx+8+(x-xs)/(xe-xs)*(mw-16),fy=y=>my+6+(yt-y)/(yt-yb)*(mh-12);
+  const xs=-20,xe=LIP+LHILL+LBEND+1500,yt=10,yb=land(xe),fx=x=>mx+8+(x-xs)/(xe-xs)*(mw-16),fy=y=>my+6+(yt-y)/(yt-yb)*(mh-12);
   g.strokeStyle='#5d9fd0';g.lineWidth=2;g.beginPath();for(let x=xs;x<=xe;x+=40){const y=fy(hill(x));x===xs?g.moveTo(fx(x),y):g.lineTo(fx(x),y)}g.stroke();
   const b=best();if(b){g.fillStyle='#7a3cff';g.fillRect(fx(LIP+b)-1,my+4,2,mh-8)}
   if(p){g.fillStyle='#e0402f';g.beginPath();g.arc(fx(clamp(p.x,xs,xe)),fy(clamp(p.y,yb,yt)),4,0,TAU);g.fill()}}
