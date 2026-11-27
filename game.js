@@ -580,6 +580,8 @@ function drawSki(cam,vw,T){
   if(S.ph==='stop'){const x=S.x,h=skiGround(x);ctx.fillStyle='#e0402f';ctx.fillRect(x-1.5,110-h,3,50);ctx.beginPath();ctx.moveTo(x+1.5,110-h);ctx.lineTo(x+28,119-h);ctx.lineTo(x+1.5,128-h);ctx.fill()}
 }
 
+const FEELS=[[130,130,'Now'],[500,1500,'Light'],[1000,2500,'Medium'],[1800,4000,'Heavy']];
+let feel=Math.max(0,Math.min(3,+store.get('cr-feel')||0));
 function upd(c,now,dt){
   const k=1-Math.exp(-dt/130);
   if(c.kind==='bot'){
@@ -594,7 +596,8 @@ function upd(c,now,dt){
       if(headX(c)>TRACK-2)c.phi=Math.min(c.phi,phiForFinish(c.char)-.01);
     }
   }else{
-    let inst=dt>0?c.acc/dt*1000:0;c.acc=0;if(window.__AP&&state==='race'&&c===me&&c.done==null)inst=apRPM(c,now)*2*Math.PI/60;c.w+=(inst-c.w)*k;
+    let inst=dt>0?c.acc/dt*1000:0;c.acc=0;if(window.__AP&&state==='race'&&c===me&&c.done==null)inst=apRPM(c,now)*2*Math.PI/60;
+    if(mode==='practice'&&c===me&&feel>0){const f=FEELS[feel];c.w+=(inst-c.w)*(1-Math.exp(-dt/(inst>c.w?f[0]:f[1])))}else c.w+=(inst-c.w)*k;
   }
   const sp=Math.min(CAP,Math.max(0,c.w));
   c.disp+=(rpmOf(sp)-c.disp)*Math.min(1,dt/90);
@@ -2001,7 +2004,7 @@ function say(s){const m=document.getElementById('msg');if(m)m.textContent=s}
 function copyText(s,ok){try{navigator.clipboard.writeText(s).then(()=>say(ok),()=>say(s))}catch(e){say(s)}}
 function saveForm(){const c=document.getElementById('code');if(c)codeDraft=c.value.replace(/\D/g,'').slice(0,4)}
 function clearRoomParam(){qs.delete('room');history.replaceState(null,'',location.pathname+(qs.toString()?'?'+qs.toString():''))}
-function raceOv(){ov.innerHTML=mode==='practice'?`<button class="done" data-act="menu">${t('done')}</button><button class="done cpub" data-act="cpurace">${t('raceCpu')}</button>`:`<button class="quit" data-act="quit">✕ ${t('quit')}</button>${switchOffer?`<button class="switchb" data-act="switchany">🌍 ${t('switchQ')} <b>${t('switchYes')}</b></button>`:''}`}
+function raceOv(){ov.innerHTML=mode==='practice'?`<div class="feelb" data-g="feel">${FEELS.map((f,i)=>`<button data-act="feel" data-v="${i}" class="${i===feel?'on':''}">${f[2]}</button>`).join('')}</div><button class="done" data-act="menu">${t('done')}</button><button class="done cpub" data-act="cpurace">${t('raceCpu')}</button>`:`<button class="quit" data-act="quit">✕ ${t('quit')}</button>${switchOffer?`<button class="switchb" data-act="switchany">🌍 ${t('switchQ')} <b>${t('switchYes')}</b></button>`:''}`}
 function startLocal(){
   saveForm();botChar=null;finishId++;if(mode==='solo')raceLv=lvl;setup();firstDone=0;winner=null;endNote='';boardNote='';panel='race';lastCount=0;switchOffer=false;
   if(mode==='practice'){state='race';startT=performance.now();sfx.go()}
@@ -2082,6 +2085,7 @@ ov.addEventListener('click',e=>{
   const mn=e.target.closest&&e.target.closest('[data-m]');if(mn){sfx.tap();missionStart(+mn.dataset.m);return}
   const b=e.target.closest('button');if(!b||b.disabled)return;const gp=b.parentElement.dataset.g,act=b.dataset.act;
   sfx.tap();
+  if(act==='feel'){feel=Math.max(0,Math.min(3,+b.dataset.v||0));store.set('cr-feel',feel);raceOv();return}
   if(act==='menu'&&mode==='practice'&&state==='race'){home();return}
   if(act==='anystart'){if(anyone&&state==='match'&&net){anyGo=true;matchTick()}return}
   if(act==='quit'){confirmBox(t('quitQ'),'keep',t('keep'),'quityes',t('quitYes'));return}
